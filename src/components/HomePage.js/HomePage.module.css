@@ -1,0 +1,31 @@
+
+.Header {
+    background-color: #C7D09D;
+    /* background-color: #98fb98 #F0FFFF */
+    /* background-color: PaleGreen; */
+    /* background-color: #98fb98 #F0FFFF */
+
+    width: 100%;
+    height: 70px;
+    display:inline-block;
+    top:0;
+    position: fixed;
+}
+
+
+/* 
+.Header ul{
+    list-style-type: none;
+    overflow: hidden;
+}
+
+.Header li strong{
+    float:left;
+    
+}
+
+
+
+.brand{
+    margin: 8px;
+} */

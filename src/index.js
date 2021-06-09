@@ -1,8 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './containers/App';
+
 import reportWebVitals from './reportWebVitals';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.js';
+import 'bootstrap/dist/js/bootstrap.min.js';
+import axios from 'axios';
+
+//axios.defaults.baseURL = 'https://ecom.xircular.io/v2/api';
+axios.defaults.baseURL = 'http://localhost:8999/api';
+
+
 
 ReactDOM.render(
   <React.StrictMode>

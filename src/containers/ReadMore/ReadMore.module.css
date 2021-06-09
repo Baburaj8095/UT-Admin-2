@@ -1,0 +1,15 @@
+.container{
+    left: 23%;
+    height: 5px;
+    width: 10px;
+
+  }
+    
+  .text{
+    font-size: 12px;
+  }
+    
+  .readOrHide{
+    color: rgb(192,192,192);
+    cursor: pointer;
+  }

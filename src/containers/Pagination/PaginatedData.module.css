@@ -1,0 +1,75 @@
+.paginationButtons{
+    width: 82%;
+    height: 20px;
+    /*  height: 80px; this one is  for material ui*/
+    
+    bottom: 0;
+    position: fixed;
+    list-style: none;
+    color: black;
+    display: flex;
+    justify-content: center;
+}
+
+.paginationButtons a{
+    padding: 8px;
+    margin: 8px;
+    border-radius: 3px;
+    border: 1px solid green;
+    color: orange;
+    cursor: pointer;
+  
+}
+
+.paginationButtons a:hover{
+    color: white;
+    background-color: green;
+}
+
+.activePageNumberButton a{
+    color: white;
+    background-color: green;
+    margin: 5px;
+    border-radius: 3px;
+}
+
+
+.previousButton{
+    color: green;
+
+}
+
+
+.nextButton{
+    color: green;
+}
+
+.paginationDisabled{
+    color: grey;
+    cursor: none;
+
+}
+
+
+
+/* card items */
+.Items{
+    margin-bottom: 1%;
+    margin-left: 40px;
+    margin-right: 40px;
+    background: white;
+    background-size: 100% 400px;
+}
+
+.Images{
+  width: 100px;
+  height: 100px;
+  margin: 12px;
+ 
+}
+
+.CartButton{
+    margin-right: 0;
+}
+
+
