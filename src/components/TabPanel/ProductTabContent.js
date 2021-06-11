@@ -10,7 +10,8 @@ import axios from 'axios';
 
 
 import classes2 from './ProductTabContent.module.css';
-import PaginatedData from '../../containers/Pagination/PaginatedData';
+import LocalFavourites from '../../containers/SideTabs/LocalFavourites';
+import SaladEssentials from '../../containers/SideTabs/SaladEssentials';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -23,7 +24,9 @@ const useStyles = makeStyles((theme) => ({
 
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`,
-  },
+  }
+
+
 
 }));
 
@@ -82,15 +85,31 @@ export default function ProductTabContent() {
 
 
   const [CategoryId, setCategoryId] = useState(null);
-  console.log(CategoryId);
 
+  const defaultList = <LocalFavourites cId={CategoryId} />;
+                      
+
+  const listOfProducts =  <SaladEssentials cId={CategoryId} />;
+                          
+
+  const [productList, setproductList] = useState(defaultList);
+
+  
   const sendCategoryId =(id) =>{
+    
     setCategoryId(id);
+    setproductList(listOfProducts);
+    
+    
   }
+
+
+let indexNum = [];
+let count = 1;
 
   return (
     <div className={classes.root}>
-    
+        
       <Tabs
         orientation="vertical"
         variant="scrollable"
@@ -100,36 +119,58 @@ export default function ProductTabContent() {
         className={classes.tabs}
       >
 
-      {category.map((cat =>{
-        //onClick={function (){sendCategoryId(cat.id)}} 
-          return(
-            <Tab key={cat.id} onClick={function (){sendCategoryId(cat.id)}} className={classes2.tab} label={cat.name} {...anyProps(0)} style={{marginRight:'10px',fontSize: '12px', fontWeight: '600'}}/>
-          )
-        }))
-        }
+        {category.map((cat, index) =>{
 
+          indexNum.push(count);
+          count++;
+          //onClick={function (){sendCategoryId(cat.id)}} 
+            return(
+              <Tab key={index} onClick={function (){sendCategoryId(cat.id)}} className={classes2.tab} label={cat.name} {...anyProps(0)} style={{minWidth:'60px',marginRight:'10px',fontSize: '12px', fontWeight: '600'}}/>
+            )
+          })
+          }
 
-        {/* <Tab className={classes2.tab} label="Salad Essentials" {...anyProps(1)} style={{marginRight:'10px',fontSize: '12px', fontWeight: '600'}}/>
-        <Tab className={classes2.tab} label="Flavour Bombs" {...anyProps(2)}  style={{marginLeft:'-10px', fontSize: '12px', fontWeight: '600'}}/>
-       */}
       </Tabs>
-      <div className={classes2.divScroller}>
+
+        {
+          
+         indexNum.map(val =>{
+           return(
+
+            <TabPanel value={value} index={val}>
+                {productList}
+          </TabPanel>
+
+           )
+         })
+        }
+                  
+        
+        
+
+
+      {/* <div className={classes2.divScroller}  >
         <TabPanel value={value} index={0}>
-          <PaginatedData />
+            <PaginatedData cId={CategoryId} />
         </TabPanel>
       </div>
-      <TabPanel value={value} index={1}>
-        Item Two
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Item Three
-      </TabPanel>
+      
+      <div className={classes2.divScroller} >
+          <TabPanel value={value} index={1}>
+              <SaladEssentials cId={CategoryId} />
+          </TabPanel>
+      </div>
+
+      <div className={classes2.divScroller} >
+          <TabPanel value={value} index={2}>
+              <FlavourBombs cId={CategoryId} />
+          </TabPanel>
+      </div> */}
+
+     
     </div>
   );
 }
-
-
-
 
 
 //tab side content
@@ -143,12 +184,17 @@ function TabPanel(props) {
         id={`vertical-tabpanel-${index}`}
         aria-labelledby={`vertical-tab-${index}`}
         {...other}
+        className={classes2.divScroller}
       >
+      
         {value === index && (
-          <Box p={3}>
-            <Typography>{children}</Typography>
+          
+          <Box p={3} >
+              <Typography >{children}</Typography>  
           </Box>
-        )}
+        
+          )
+        }
       </div>
     );
   }

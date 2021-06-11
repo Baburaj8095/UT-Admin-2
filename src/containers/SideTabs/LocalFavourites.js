@@ -7,7 +7,7 @@ import {withStyles} from '@material-ui/core/styles';
 
 import Pagination from '@material-ui/lab/Pagination';
 
-import classes2 from './PaginatedData.module.css';
+import classes2 from './LocalFavourites.module.css';
 import Spinner from '../../components/Spinner/Spinner';
 import ReadMore from '../ReadMore/ReadMore';
 
@@ -31,22 +31,6 @@ const useStyles = theme=>({
           },
       },
 
-      scroller: {
-        justifyContent: 'center',
-        position: 'relative',
-        overflow: 'hidden',
-        '&::-webkit-scrollbar': {
-                   width: '5px',
-         },
-         '&::-webkit-scrollbar-thumb': {
-            background: '#39ff14',
-            borderRadius: '10px',
-          },
-          '&::-webkit-scrollbar-thumb:hover': {
-            background: '#00ffff', 
-          },
-
-      },
       
       formControl: {
         margin: theme.spacing(1),
@@ -72,7 +56,7 @@ class PaginatedData extends Component{
 
     //start of componentDidMount
    async componentDidMount(){
-
+       console.log("cat id from paginatedData.js:", this.props.cId);
     this.setState({
         isLoading: true  
         });
@@ -85,8 +69,10 @@ class PaginatedData extends Component{
             const resp= await axios.post(authApi, body);
             this.setState({token: resp.data.id_token});
 
-            //get the product list
-            const api = "/products";
+            //get the product list ....maybe use the 1101 id for default local fav
+            //const api = "/products?page=0&productCategoryId.specified=true&productCategoryId.equals="+this.props.cId;
+            const api = "/products?page=0&productCategoryId.specified=true&productCategoryId.equals=1101";
+
             const jwtToken ='Bearer '+this.state.token;
 
 
@@ -126,10 +112,15 @@ class PaginatedData extends Component{
 
    render(){
 
-
+    let itemsPerPage = 7;
     const {classes} = this.props;
 
-    const itemsPerPage = 11;
+    if(this.state.dataItems.length <=5){
+        itemsPerPage = 11;
+    }else{
+        itemsPerPage = 14;
+    }
+    
     const pagesVisited = this.state.pageNumber * itemsPerPage;
 
     const pageCount = Math.ceil(this.state.dataItems.length / itemsPerPage);
@@ -204,7 +195,7 @@ class PaginatedData extends Component{
    //final return of render()         
 return (
     
-    <div className={classes.scroller}> 
+    <div > 
            
            <Grid container  style={{margin:'5px', justifyContent: 'center'}}>
               {displayItems}

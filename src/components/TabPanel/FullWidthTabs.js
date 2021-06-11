@@ -8,6 +8,7 @@ import SwipeableViews from 'react-swipeable-views';
 import Box from '@material-ui/core/Box';
 import ProductTabContent from './ProductTabContent';
 
+import AddCategory from '../Buttons/AddCategory/AddCategory';
 
 
 
@@ -24,6 +25,7 @@ const AntTab = withStyles((theme) => ({
   root: {
     textTransform: 'none',
     minWidth: 72,
+   top:0,
     marginLeft: '15px',
     fontWeight: theme.typography.fontWeightRegular,
     marginRight: theme.spacing(4),
@@ -64,14 +66,25 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   demo1: {
+    position:'fixed',
+    top:'70px',
+    width:'100%',
     backgroundColor: theme.palette.background.paper,
   },
+  rowElementsDiv:{
+    width:'100%',
+    marginTop:'160px',
+    textAlign: 'center',
+  },
+  // rowElements:{
+  //   display: 'inline-block',
+  // }
   
 }));
 
-export default function CustomizedTabs() {
+export default function HeaderBelowMenu() {
   const classes = useStyles();
-  const theme = useTheme();
+  //const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -96,24 +109,52 @@ export default function CustomizedTabs() {
         <Typography className={classes.padding} />
       </div>
 
+
+  {value === 0 ?  <div className={classes.rowElementsDiv}>
+                      <div style={{display:'inline-block', float:'left', marginLeft:'60px'}}>
+                        <h5 style={{opacity: '0.8'}}>Category</h5>
+                      </div>
+
+                      <div style={{display:'inline-block', marginRight:'445px'}}>
+                        <span style={{fontSize:'18px'}}> All Products</span>
+                      </div>
+                      
+                      <div style={{display:'inline-block', float:'right', marginRight:'115px'}}>
+                        <AddCategory/>              
+                      </div>
+                      <div style={{display:'inline-block', float:'right'}}>
+                        <AddCategory/>              
+                      </div>
+                  </div>
+
+             : null}
+
+              <br/>
+
       <div
         index={value}
         onChangeIndex={handleChangeIndex}
         >
-          <TabPanel value={value} index={0}  style={{marginTop: '-35px'}}>
-          <h4 style={{opacity: '0.8', marginBottom: '10px', marginLeft: '10px'}}>Category</h4>
+          <TabPanel value={value} index={0}  style={{marginTop: '-42px'}}>
+<br/>
             <ProductTabContent />
+
           </TabPanel>
+
           <TabPanel value={value} index={1} >
             Inventory
           </TabPanel>
+
           <TabPanel value={value} index={2} >
             Delivery Time slot
           </TabPanel>
+
           <TabPanel value={value} index={3} >
             Order Management
           </TabPanel>
       </div>
+
+
     </div>
   );
 }
