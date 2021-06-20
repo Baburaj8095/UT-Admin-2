@@ -1,0 +1,18 @@
+.main-footer{
+    color: white;
+    background-color: F0F6EE;
+    /* background-color: #dc3545; */
+    padding-top: 3em;
+    position: relative;
+    bottom: 0;
+    text-align: center;
+}
+
+
+.page-container{
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}

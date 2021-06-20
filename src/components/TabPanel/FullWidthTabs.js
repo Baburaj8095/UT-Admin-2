@@ -1,4 +1,5 @@
-import React from 'react';
+import React,{useState} from 'react';
+import {NavLink, useHistory} from 'react-router-dom';
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -6,9 +7,17 @@ import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
 import Box from '@material-ui/core/Box';
-import ProductTabContent from './ProductTabContent';
+
+import { withRouter } from 'react-router-dom';
+
+
+import ProductTabContent from './ProductTabContent/ProductTabContent';
 
 import AddCategory from '../Buttons/AddCategory/AddCategory';
+import AddProduct from '../Buttons/AddProduct/AddProduct';
+import InventoryTabContent from './InventoryTabContent/InventoryTabContent';
+import { Grid } from '@material-ui/core';
+
 
 
 
@@ -82,10 +91,10 @@ const useStyles = makeStyles((theme) => ({
   
 }));
 
-export default function HeaderBelowMenu() {
+const HeaderBelowMenu = ()=> {
   const classes = useStyles();
   //const theme = useTheme();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -95,6 +104,11 @@ export default function HeaderBelowMenu() {
   const handleChangeIndex = (index) => {
     setValue(index);
   };
+
+
+ //link for the addCategory component
+    let history = useHistory();
+
 
   return (
     <div className={classes.root}>
@@ -120,10 +134,11 @@ export default function HeaderBelowMenu() {
                       </div>
                       
                       <div style={{display:'inline-block', float:'right', marginRight:'115px'}}>
-                        <AddCategory/>              
+                        <NavLink to="/add-category" style={{textDecoration:'none'}}><AddCategory /></NavLink>
                       </div>
+                  
                       <div style={{display:'inline-block', float:'right'}}>
-                        <AddCategory/>              
+                        <NavLink to="/add-product" style={{textDecoration:'none'}}><AddProduct /></NavLink>
                       </div>
                   </div>
 
@@ -140,9 +155,9 @@ export default function HeaderBelowMenu() {
             <ProductTabContent />
 
           </TabPanel>
-
-          <TabPanel value={value} index={1} >
-            Inventory
+          
+          <TabPanel value={value} index={1} style={{marginTop: '10px'}}>
+            <InventoryTabContent />
           </TabPanel>
 
           <TabPanel value={value} index={2} >
@@ -159,7 +174,7 @@ export default function HeaderBelowMenu() {
   );
 }
 
-
+export default withRouter(HeaderBelowMenu);
 
 
 

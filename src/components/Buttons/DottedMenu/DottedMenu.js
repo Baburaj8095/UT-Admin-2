@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { useHistory } from 'react-router';
+import {reactLocalStorage} from 'reactjs-localstorage';
+
+
+
 
 const options = [
   'Edit',
@@ -12,7 +17,26 @@ const options = [
 
 const ITEM_HEIGHT = 48;
 
-export default function LongMenu() {
+export default function LongMenu(props) {
+
+
+  const [productData, setProductData] = useState({
+                                                  Pname:props.name,
+                                                  Pdesc: props.desc,
+                                                  Pimage: props.image
+                                                  });
+
+ 
+   reactLocalStorage.setObject("productData",{
+                                                Pname:props.name,
+                                                Pdesc: props.desc,
+                                                Pimage: props.image,
+                                                Pid:props.product_id
+                                                });
+  
+
+  const history = useHistory();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -26,6 +50,17 @@ export default function LongMenu() {
    
   };
 
+
+
+  const editProduct=()=>{
+    history.push('/edit-product');
+  }
+
+
+  const archieveProduct=()=>{
+    history.push('/archieve-product');
+  }
+
   return (
     <div>
       <IconButton
@@ -36,6 +71,8 @@ export default function LongMenu() {
       >
         <MoreVertIcon />
       </IconButton>
+
+      
       <Menu
         id="long-menu"
         anchorEl={anchorEl}
@@ -50,7 +87,7 @@ export default function LongMenu() {
         }}
       >
         {options.map((option) => (
-          <MenuItem key={option} selected={option === 'Pyxis'} onClick={handleClose}>
+          <MenuItem key={option} selected={option === 'Pyxis'} onClick={ option === 'Edit' ? editProduct: archieveProduct}>
             {option}
           </MenuItem>
         ))}

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './containers/App';
+import { BrowserRouter} from "react-router-dom";
 
 import reportWebVitals from './reportWebVitals';
 
@@ -11,15 +12,15 @@ import 'bootstrap/dist/js/bootstrap.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://ecom.xircular.io/v2/api';
-//axios.defaults.baseURL = 'http://localhost:8999/api';
 
+//axios.defaults.baseURL = 'https://ecom.xircular.io/v2/api';
+axios.defaults.baseURL = 'http://localhost:8999/api';
 
 
 ReactDOM.render(
-  <React.StrictMode>
+  <BrowserRouter>
     <App />
-  </React.StrictMode>,
+  </BrowserRouter>,
   document.getElementById('root')
 );
 

@@ -12,6 +12,7 @@ import Spinner from '../../components/Spinner/Spinner';
 import ReadMore from '../ReadMore/ReadMore';
 
 import DottedMenu from '../../components/Buttons/DottedMenu/DottedMenu';
+import {reactLocalStorage} from 'reactjs-localstorage';
 
 
 
@@ -47,7 +48,6 @@ const useStyles = theme=>({
 class PaginatedData extends Component{
 
         state={
-            token: null,
             dataItems:[],
             isLoading: false,
             pageNumber: 0,
@@ -56,24 +56,22 @@ class PaginatedData extends Component{
 
     //start of componentDidMount
    async componentDidMount(){
+
        console.log("cat id from paginatedData.js:", this.props.cId);
-    this.setState({
-        isLoading: true  
-        });
+           
+            this.setState({
+                isLoading: true  
+                });
 
 
-         //get the jwt token. later store or access the token from locaStorage
-            const body = {username: 'guest', password: 'user'};
-            const authApi = "/2/authenticate";
+         
 
-            const resp= await axios.post(authApi, body);
-            this.setState({token: resp.data.id_token});
-
-            //get the product list ....maybe use the 1101 id for default local fav
+            //get the product list .... use the 1101 id for default local fav
             //const api = "/products?page=0&productCategoryId.specified=true&productCategoryId.equals="+this.props.cId;
             const api = "/products?page=0&productCategoryId.specified=true&productCategoryId.equals=1101";
 
-            const jwtToken ='Bearer '+this.state.token;
+            const jwt = reactLocalStorage.get('id_token');
+            const jwtToken ='Bearer '+jwt;
 
 
             axios.get(api, {
@@ -112,8 +110,10 @@ class PaginatedData extends Component{
 
    render(){
 
-    let itemsPerPage = 7;
+    
     const {classes} = this.props;
+
+    let itemsPerPage =11;
 
     if(this.state.dataItems.length <=5){
         itemsPerPage = 11;
@@ -153,7 +153,7 @@ class PaginatedData extends Component{
                                                                     <th>
                                                                         <div style={{float:'right'}}>
                                                                             {/* <button className={classes2.CartButton} onClick={() => this.addToCartAction(product)}>Dot menu</button>   */}
-                                                                            <DottedMenu className={classes2.CartButton}/>
+                                                                            <DottedMenu name={product.name} product_id={product.id} desc={product.description} image={product.productImage} className={classes2.CartButton}/>
                                                                         </div>
                                                                     </th>
                                                                 </tr>

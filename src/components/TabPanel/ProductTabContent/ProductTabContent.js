@@ -7,11 +7,12 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
 import axios from 'axios';
+import {reactLocalStorage} from 'reactjs-localstorage';
 
 
 import classes2 from './ProductTabContent.module.css';
-import LocalFavourites from '../../containers/SideTabs/LocalFavourites';
-import SaladEssentials from '../../containers/SideTabs/SaladEssentials';
+import LocalFavourites from '../../../containers/SideTabs/LocalFavourites';
+import SaladEssentials from '../../../containers/SideTabs/SaladEssentials';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -37,44 +38,35 @@ export default function ProductTabContent() {
   const classes = useStyles();
   
 
-  //jwt token
-  const [token, setToken] = useState(null);
-
   //categories
   const [category, setCategory] = useState([]);
 
-
+  //jwt token from LocalStorage
+  const token = reactLocalStorage.get('id_token');
   //get the product-category list
   const api = "/product-categories";
+  //const jwt = reactLocalStorage.get('id_token');
   const jwtToken ='Bearer '+token;
 
 
-//const bar = React.useCallback(() => {{username: 'guest', password: 'user'}, [])
-  //axios request body
   
-  const authApi = "/2/authenticate";
 
-//post request to get the jwt
+//get the product category
   useEffect( () =>{
-    const body = {username: 'guest', password: 'user'};
-          axios.post(authApi, body)
-              .then(response =>{
-                setToken(response.data.id_token);
-                return response;
-              })
-              .then(()=> axios.get(api, {
+
+        axios.get(api, {
                 headers: {
                 'Authorization': jwtToken,
                 'Accept' : '*/*',
                 'Content-Type': 'application/json',
                 'App-Token' : 'A14BC'
                   }
-                }))
+                })
                 .then(productCategory =>{
                   setCategory(productCategory.data);
                   return productCategory;
                 })
-              },[authApi,jwtToken, api]);
+      },[jwtToken, api, token]);
   
 
 
@@ -94,12 +86,31 @@ export default function ProductTabContent() {
 
   const [productList, setproductList] = useState(defaultList);
 
+  //storing the category id in the useState hook
+  const [localStorage, setlocalStorage] = useState(null);
   
-  const sendCategoryId =(id) =>{
+
+  //storing the category name
+  const [catName, setCatName] = useState(null);
+
+  const sendCategoryId =(id, name) =>{
     
     setCategoryId(id);
     setproductList(listOfProducts);
+    setlocalStorage(id);
+    setCatName(name);
+    setLocal();
+   
     
+  }
+
+  //storing the category id in the LocalStorage
+  let i=0;
+  const setLocal=()=>{
+    reactLocalStorage.set('category_id', localStorage);
+    reactLocalStorage.set('cat_name', catName);
+    // i++;
+    reactLocalStorage.set('clicked_count', i++);
     
   }
 
@@ -125,8 +136,8 @@ let count = 1;
           count++;
           //onClick={function (){sendCategoryId(cat.id)}} 
             return(
-              <Tab key={index} onClick={function (){sendCategoryId(cat.id)}} className={classes2.tab} label={cat.name} {...anyProps(0)} style={{minWidth:'60px',marginRight:'10px',fontSize: '12px', fontWeight: '600'}}/>
-            )
+                <Tab key={index} onClick={function (){sendCategoryId(cat.id, cat.name)}} className={classes2.tab} label={cat.name} {...anyProps(0)} style={{minWidth:'60px',marginRight:'10px',fontSize: '12px', fontWeight: '600'}}/>
+              )
           })
           }
 
@@ -134,15 +145,19 @@ let count = 1;
 
         {
           
-         indexNum.map(val =>{
-           return(
+          CategoryId !=null ?   indexNum.map(val =>{
+                                        return(
+                                            <TabPanel value={value} index={val}>
+                                                  {productList}
+                                              </TabPanel>
+                                              
+                                            )
 
-            <TabPanel value={value} index={val}>
-                {productList}
-          </TabPanel>
+                                      })
 
-           )
-         })
+                          : <TabPanel>
+                                {defaultList}
+                            </TabPanel>
         }
                   
         

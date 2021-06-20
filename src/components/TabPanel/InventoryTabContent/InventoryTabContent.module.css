@@ -1,13 +1,12 @@
 .paginationButtons{
-    width: 73%;
+    width: 100%;
     height: 20px;
     /*  height: 80px; this one is  for material ui*/
-    
-    bottom: 0;
-    position: fixed;
+    margin-top: 20px;
     list-style: none;
     color: black;
     display: flex;
+    
     justify-content: center;
 }
 
@@ -50,26 +49,5 @@
 
 }
 
-
-
-/* card items */
-.Items{
-    margin-bottom: 1%;
-    margin-left: 40px;
-    margin-right: 40px;
-    background: white;
-    background-size: 100% 400px;
-}
-
-.Images{
-  width: 100px;
-  height: 100px;
-  margin: 12px;
- 
-}
-
-.CartButton{
-    margin-right: 0;
-}
 
 
