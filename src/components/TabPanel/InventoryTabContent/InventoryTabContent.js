@@ -18,6 +18,7 @@ import {reactLocalStorage} from 'reactjs-localstorage';
 import InventoryTabContentCss from './InventoryTabContent.module.css';
 import Spinner from '../../Spinner/Spinner';
 import Footer from '../../Footer/Footer';
+import AddInventoryModal from './AddInventoryModal';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -46,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  
 }));
 
 // function createData( unit, price, stock, action) {
@@ -129,6 +131,20 @@ const pageCount = Math.ceil(products.length / itemsPerPage);
 
 
 
+//////////////////////////////////////////      modal setUp starts     ///////////////////////////////////////////////////
+
+const [openModal, setOpenModal] = useState(false);
+
+
+const removeProductHandler = () =>{
+    const confirmation = window.confirm("Are you sure you want to remove a unit of this product from the inventory?");
+    console.log("confirmation: ", confirmation);
+}
+
+
+
+
+
 let InventoryItems = '';  
 
 
@@ -159,9 +175,9 @@ if(isLoading){
                                                                                             
                                                                                         </Grid>
                                                                                         <Grid item >
-                                                                                            <Tooltip title="Add to inventory" placement="top">
+                                                                                            <Tooltip title="Add" placement="top">
                                                                                                     <IconButton style={{color:'green'}}>
-                                                                                                        <AddCircleOutlineIcon onClick={()=>{console.log('button clicked')}}/>
+                                                                                                        <AddCircleOutlineIcon onClick={ () =>setOpenModal(true) }/>
                                                                                                     </IconButton>                                          
                                                                                             </Tooltip>                                                  
                                                                                         </Grid>
@@ -186,11 +202,11 @@ if(isLoading){
                                                                                 <TableCell style={{border:'0px solid grey'}}>{pi.price}</TableCell>
                                                                                 <TableCell style={pi.stock === 0 ? {border:'0px solid grey', color:'red'} : {border:'0px solid grey', color:'green'} }>{pi.stock}</TableCell>
                                                                                 <TableCell style={{border:'0px solid grey'}}>
-                                                                                    <Tooltip  title={pi.stock === 0 ? "not allowed" : "Remove"} placement="top">
+                                                                                    <Tooltip  title={pi.stock === 0 ? "not allowed" : "Remove"}  placement="top">
                                                                                         <IconButton  style={{color:'red'}}>
                                                                                             <RemoveCircleOutlineIcon
-                                                                                                    onClick={()=>{console.log('minus btn clicked')}} 
-                                                                                                    style={pi.stock === 0 ? {cursor:'not-allowed', pointerEvents:'none'} : {cursor: 'pointer'} }
+                                                                                                    onClick={removeProductHandler} 
+                                                                                                    style={pi.stock === 0 ? {cursor:'not-allowed',pointerEvents:'none'} : {cursor: 'pointer'} }
                                                                                                     />
                                                                                         </IconButton>                                          
                                                                                     </Tooltip>
@@ -226,6 +242,14 @@ if(isLoading){
             <Grid container spacing={5}>
                 {InventoryItems}           
             </Grid>
+
+            <AddInventoryModal 
+                openModal={openModal}
+                setOpenModal = {setOpenModal}
+            />
+
+
+           
 
             <Paginator
                 previousLabel = {"<"}

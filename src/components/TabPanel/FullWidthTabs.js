@@ -1,11 +1,10 @@
 import React,{useState} from 'react';
 import {NavLink, useHistory} from 'react-router-dom';
-import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles, withStyles} from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import SwipeableViews from 'react-swipeable-views';
 import Box from '@material-ui/core/Box';
 
 import { withRouter } from 'react-router-dom';
@@ -16,10 +15,8 @@ import ProductTabContent from './ProductTabContent/ProductTabContent';
 import AddCategory from '../Buttons/AddCategory/AddCategory';
 import AddProduct from '../Buttons/AddProduct/AddProduct';
 import InventoryTabContent from './InventoryTabContent/InventoryTabContent';
-import { Grid } from '@material-ui/core';
-
-
-
+import TimeAndSlot from './TimeAndSlot/TimeAndSlot';
+import OrderManagement from './OrderManagement/OrderManagement';
 
 const AntTabs = withStyles({
   root: {
@@ -110,6 +107,10 @@ const HeaderBelowMenu = ()=> {
     let history = useHistory();
 
 
+    //calendar
+    const [dateValue, setDateValue] = useState(new Date());
+
+
   return (
     <div className={classes.root}>
 
@@ -161,11 +162,11 @@ const HeaderBelowMenu = ()=> {
           </TabPanel>
 
           <TabPanel value={value} index={2} >
-            Delivery Time slot
+            <TimeAndSlot />
           </TabPanel>
 
           <TabPanel value={value} index={3} >
-            Order Management
+            <OrderManagement />
           </TabPanel>
       </div>
 

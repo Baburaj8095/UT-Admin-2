@@ -136,7 +136,7 @@ class PaginatedData extends Component{
         displayItems = this.state.dataItems.slice(pagesVisited, pagesVisited + itemsPerPage)
                                            .map((product)=>{
     
-                                            if(product.inventories.length !== 0){
+                                            if(!product.archieved){
                                         
                                                 return(
 

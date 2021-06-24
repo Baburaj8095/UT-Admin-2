@@ -14,7 +14,8 @@ import axios from 'axios';
 
 
 //axios.defaults.baseURL = 'https://ecom.xircular.io/v2/api';
-axios.defaults.baseURL = 'http://localhost:8999/api';
+//axios.defaults.baseURL = 'http://localhost:8999/api';
+axios.defaults.baseURL = 'https://ecom.xircular.io/test/api';
 
 
 ReactDOM.render(
