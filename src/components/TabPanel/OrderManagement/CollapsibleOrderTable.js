@@ -16,6 +16,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import TablePagination from '@material-ui/core/TablePagination';
 import moment from 'moment';
+import { reactLocalStorage } from 'reactjs-localstorage';
 
 
 const useStyles = makeStyles({
@@ -36,20 +37,6 @@ const useRowStyles = makeStyles({
   },
 });
 
-function createData(name, calories, fat, carbs, protein, price) {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    price,
-    history: [
-      { date: '2020-01-05', customerId: '11091700', amount: 3 },
-      { date: '2020-01-02', customerId: 'Anonymous', amount: 1 },
-    ],
-  };
-}
 
 
 
@@ -76,10 +63,12 @@ const handleChangeRowsPerPage = (event) => {
   setPage(0);
 };
 
+const tableLength = reactLocalStorage.get('table_data_length');
+
 paginate = (<TablePagination
 rowsPerPageOptions={[10, 25, 100]}
 component="div"
-count={rows.length}
+count={tableLength}
 rowsPerPage={rowsPerPage}
 page={page}
 onChangePage={handleChangePage}
@@ -88,7 +77,7 @@ onChangeRowsPerPage={handleChangeRowsPerPage}
 
 //end of pagination settings
 
-  const { row } = props;
+  const { row } = props; //outer table data
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
 
@@ -103,10 +92,10 @@ onChangeRowsPerPage={handleChangeRowsPerPage}
               </IconButton>
               </TableCell>
               <TableCell component="th" scope="row">{row.id}</TableCell>
-              <TableCell align="right">{row.placedDate}</TableCell>
-              <TableCell align="right">{row.status}</TableCell>
-              <TableCell align="right">{row.customer.firstName}</TableCell>
-              <TableCell align="right">{ moment(row.deliveryInfo.slotStart).format('YYYY-MM-DD')} - { moment(row.deliveryInfo.slotEnd).format('YYYY-MM-DD')}</TableCell>
+              <TableCell cocomponent="th">{row.placedDate}</TableCell>
+              <TableCell cocomponent="th">{row.status}</TableCell>
+              <TableCell cocomponent="th">{row.customer.firstName}</TableCell>
+              <TableCell cocomponent="th">{ moment(row.deliveryInfo.slotStart).format('YYYY-MM-DD')} - { moment(row.deliveryInfo.slotEnd).format('YYYY-MM-DD')}</TableCell>
       </TableRow>
        {/* <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -168,28 +157,11 @@ onChangeRowsPerPage={handleChangeRowsPerPage}
 // };
 
 
- 
-
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0, 3.99),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3, 4.99),
-  createData('Eclair', 262, 16.0, 24, 6.0, 3.79),
-  createData('Cupcake', 305, 3.7, 67, 4.3, 2.5),
-  createData('Gingerbread', 356, 16.0, 49, 3.9, 1.5),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0, 3.99),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3, 4.99),
-  createData('Eclair', 262, 16.0, 24, 6.0, 3.79),
-  createData('Cupcake', 305, 3.7, 67, 4.3, 2.5),
-  createData('', '', '', '','' , paginate),
-];
-
-
-
 
 const CollapsibleOrderTable = (props)=> {
 
-  const data = props.tableData;
+  const data = props.tableData; //data passed as props in OrderManagement.js
+  reactLocalStorage.set('table_data_length', data.length);
 
   const classes2 = useStyles();
 
@@ -197,14 +169,14 @@ const CollapsibleOrderTable = (props)=> {
   return (
     <Paper className={classes2.paper}>
       <Table aria-label="collapsible table">
-        <TableHead >
+        <TableHead>
           <TableRow style={{backgroundColor:'#E6E6FA', textAlign:'center'}}>
             <TableCell />
             <TableCell style={{fontSize:'17px'}}>Order ID</TableCell>
-            <TableCell style={{fontSize:'17px'}} align="right">Order Date</TableCell>
-            <TableCell style={{fontSize:'17px'}} align="right">Status</TableCell>
-            <TableCell style={{fontSize:'17px'}} align="right">Customer Name</TableCell>
-            <TableCell style={{fontSize:'17px'}} align="right">Delivery Slot</TableCell>
+            <TableCell style={{fontSize:'17px'}} component="th">Order Date</TableCell>
+            <TableCell style={{fontSize:'17px'}} component="th">Status</TableCell>
+            <TableCell style={{fontSize:'17px'}} component="th">Customer Name</TableCell>
+            <TableCell style={{fontSize:'17px'}} component="th">Delivery Slot</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

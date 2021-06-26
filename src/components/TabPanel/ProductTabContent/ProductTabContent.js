@@ -21,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     display: 'flex',
     height: 523,
+     marginTop:'80px'
+    //position:'fixed',//this positions the categories and theproduct list and the pagination fixed
   },
 
   tabs: {
@@ -93,30 +95,40 @@ export default function ProductTabContent() {
   //storing the category name
   const [catName, setCatName] = useState(null);
 
-  const sendCategoryId =(id, name) =>{
+  //storing the rank in the localStorage to be used while creating a product(AddProductsLink.js)
+  const [Rank, setRank] = useState(1);
+
+  const [counterr, setcount] = useState(0); //to test if counter is incrementing or not
+
+  const sendCategoryId =(id,counter, name, rank) =>{
     
     setCategoryId(id);
     setproductList(listOfProducts);
     setlocalStorage(id);
     setCatName(name);
+    setRank(rank);
+
+    setcount(counter); //to test if counter is incrementing or not
+
     setLocal();
    
     
   }
 
-  //storing the category id in the LocalStorage
+  //storing the category data in the LocalStorage
   let i=0;
   const setLocal=()=>{
     reactLocalStorage.set('category_id', localStorage);
     reactLocalStorage.set('cat_name', catName);
+    reactLocalStorage.set('rank', Rank);
     // i++;
     reactLocalStorage.set('clicked_count', i++);
-    
+    console.log("the counter value: ",counterr);    
   }
 
 
 let indexNum = [];
-let count = 1;
+let count = -1;
 
   return (
     <div className={classes.root}>
@@ -132,11 +144,11 @@ let count = 1;
 
         {category.map((cat, index) =>{
 
-          indexNum.push(count);
-          count++;
+          indexNum.push(count++);
+          
           //onClick={function (){sendCategoryId(cat.id)}} 
             return(
-                <Tab key={index} onClick={function (){sendCategoryId(cat.id, cat.name)}} className={classes2.tab} label={cat.name} {...anyProps(0)} style={{minWidth:'60px',marginRight:'10px',fontSize: '12px', fontWeight: '600'}}/>
+                <Tab key={index} onClick={function (){sendCategoryId(cat.id, count, cat.name, cat.rank)}} className={classes2.tab} label={cat.name} {...anyProps(0)} style={{minWidth:'60px',marginRight:'10px',fontSize: '12px', fontWeight: '600'}}/>
               )
           })
           }
@@ -158,29 +170,7 @@ let count = 1;
                           : <TabPanel>
                                 {defaultList}
                             </TabPanel>
-        }
-                  
-        
-        
-
-
-      {/* <div className={classes2.divScroller}  >
-        <TabPanel value={value} index={0}>
-            <PaginatedData cId={CategoryId} />
-        </TabPanel>
-      </div>
-      
-      <div className={classes2.divScroller} >
-          <TabPanel value={value} index={1}>
-              <SaladEssentials cId={CategoryId} />
-          </TabPanel>
-      </div>
-
-      <div className={classes2.divScroller} >
-          <TabPanel value={value} index={2}>
-              <FlavourBombs cId={CategoryId} />
-          </TabPanel>
-      </div> */}
+        }                  
 
      
     </div>

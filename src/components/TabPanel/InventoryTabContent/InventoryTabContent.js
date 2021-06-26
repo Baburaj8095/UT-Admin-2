@@ -50,24 +50,6 @@ const useStyles = makeStyles((theme) => ({
   
 }));
 
-// function createData( unit, price, stock, action) {
-//   return { unit, price, stock, action };
-// }
-
-// const rows = [
-//   createData(159, 6.0, 24,  <RemoveCircleOutlineIcon />),
-//   createData(237, 9.0, 37, <RemoveCircleOutlineIcon />),
-//     ];
-
-
-
-
-
-//jwt token from LocalStorage
-
-
-
-
 
 const InventoryTabContent=()=> {
   const classes = useStyles();
@@ -77,16 +59,15 @@ const [isLoading, setisLoading] = useState(true);
   const [products, setProducts] = useState([]);
 
   const token = reactLocalStorage.get('id_token');
-  //get the product-category list
-  const api = "/products";
+  //api for product inventories
+  const api = "/product-inventories";
   //const jwt = reactLocalStorage.get('id_token');
   const jwtToken ='Bearer '+token;
   
   
-  //get the product category
+  //get the product inventories
   useEffect( () =>{
 
-  
         axios.get(api, {
                 headers: {
                 'Authorization': jwtToken,
@@ -101,9 +82,11 @@ const [isLoading, setisLoading] = useState(true);
                     setisLoading(false);
                   return product;
                 })
-      },[jwtToken, api, token]);
+      },[jwtToken, api]);
 
 
+      //get the product with the prodict_id iterated through the map of inventories
+      
 
 
 //pagination setup starts
@@ -138,7 +121,7 @@ const [openModal, setOpenModal] = useState(false);
 
 const removeProductHandler = () =>{
     const confirmation = window.confirm("Are you sure you want to remove a unit of this product from the inventory?");
-    console.log("confirmation: ", confirmation);
+    
 }
 
 
@@ -161,19 +144,22 @@ if(isLoading){
                                                 <Grid item sm={6} xs={12} lg={4} key={res.id}> 
                                                     <TableContainer component={Card} className={classes.theCard}>
 
-                                                            <Table className={classes.table} aria-label="simple table">
+                                                            <Table className={classes.table} >
                                                                     <TableHead>
                                                                         <TableRow>
                                                                             <TableCell colSpan={4}>
 
                                                                                 <Box className={classes.toolbar}>
                                                                                     <Grid container>
+
                                                                                         <Grid item xs style={{width:'80px'}}>
+
                                                                                             <Typography variant="h6" className={classes.title}>
                                                                                                 {res.name}
                                                                                             </Typography>
                                                                                             
                                                                                         </Grid>
+
                                                                                         <Grid item >
                                                                                             <Tooltip title="Add" placement="top">
                                                                                                     <IconButton style={{color:'green'}}>
@@ -196,23 +182,23 @@ if(isLoading){
                                                                         </TableRow>
                                                                     </TableHead>
                                                                     <TableBody>
-                                                                        {res.inventories.map((pi) => (
-                                                                            <TableRow key={pi.name}>
-                                                                                <TableCell style={ {border:'0px solid grey'}}>{pi.unitName}</TableCell>
-                                                                                <TableCell style={{border:'0px solid grey'}}>{pi.price}</TableCell>
-                                                                                <TableCell style={pi.stock === 0 ? {border:'0px solid grey', color:'red'} : {border:'0px solid grey', color:'green'} }>{pi.stock}</TableCell>
+                                                                        
+                                                                            <TableRow>
+                                                                                <TableCell style={ {border:'0px solid grey'}}>{res.unitName}</TableCell>
+                                                                                <TableCell style={{border:'0px solid grey'}}>{res.price}</TableCell>
+                                                                                <TableCell style={res.stock === 0 ? {border:'0px solid grey', color:'red'} : {border:'0px solid grey', color:'green'} }>{res.stock}</TableCell>
                                                                                 <TableCell style={{border:'0px solid grey'}}>
-                                                                                    <Tooltip  title={pi.stock === 0 ? "not allowed" : "Remove"}  placement="top">
+                                                                                    <Tooltip  title={res.stock === 0 ? "not allowed" : "Remove"}  placement="top">
                                                                                         <IconButton  style={{color:'red'}}>
                                                                                             <RemoveCircleOutlineIcon
                                                                                                     onClick={removeProductHandler} 
-                                                                                                    style={pi.stock === 0 ? {cursor:'not-allowed',pointerEvents:'none'} : {cursor: 'pointer'} }
+                                                                                                    style={res.stock === 0 ? {cursor:'not-allowed',pointerEvents:'none'} : {cursor: 'pointer'} }
                                                                                                     />
                                                                                         </IconButton>                                          
                                                                                     </Tooltip>
                                                                                 </TableCell>
                                                                             </TableRow>
-                                                                            ))}
+                                                                           
                                                                     </TableBody>
                                                                 </Table>
                                                         </TableContainer>
@@ -247,9 +233,6 @@ if(isLoading){
                 openModal={openModal}
                 setOpenModal = {setOpenModal}
             />
-
-
-           
 
             <Paginator
                 previousLabel = {"<"}

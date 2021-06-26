@@ -116,8 +116,6 @@ const Login=()=> {
 
           const body = {username:data.email, password:data.password};
           
-
-
           axios.post(authApi, body)
               .then(response =>{
 
@@ -142,12 +140,15 @@ const Login=()=> {
       
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
+        
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
+
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+
           <form onSubmit={(event) =>handleLogin(event)} method="get" className={classes.form} noValidate>
             <TextField
             InputProps={{
@@ -207,8 +208,7 @@ const Login=()=> {
                
               <FormControl variant="outlined" style={{marginLeft:'0px'}} fullWidth className={classes.formControl}>
                 <InputLabel id="market">Market</InputLabel>
-                <Select
-                
+                <Select              
                   labelId="market"
                   id="market"
                   value={data.market}

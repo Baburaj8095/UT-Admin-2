@@ -1,16 +1,12 @@
-import React,{Component, useState} from 'react';
+import React,{Component} from 'react';
 //import json_data from '../Pagination/fake_data.json';
 import Paginator from 'react-paginate';
-import { Button, Card, CardContent, Grid, Typography } from '@material-ui/core';
+import { Card, CardContent, Grid, Typography } from '@material-ui/core';
 import axios from 'axios';
 import {withStyles} from '@material-ui/core/styles';
 
-import Pagination from '@material-ui/lab/Pagination';
-
 import classes2 from './LocalFavourites.module.css';
 import Spinner from '../../components/Spinner/Spinner';
-import ReadMore from '../ReadMore/ReadMore';
-
 import DottedMenu from '../../components/Buttons/DottedMenu/DottedMenu';
 import {reactLocalStorage} from 'reactjs-localstorage';
 
@@ -26,12 +22,6 @@ const useStyles = theme=>({
         margin: 9.8,
         
       },
-      paginatorReact : {
-        '& > *': {
-            marginTop: theme.spacing(2),
-          },
-      },
-
       
       formControl: {
         margin: theme.spacing(1),
@@ -63,8 +53,6 @@ class PaginatedData extends Component{
                 isLoading: true  
                 });
 
-
-         
 
             //get the product list .... use the 1101 id for default local fav
             //const api = "/products?page=0&productCategoryId.specified=true&productCategoryId.equals="+this.props.cId;
@@ -201,15 +189,8 @@ return (
               {displayItems}
            </Grid> 
 
-            {/* <div className={classes.paginatorReact}>
-                <Pagination className={classes2.paginationButtons}
-                            count={pageCount}
-                            onChange={this.changePage}
-                            
-                            variant="outlined"
-                            color="secondary"/>
-            </div> */}
-
+           
+        <div style={{marginTop:'30px'}}>
             <Paginator
                 previousLabel = {"<"}
                 nextLabel = {">"}
@@ -222,6 +203,8 @@ return (
                 activeClassName = {classes2.activePageNumberButton}
                 
                 />
+
+        </div>
                     
         </div>
 

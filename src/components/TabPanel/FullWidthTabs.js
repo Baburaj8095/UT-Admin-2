@@ -18,20 +18,26 @@ import InventoryTabContent from './InventoryTabContent/InventoryTabContent';
 import TimeAndSlot from './TimeAndSlot/TimeAndSlot';
 import OrderManagement from './OrderManagement/OrderManagement';
 
+
+//to enable scrollbar in all the main pages, remove the styling in the App.js
+
 const AntTabs = withStyles({
   root: {
     borderBottom: '1px solid #e8e8e8',
+    position:'fixed',
+    width:'100%',
+    
   },
   indicator: {
     backgroundColor: '#32CD32',
   },
 })(Tabs);
 
-const AntTab = withStyles((theme) => ({
+const AntTab = withStyles((theme) => ({ // main header tabs panel
   root: {
     textTransform: 'none',
     minWidth: 72,
-   top:0,
+    top:0,
     marginLeft: '15px',
     fontWeight: theme.typography.fontWeightRegular,
     marginRight: theme.spacing(4),
@@ -67,19 +73,21 @@ const AntTab = withStyles((theme) => ({
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    position:'fixed'
   },
   padding: {
     padding: theme.spacing(3),
   },
-  demo1: {
+  demo1: { // main header tabs panel
     position:'fixed',
     top:'70px',
     width:'100%',
     backgroundColor: theme.palette.background.paper,
   },
-  rowElementsDiv:{
+  rowElementsDiv:{ // category, all products, add product, add category div
+    position:'fixed',
     width:'100%',
-    marginTop:'160px',
+    marginTop:'65px',
     textAlign: 'center',
   },
   // rowElements:{
@@ -105,10 +113,6 @@ const HeaderBelowMenu = ()=> {
 
  //link for the addCategory component
     let history = useHistory();
-
-
-    //calendar
-    const [dateValue, setDateValue] = useState(new Date());
 
 
   return (
@@ -204,9 +208,6 @@ TabPanel.propTypes = {
   index: PropTypes.any.isRequired,
   value: PropTypes.any.isRequired,
 };
-
-
-
 
 
 function anyProps(index) {

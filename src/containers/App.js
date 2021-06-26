@@ -10,12 +10,14 @@ import ArchieveProduct from "../Links/ArchieveProduct/ArchieveProduct";
 
 
 function App() {
+  // style={{overflow:'hidden'}} disables scrollbar in all the pages
   return (
-   <div>
+    <div style={{overflow:'hidden'}}>
+     
     <Switch>
  
     
-                {/* <ProtectedRoutes path="/homepage" component={HomePage} isAuth={isAuth}/>  */}
+    {/* <ProtectedRoutes path="/homepage" component={HomePage} isAuth={isAuth}/>  */}
        
     <Route  path="/homepage" exact component={ withRouter(HomePage) } />
     <Route  path="/edit-product" exact component={ withRouter(EditProduct) } />

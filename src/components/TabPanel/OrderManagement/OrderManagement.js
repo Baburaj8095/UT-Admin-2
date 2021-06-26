@@ -389,13 +389,21 @@ const OrderManagement =()=> {
     </div>
 
     {/*///////////////// table content ////////////////*/}
-            <div style={{marginTop:'100px', width:'100%'}}>
-              <div>
-                  <CollapsibleOrderTable  tableData = {dataHolder}/>
-              </div>
+        <div style={{marginTop:'100px', width:'100%'}}>
+          <div style={{overflow:'scroll',overflowX:'hidden', height:'480px', width:'170%'}}>
+            <div>
+                <CollapsibleOrderTable  tableData = {dataHolder}/>
             </div>
+          </div>
+        </div>
+
+        {/* <div style={{backgroundColor: 'grey', color:'white', position:'fixed', width:'97%',bottom:0, height:'130px'}}>
+              <Footer />
+        </div> */}
 
 </div>
+
+            
     </Auxiliary>
   );
 }

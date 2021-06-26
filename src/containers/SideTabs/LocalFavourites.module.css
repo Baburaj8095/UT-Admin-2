@@ -1,14 +1,13 @@
 .paginationButtons{
     width: 73%;
     height: 20px;
-    /*  height: 80px; this one is  for material ui*/
-    
     bottom: 0;
     position: fixed;
     list-style: none;
     color: black;
     display: flex;
     justify-content: center;
+    
 }
 
 .paginationButtons a{
@@ -31,17 +30,20 @@
     background-color: green;
     margin: 5px;
     border-radius: 3px;
+    
 }
 
 
 .previousButton{
     color: green;
+    
 
 }
 
 
 .nextButton{
     color: green;
+    
 }
 
 .paginationDisabled{

@@ -47,23 +47,37 @@ const logout=()=>{
 
 
   //body
+  //{
+  //   "name": "Mango Juice",
+  //   "description": "mango juice",
+  //   "productImage": "https://unsplash.com/photos/2TxmAfd3bxU",
+  //   "archieved": false,
+  //   "rank":3,
+  //   "dateInventory":true,
+  //   "productCategory": {
+  //       "id":1752
+  //     }
+  //   } 
+
   const [body, setbody] = useState({
                                       name: '',
                                       description: '',
                                       productImage : '',
                                       archieved:false,
+                                      rank:reactLocalStorage.get('rank'), //this rank value was set in the localstorage while iterating through the category map in ProductsTabContent.js
+                                      dateInventory: true,
                                       productCategory: {
-                                                          id: parseInt(reactLocalStorage.get('category_id'))
+                                                          id: parseInt(reactLocalStorage.get('category_id')) //1804 for Dry Fruits category
                                                       }
                                       })
 
 
 //handle user input data
   const handleInput = (e) =>{
-    const newData= {...body};
+    const newData= {...body,  productCategory: {id: body.productCategory.id}};
     newData[e.target.id] = e.target.value;
     setbody(newData);
-    console.log(newData);
+    console.log("input data collected",newData);
   }
 
  
@@ -78,13 +92,27 @@ const logout=()=>{
 
   //for product post
   //body
+  // {
+  //   "name": "Mango Juice",
+  //   "description": "mango juice",
+  //   "productImage": "https://unsplash.com/photos/2TxmAfd3bxU",
+  //   "archieved": false,
+  //   "rank":3, parseInt
+  //   "dateInventory":true,
+  //   "productCategory": {
+  //       "id":1752
+  //     }
+  //   } 
+
   const product = {
                       name: body.name,
                       description: body.description,
                       productImage : body.productImage,
-                      archieved:body.archieved,
+                      archieved: body.archieved,
+                      rank: parseInt(body.rank),
+                      dateInventory: body.dateInventory,
                       productCategory: {
-                                          id: parseInt(reactLocalStorage.get('category_id'))
+                                          id: body.productCategory.id//parseInt(reactLocalStorage.get('category_id'))
                                       }
                       }
 
@@ -96,7 +124,7 @@ const headerObject = {
                       }
 
 const submitData =()=>{
- 
+  reactLocalStorage.get('category_id');
  // console.log("id_token from localstorage: ",reactLocalStorage.get('id_token'));
 
  
@@ -106,7 +134,7 @@ const submitData =()=>{
            )
           .then(response=>{
               console.log("submited products: "+response.data);
-              return history.push("/");
+              return history.push("/homepage");
                 }
             ).catch((error)=>{
               console.log("error while posting data: ",error);
@@ -143,7 +171,7 @@ const submitData =()=>{
                               <div>
                               
                                   <TextField
-                                    id="product_name"
+                                    id="name"
                                     label="Product Name"
                                     onChange={(e) => handleInput(e)}
                                     defaultValue={body.name}
@@ -161,8 +189,27 @@ const submitData =()=>{
                                   />
 
                                   <TextField
-                                    id="product_category"
-                                    
+                                    type="number"
+                                    id="rank"
+                                    label="Product Rank"
+                                    onChange={(e) => handleInput(e)}
+                                    defaultValue={body.rank}
+                                    style={{ marginLeft: 2,marginTop: 12 }}
+                                    placeholder="product rank ( 1 - 100 )"
+                                    helperText=""
+                                    fullWidth
+                                    size="small"
+                                    margin="normal"
+                                    InputLabelProps={{
+                                      shrink: true,
+                                    }}
+                                    variant="outlined"
+                                    required
+                                  />
+
+                                  <TextField
+                                    id="id"
+                                    name="productCategory"
                                     defaultValue={reactLocalStorage.get('cat_name')}
                                     onChange={(e) => handleInput(e)}  
                                     readOnly
@@ -181,7 +228,7 @@ const submitData =()=>{
                                   />
 
                                   <TextField
-                                    id="product_pescription"
+                                    id="description"
                                     label="Product Description"
                                     onChange={(e) => handleInput(e)}
                                     defaultValue={body.description}
@@ -200,7 +247,7 @@ const submitData =()=>{
                                   />
 
                                   <TextField
-                                    id="product_image"
+                                    id="productImage"
                                     label="Product Image URL"
                                     onChange={(e) => handleInput(e)}
                                     defaultValue={body.productImage}
