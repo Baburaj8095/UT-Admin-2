@@ -119,7 +119,7 @@ const HeaderBelowMenu = ()=> {
     <div className={classes.root}>
 
       <div className={classes.demo1}>
-        <AntTabs value={value} onChange={handleChange} aria-label="ant example">
+        <AntTabs value={value} onChange={handleChange} >
           <AntTab label="Product" {...anyProps(0)}/>
           <AntTab label="Inventory" {...anyProps(1)}/>
           <AntTab label="Delivery Time slot" {...anyProps(2)}/>

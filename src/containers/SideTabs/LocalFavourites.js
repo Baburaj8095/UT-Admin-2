@@ -141,7 +141,7 @@ class PaginatedData extends Component{
                                                                     <th>
                                                                         <div style={{float:'right'}}>
                                                                             {/* <button className={classes2.CartButton} onClick={() => this.addToCartAction(product)}>Dot menu</button>   */}
-                                                                            <DottedMenu name={product.name} product_id={product.id} desc={product.description} image={product.productImage} className={classes2.CartButton}/>
+                                                                            <DottedMenu name={product.name} product_id={product.id} desc={product.description} image={product.productImage} prodRank={product.rank} catId={product.productCategory.id} className={classes2.CartButton}/>
                                                                         </div>
                                                                     </th>
                                                                 </tr>

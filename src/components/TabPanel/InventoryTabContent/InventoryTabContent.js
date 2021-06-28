@@ -56,7 +56,7 @@ const InventoryTabContent=()=> {
 
 const [isLoading, setisLoading] = useState(true);
 
-  const [products, setProducts] = useState([]);
+  const [InventoryData, setInventoryProducts] = useState([]);
 
   const token = reactLocalStorage.get('id_token');
   //api for product inventories
@@ -64,29 +64,87 @@ const [isLoading, setisLoading] = useState(true);
   //const jwt = reactLocalStorage.get('id_token');
   const jwtToken ='Bearer '+token;
   
+  //to get the product based on the product_id in the inventory
+  const [Product, setProduct] = useState([]);
+  const [ProductId, setProductId] = useState(null);
   
-  //get the product inventories
-  useEffect( () =>{
+  
 
-        axios.get(api, {
-                headers: {
-                'Authorization': jwtToken,
-                'Accept' : '*/*',
-                'Content-Type': 'application/json',
-                'App-Token' : 'A14BC'
-                  }
-                })
-                .then(product =>{
-                    setProducts(product.data);
-                    console.log("product.data: ",product.data);
-                    setisLoading(false);
-                  return product;
-                })
-      },[jwtToken, api]);
+  
 
 
-      //get the product with the prodict_id iterated through the map of inventories
-      
+
+//const [resp, setGitData] = useState({ data: null, repos: null });
+
+  useEffect(() => {
+
+    let api2 = '';
+    const getProductId = ()=>{
+        if(ProductId != null){
+            api2 = "/products/"+ProductId;
+        }
+    } 
+   
+      setisLoading(false);
+
+      axios.get(
+                api, {
+                        headers: {
+                        'Authorization': jwtToken,
+                        'Accept' : '*/*',
+                        'Content-Type': 'application/json',
+                        'App-Token' : 'A14BC'
+                        }
+                        }
+                    ).then(resp=>{
+                                setInventoryProducts(resp.data);
+
+                    });
+
+    //   const productsResponse = axios.get(
+//                                         api2, {
+//                                             headers: {
+//                                             'Authorization': jwtToken,
+//                                             'Accept' : '*/*',
+//                                             'Content-Type': 'application/json',
+//                                             'App-Token' : 'A14BC'
+//                                                 }
+//                                             }
+    //                                         );
+
+    // axios.all([inventoResponse]).then(axios.spread((...responses) => {
+    //     setInventoryProducts(responses);
+    //     //setProduct(responses[1]);
+    //     getProductId();
+    //     //setInventoryProducts({ inventory: responses[0].data, product: responses[1].data });
+    //     console.log("inventory data: "+responses);
+       
+    //     })).catch(errors => {
+    //             console.log("error from InventoryTabContent.js: ", errors);
+    //     })
+
+      //setInventoryProducts({ inventory: inventoResponse.data, product: productsResponse.data });
+
+
+
+      axios.get(api2, {
+                        headers: {
+                        'Authorization': jwtToken,
+                        'Accept' : '*/*',
+                        'Content-Type': 'application/json',
+                        'App-Token' : 'A14BC'
+                            }
+                      }
+                ).then(res=>{
+                    setProduct(res.data);
+                    console.log("producrs from single axios get products: ",res.data)
+                });
+
+
+
+  }, [jwtToken, api, ProductId]);
+
+
 
 
 //pagination setup starts
@@ -108,7 +166,7 @@ let itemsPerPage = 3;
 
 const pagesVisited = pageNumber * itemsPerPage;
 
-const pageCount = Math.ceil(products.length / itemsPerPage);
+const pageCount = Math.ceil(InventoryData.length / itemsPerPage);
 
 //pagination setup ends
 
@@ -121,11 +179,8 @@ const [openModal, setOpenModal] = useState(false);
 
 const removeProductHandler = () =>{
     const confirmation = window.confirm("Are you sure you want to remove a unit of this product from the inventory?");
-    
+    console.log("do you want to delete this item from thr inventory? ", confirmation);
 }
-
-
-
 
 
 let InventoryItems = '';  
@@ -135,84 +190,87 @@ if(isLoading){
     InventoryItems = <Spinner />;
 }else{
 
-    InventoryItems = products.slice(pagesVisited, pagesVisited + itemsPerPage )
+    InventoryItems = InventoryData.slice(pagesVisited, pagesVisited + itemsPerPage )
                            .map(res=>{
+                                //setProductId(res.product.id);
+                                //Product.map(products=>{
+                                    
+                                    if(res){
 
-                                    if(!res.archieved){
+                                      return(                           
+                                            <Grid item sm={6} xs={12} lg={4} key={res.id}> 
+                                                <TableContainer component={Card} className={classes.theCard}>
 
-                                        return(                           
-                                                <Grid item sm={6} xs={12} lg={4} key={res.id}> 
-                                                    <TableContainer component={Card} className={classes.theCard}>
+                                                        <Table className={classes.table} >
+                                                                <TableHead>
+                                                                    <TableRow>
+                                                                        <TableCell colSpan={4}>
 
-                                                            <Table className={classes.table} >
-                                                                    <TableHead>
-                                                                        <TableRow>
-                                                                            <TableCell colSpan={4}>
+                                                                            <Box className={classes.toolbar}>
+                                                                                <Grid container>
 
-                                                                                <Box className={classes.toolbar}>
-                                                                                    <Grid container>
+                                                                                    <Grid item xs style={{width:'80px'}}>
 
-                                                                                        <Grid item xs style={{width:'80px'}}>
-
-                                                                                            <Typography variant="h6" className={classes.title}>
-                                                                                                {res.name}
-                                                                                            </Typography>
-                                                                                            
-                                                                                        </Grid>
-
-                                                                                        <Grid item >
-                                                                                            <Tooltip title="Add" placement="top">
-                                                                                                    <IconButton style={{color:'green'}}>
-                                                                                                        <AddCircleOutlineIcon onClick={ () =>setOpenModal(true) }/>
-                                                                                                    </IconButton>                                          
-                                                                                            </Tooltip>                                                  
-                                                                                        </Grid>
+                                                                                        <Typography variant="h6" className={classes.title}>
+                                                                                            {res.product.id}
+                                                                                        </Typography>
+                                                                                        
                                                                                     </Grid>
-                                                                                </Box>
 
+                                                                                    <Grid item >
+                                                                                        <Tooltip title="Add" placement="top">
+                                                                                                <IconButton style={{color:'green'}}>
+                                                                                                    <AddCircleOutlineIcon onClick={ () =>setOpenModal(true) }/>
+                                                                                                </IconButton>                                          
+                                                                                        </Tooltip>                                                  
+                                                                                    </Grid>
+                                                                                </Grid>
+                                                                            </Box>
+
+                                                                        </TableCell>
+                                                                    </TableRow>
+
+                                                                    <TableRow> 
+                                                                        
+                                                                        <TableCell >Unit</TableCell>
+                                                                        <TableCell >Price</TableCell>
+                                                                        <TableCell colspan={2} >Stock</TableCell>
+                                                                        
+                                                                    </TableRow>
+                                                                </TableHead>
+                                                                <TableBody>
+                                                                    
+                                                                        <TableRow>
+                                                                            <TableCell style={ {border:'0px solid grey'}}>{res.unitName}</TableCell>
+                                                                            <TableCell style={{border:'0px solid grey'}}>{res.price}</TableCell>
+                                                                            <TableCell style={res.stock === 0 ? {border:'0px solid grey', color:'red'} : {border:'0px solid grey', color:'green'} }>{res.stock}</TableCell>
+                                                                            <TableCell style={{border:'0px solid grey'}}>
+                                                                                <Tooltip  title={res.stock === 0 ? "not allowed" : "Remove"}  placement="top">
+                                                                                    <IconButton  style={{color:'red'}}>
+                                                                                        <RemoveCircleOutlineIcon
+                                                                                                onClick={removeProductHandler} 
+                                                                                                style={res.stock === 0 ? {cursor:'not-allowed',pointerEvents:'none'} : {cursor: 'pointer'} }
+                                                                                                />
+                                                                                    </IconButton>                                          
+                                                                                </Tooltip>
                                                                             </TableCell>
                                                                         </TableRow>
+                                                                       
+                                                                </TableBody>
+                                                            </Table>
+                                                    </TableContainer>
+                                             </Grid>
+                        
 
-                                                                        <TableRow> 
-                                                                            
-                                                                            <TableCell >Unit</TableCell>
-                                                                            <TableCell >Price</TableCell>
-                                                                            <TableCell colspan={2} >Stock</TableCell>
-                                                                            
-                                                                        </TableRow>
-                                                                    </TableHead>
-                                                                    <TableBody>
-                                                                        
-                                                                            <TableRow>
-                                                                                <TableCell style={ {border:'0px solid grey'}}>{res.unitName}</TableCell>
-                                                                                <TableCell style={{border:'0px solid grey'}}>{res.price}</TableCell>
-                                                                                <TableCell style={res.stock === 0 ? {border:'0px solid grey', color:'red'} : {border:'0px solid grey', color:'green'} }>{res.stock}</TableCell>
-                                                                                <TableCell style={{border:'0px solid grey'}}>
-                                                                                    <Tooltip  title={res.stock === 0 ? "not allowed" : "Remove"}  placement="top">
-                                                                                        <IconButton  style={{color:'red'}}>
-                                                                                            <RemoveCircleOutlineIcon
-                                                                                                    onClick={removeProductHandler} 
-                                                                                                    style={res.stock === 0 ? {cursor:'not-allowed',pointerEvents:'none'} : {cursor: 'pointer'} }
-                                                                                                    />
-                                                                                        </IconButton>                                          
-                                                                                    </Tooltip>
-                                                                                </TableCell>
-                                                                            </TableRow>
-                                                                           
-                                                                    </TableBody>
-                                                                </Table>
-                                                        </TableContainer>
-                                                 </Grid>
-                            
+                                            )
+                                
+                                
 
-                                                )
-                                    //end of map return
-
-                         }
+                         }else{ return null}                            
+                            //}) //end of inner map return
+                                    
                  return null;
-    }
-            
-)
+                            })//end of outer map
 
 
 }//end of else

@@ -51,11 +51,15 @@ const prod_data = reactLocalStorage.getObject('productData');
 
   //body
   const [body, setbody] = useState({
+                                      id: prod_data.Pid,
                                       name: prod_data.Pname,
                                       description: prod_data.Pdesc,
                                       productImage : prod_data.Pimage,
+                                      archieved: true,
+                                      rank: prod_data.Prank,
+                                      dateInventory:true,
                                       productCategory:{
-                                          id:reactLocalStorage.get('cat_id')
+                                          id:prod_data.PCatID, // or reactLocalStorage.get('cat_id')
                                       }
                                       });
 
@@ -81,12 +85,19 @@ const prod_data = reactLocalStorage.getObject('productData');
  //jwt token
  const jwtToken ='Bearer '+id_token;
 
-  //for product post
-  //body
+
+  // //body
   const product = {
+                      id: body.id,
                       name: body.name,
                       description: body.description,
                       productImage : body.productImage,
+                      archieved: body.archieved,
+                      rank:parseInt(body.rank),
+                      dateInventory:body.dateInventory,
+                      productCategory:{
+                                          id:body.productCategory.id, 
+                                      }
                       
                       }
 
@@ -102,19 +113,24 @@ const submitData =()=>{
  // console.log("id_token from localstorage: ",reactLocalStorage.get('id_token'));
 
  
-  axios.post(api,
+  axios.put(api,
            product,
            {headers: headerObject} 
            )
           .then(response=>{
-              console.log("submited products: "+response.data);
+              console.log("updated product details: "+response.data);
               return history.push("/homepage");
                 }
             ).catch((error)=>{
-              console.log("error while posting data: ",error);
+                const errorAlert = window.confirm("something went wrong, please try again");
+                if(errorAlert){
+                  history.push('/edit-product');
+                }
+              console.log("error while updating data: ",error);
             })
                 
   }
+
 
   
 
@@ -145,7 +161,7 @@ const submitData =()=>{
                               <div>
                               
                                   <TextField
-                                    id="product_name"
+                                    id="name"
                                     label="Product Name"
                                     onChange={(e) => handleInput(e)}
                                     defaultValue={body.name}
@@ -165,7 +181,7 @@ const submitData =()=>{
                                   
 
                                   <TextField
-                                    id="product_pescription"
+                                    id="description"
                                     label="Product Description"
                                     onChange={(e) => handleInput(e)}
                                     defaultValue={body.description}
@@ -184,7 +200,7 @@ const submitData =()=>{
                                   />
 
                                   <TextField
-                                    id="product_image"
+                                    id="productImage"
                                     label="Product Image URL"
                                     onChange={(e) => handleInput(e)}
                                     defaultValue={body.productImage}

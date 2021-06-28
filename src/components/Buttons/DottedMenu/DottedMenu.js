@@ -28,10 +28,12 @@ export default function LongMenu(props) {
 
  
    reactLocalStorage.setObject("productData",{
+                                                Pid: props.product_id,
                                                 Pname:props.name,
                                                 Pdesc: props.desc,
                                                 Pimage: props.image,
-                                                Pid:props.product_id
+                                                Prank:props.prodRank,
+                                                PCatID: props.catId
                                                 });
   
 

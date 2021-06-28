@@ -133,7 +133,7 @@ const submitData =()=>{
            {headers: headerObject} 
            )
           .then(response=>{
-              console.log("submited products: "+response.data);
+              console.log("submitted products: "+response.data);
               return history.push("/homepage");
                 }
             ).catch((error)=>{
