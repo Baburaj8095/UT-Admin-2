@@ -13,6 +13,7 @@ import {reactLocalStorage} from 'reactjs-localstorage';
 import classes2 from './ProductTabContent.module.css';
 import LocalFavourites from '../../../containers/SideTabs/LocalFavourites';
 import SaladEssentials from '../../../containers/SideTabs/SaladEssentials';
+import { CollectionsOutlined } from '@material-ui/icons';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -78,7 +79,36 @@ export default function ProductTabContent() {
   };
 
 
+  
+
+  //storing the category id in the useState hook
+  const [localStorage, setlocalStorage] = useState(null);
+  
+
   const [CategoryId, setCategoryId] = useState(null);
+
+  //storing the category name
+  const [catName, setCatName] = useState(null);
+
+  //storing the rank in the localStorage to be used while creating a product(AddProductsLink.js)
+  const [Rank, setRank] = useState(1);
+
+  const sendCategoryId =(id,counter, name, rank) =>{
+    
+    setCategoryId(id);
+    setproductList(listOfProducts);
+    setlocalStorage(id);
+    setCatName(name);
+    setRank(rank);
+    
+    setLocal();
+   
+    
+  }
+
+
+
+
 
   const defaultList = <LocalFavourites cId={CategoryId} />;
                       
@@ -88,48 +118,20 @@ export default function ProductTabContent() {
 
   const [productList, setproductList] = useState(defaultList);
 
-  //storing the category id in the useState hook
-  const [localStorage, setlocalStorage] = useState(null);
-  
-
-  //storing the category name
-  const [catName, setCatName] = useState(null);
-
-  //storing the rank in the localStorage to be used while creating a product(AddProductsLink.js)
-  const [Rank, setRank] = useState(1);
-
-  const [counterr, setcount] = useState(0); //to test if counter is incrementing or not
-
-  const sendCategoryId =(id,counter, name, rank) =>{
-    
-    setCategoryId(id);
-    setproductList(listOfProducts);
-    setlocalStorage(id);
-    setCatName(name);
-    setRank(rank);
-
-    setcount(counter); //to test if counter is incrementing or not
-
-    setLocal();
-   
-    
-  }
-
   //storing the category data in the LocalStorage
-  let i=0;
+
   const setLocal=()=>{
     reactLocalStorage.set('category_id', localStorage);
     reactLocalStorage.set('cat_name', catName);
     reactLocalStorage.set('rank', Rank);
-    // i++;
-    reactLocalStorage.set('clicked_count', i++);
-    console.log("the counter value: ",counterr);    
   }
 
 
 let indexNum = [];
 let count = -1;
 
+let catID = [];//for testing
+console.log('catID', catID);
   return (
     <div className={classes.root}>
         
@@ -143,9 +145,9 @@ let count = -1;
       >
 
         {category.map((cat, index) =>{
-
-          indexNum.push(count++);
-          
+          count++
+          indexNum.push(count);
+          catID.push(cat.id);//testing
           //onClick={function (){sendCategoryId(cat.id)}} 
             return(
                 <Tab key={index} onClick={function (){sendCategoryId(cat.id, count, cat.name, cat.rank)}} className={classes2.tab} label={cat.name} {...anyProps(0)} style={{minWidth:'60px',marginRight:'10px',fontSize: '12px', fontWeight: '600'}}/>
@@ -167,9 +169,16 @@ let count = -1;
 
                                       })
 
-                          : <TabPanel>
-                                {defaultList}
-                            </TabPanel>
+                          : indexNum.map(val =>{
+                                        return(
+                                          <TabPanel value={value} index={val}>
+                                              {defaultList}
+                                          </TabPanel>
+                                              
+                                            )
+
+                                      }) 
+                       
         }                  
 
      

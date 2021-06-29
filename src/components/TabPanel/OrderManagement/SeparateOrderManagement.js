@@ -10,6 +10,8 @@ import { ListItemIcon, NativeSelect } from '@material-ui/core';
  import 'react-date-range/dist/styles.css'; // main css file
  import 'react-date-range/dist/theme/default.css'; // theme css file
  import moment from 'moment';
+ import { Typography } from 'antd';
+
  import axios from 'axios';
  import { reactLocalStorage } from 'reactjs-localstorage';
 
@@ -20,11 +22,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // DatePicker
 import {DatePicker } from 'antd';
 import "antd/dist/antd.css";
+import HeaderClass from '../../../components/HomePage.js/HomePage.module.css';
 import Spinner from '../../Spinner/Spinner';
 import Footer from '../../Footer/Footer';
 import Auxiliary from '../../../hoc/Auxiliary';
 import CollapsibleOrderTable from './CollapsibleOrderTable';
 import { useHistory } from 'react-router';
+import { Button } from '@material-ui/core';
+import { NavLink } from 'react-router-dom';
 
 
 const BootstrapInput = withStyles((theme) => ({
@@ -127,7 +132,7 @@ const filters = [
 ];
 
 
-const OrderManagement =()=> {
+const SeparateOrderManagement =()=> {
 
   //handle logout
 const   history = useHistory();
@@ -136,6 +141,11 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
   history.push('/');
     }
 
+const logout=()=>{
+    reactLocalStorage.remove('id_token');
+    history.push('/');
+
+}
 
   const classes = useStyles();
 
@@ -291,10 +301,26 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
   return (
     <Auxiliary>
       
-    <div style={{display:'flex'}}>
-    
-    <div style={{display:'flex', position:'fixed',marginLeft:'8px', marginTop:'30px'}}>
+    <div>
 
+      {/* header start */}
+  
+          <div style={{position:'relative'}}>
+              <div className={HeaderClass.Header}>
+                        <Button style={{float:'left', margin:'15px', opacity: '0.7', fontWeight:'1000', fontSize: '16px'}}><strong>URBAN TILLER</strong></Button>
+                        <Button onClick={logout} variant="outlined" style={{float:'right', color: 'white', margin:'18px', borderColor: 'white'}}><strong>Logout</strong></Button>          
+                </div>
+          </div>
+      {/* header end */}
+
+       
+          <div style={{marginTop:'90px', marginLeft:'15px'}}>         
+              <Typography gutterBottom variant="h5" component="h5">
+                  <NavLink to="/homepage" style={{textDecoration:'none'}}>Home</NavLink> / <span style={{color:'grey'}}>Orders</span>
+              </Typography>                           
+          </div>
+
+    <div style={{display:'flex', position:'fixed',marginLeft:'15px', marginTop:'30px'}}>
 
         <div>
           <h5>All Orders </h5>
@@ -419,4 +445,4 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 }
 
 
-export default OrderManagement;
+export default SeparateOrderManagement;

@@ -1,10 +1,10 @@
-import React,{useEffect, useState} from 'react';
+import React,{ useState} from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router';
-import { NavLink, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import Auxiliary from '../../hoc/Auxiliary';
 import HeaderClass from '../../components/HomePage.js/HomePage.module.css';
 import Footer from '../../components/Footer/Footer';

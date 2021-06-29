@@ -6,6 +6,8 @@ import AddCategoryLink from "../Links/AddCategoryLink/AddCategoryLink";
 import AddProductsLink from "../Links/AddProductsLink/AddProductsLink";
 import EditProduct from "../Links/EditProduct/EditProduct";
 import ArchieveProduct from "../Links/ArchieveProduct/ArchieveProduct";
+import OrderDetailsPage from '../components/TabPanel/OrderManagement/OrderDetailsPage';
+import SeparateOrderManagement from '../components/TabPanel/OrderManagement/SeparateOrderManagement';
 
 
 
@@ -23,7 +25,10 @@ function App() {
     <Route  path="/edit-product" exact component={ withRouter(EditProduct) } />
     <Route  path="/archieve-product" exact component={ withRouter(ArchieveProduct) } />
     <Route  path="/add-category" exact component={ withRouter(AddCategoryLink) } />
-    <Route  path="/add-product" exact component={ withRouter(AddProductsLink) } />  
+    <Route  path="/add-product" exact component={ withRouter(AddProductsLink) } /> 
+    <Route  path="/order-details" exact component={ withRouter(OrderDetailsPage) } />
+    
+    <Route  path="/orders" exact component={ withRouter(SeparateOrderManagement) } />
     <Route exact path="/" component={ withRouter(Login) } />
 
   </Switch>

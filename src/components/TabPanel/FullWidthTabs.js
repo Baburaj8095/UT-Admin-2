@@ -15,7 +15,6 @@ import ProductTabContent from './ProductTabContent/ProductTabContent';
 import AddCategory from '../Buttons/AddCategory/AddCategory';
 import AddProduct from '../Buttons/AddProduct/AddProduct';
 import InventoryTabContent from './InventoryTabContent/InventoryTabContent';
-import TimeAndSlot from './TimeAndSlot/TimeAndSlot';
 import OrderManagement from './OrderManagement/OrderManagement';
 
 
@@ -166,7 +165,7 @@ const HeaderBelowMenu = ()=> {
           </TabPanel>
 
           <TabPanel value={value} index={2} >
-            <TimeAndSlot />
+            
           </TabPanel>
 
           <TabPanel value={value} index={3} >
