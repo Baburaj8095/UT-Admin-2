@@ -85,7 +85,7 @@ const AddCategoryLink=()=> {
                                       });
 
                                       
-//handle user input data
+//handle user form input data
   const handleInputData=(event) =>{ //the above property names must match the id of the input fields
     const newData= {...body};
     newData[event.target.id] = event.target.value;
