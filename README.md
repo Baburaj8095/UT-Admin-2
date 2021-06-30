@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# urban tiller admin console to manage orders and product inventory
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
