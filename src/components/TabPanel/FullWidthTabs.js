@@ -15,6 +15,7 @@ import ProductTabContent from './ProductTabContent/ProductTabContent';
 import AddCategory from '../Buttons/AddCategory/AddCategory';
 import AddProduct from '../Buttons/AddProduct/AddProduct';
 import InventoryTabContent from './InventoryTabContent/InventoryTabContent';
+import TimeAndSlot from './TimeAndSlot/TimeAndSlot';
 import OrderManagement from './OrderManagement/OrderManagement';
 
 
@@ -72,7 +73,6 @@ const AntTab = withStyles((theme) => ({ // main header tabs panel
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    position:'fixed'
   },
   padding: {
     padding: theme.spacing(3),
@@ -164,8 +164,8 @@ const HeaderBelowMenu = ()=> {
             <InventoryTabContent />
           </TabPanel>
 
-          <TabPanel value={value} index={2} >
-            
+          <TabPanel value={value} index={2} style={{marginTop: '10px'}}>
+            <TimeAndSlot />
           </TabPanel>
 
           <TabPanel value={value} index={3} >

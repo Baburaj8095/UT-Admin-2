@@ -10,6 +10,7 @@ import classes2 from './LocalFavourites.module.css';
 //import classes2 from './SaladEssentials.module.css';
 import Spinner from '../../components/Spinner/Spinner';
 //import ReadMore from '../ReadMore/ReadMore';
+import {reactLocalStorage} from 'reactjs-localstorage';
 
 import DottedMenu from '../../components/Buttons/DottedMenu/DottedMenu';
 
@@ -61,18 +62,14 @@ class SaladEssentials extends Component{
         });
 
 
-         //get the jwt token. later store or access the token from locaStorage
-            const body = {username: 'guest', password: 'user'};
-            const authApi = "/2/authenticate";
-
-            const resp= await axios.post(authApi, body);
-            this.setState({token: resp.data.id_token});
+        
+        const jwt = reactLocalStorage.get('id_token');
 
             //get the product list 
             // const api = "/products?page=0&productCategoryId.specified=true&productCategoryId.equals=1101";
             const api = "/products?page=0&productCategoryId.specified=true&productCategoryId.equals="+this.props.cId;
 
-            const jwtToken ='Bearer '+this.state.token;
+            const jwtToken ='Bearer '+jwt;
 
 
             axios.get(api, {

@@ -189,8 +189,14 @@ const [orders, setOrders] = useState([]);
             })
             .then(order =>{
               setOrders(order.data);
-                console.log("ORDERS based on order id : ",order.data);
+                console.log("ORDERS based on order id : ",order.data.status);
                 setisLoading(false);
+                if(statuses.includes(order.data.status)){
+
+                  let index = statuses.indexOf(order.data.status);
+                    setActiveStep((prevActiveStep) => prevActiveStep + index);
+              
+                }
               return order;
             })
   },[api, jwtToken]);
@@ -208,9 +214,9 @@ const getStepContent=(step)=> {
     case 0:
       return `Order placed`;
     case 1:
-      return 'Order yet to be processed';
+      return 'Order is being processing';
     case 2:
-      return `Order is being processed`;
+      return `Order is being Confirmed`;
     case 3:
       return `Order is confirmed`;
     case 4:

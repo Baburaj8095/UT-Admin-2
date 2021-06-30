@@ -12,8 +12,7 @@ import {reactLocalStorage} from 'reactjs-localstorage';
 
 import classes2 from './ProductTabContent.module.css';
 import LocalFavourites from '../../../containers/SideTabs/LocalFavourites';
-import SaladEssentials from '../../../containers/SideTabs/SaladEssentials';
-import { CollectionsOutlined } from '@material-ui/icons';
+import AddProductsLink from '../../../Links/AddProductsLink/AddProductsLink.js';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -52,7 +51,9 @@ export default function ProductTabContent() {
   const jwtToken ='Bearer '+token;
 
 
-  
+  const [CategoryId, setCategoryId] = useState();
+  const [localStorage, setlocalStorage] = useState(null);
+
 
 //get the product category
   useEffect( () =>{
@@ -67,9 +68,18 @@ export default function ProductTabContent() {
                 })
                 .then(productCategory =>{
                   setCategory(productCategory.data);
+                  setCategoryId(productCategory.data[0].id)
                   return productCategory;
                 })
-      },[jwtToken, api, token]);
+
+
+                reactLocalStorage.set('category_id', localStorage);
+                reactLocalStorage.set('cat_name', catName);
+                reactLocalStorage.set('rank', Rank);
+                reactLocalStorage.set('clicked_count', i++);
+                console.log("the counter value: ",localStorage);    
+
+      },[jwtToken, api, token,localStorage]);
   
 
 
@@ -79,19 +89,25 @@ export default function ProductTabContent() {
   };
 
 
-  
+
+  const defaultList = '';
+                      
+
+  const listOfProducts = '' ;
+                          
+
+  const [productList, setproductList] = useState(defaultList);
 
   //storing the category id in the useState hook
-  const [localStorage, setlocalStorage] = useState(null);
   
-
-  const [CategoryId, setCategoryId] = useState(null);
 
   //storing the category name
   const [catName, setCatName] = useState(null);
 
   //storing the rank in the localStorage to be used while creating a product(AddProductsLink.js)
   const [Rank, setRank] = useState(1);
+
+  const [counterr, setcount] = useState(0); //to test if counter is incrementing or not
 
   const sendCategoryId =(id,counter, name, rank) =>{
     
@@ -100,38 +116,29 @@ export default function ProductTabContent() {
     setlocalStorage(id);
     setCatName(name);
     setRank(rank);
-    
+
+    setcount(counter); 
+
     setLocal();
    
     
   }
 
-
-
-
-
-  const defaultList = <LocalFavourites cId={CategoryId} />;
-                      
-
-  const listOfProducts =  <SaladEssentials cId={CategoryId} />;
-                          
-
-  const [productList, setproductList] = useState(defaultList);
-
   //storing the category data in the LocalStorage
-
+  let i=0;
   const setLocal=()=>{
     reactLocalStorage.set('category_id', localStorage);
     reactLocalStorage.set('cat_name', catName);
     reactLocalStorage.set('rank', Rank);
+    // i++;
+    reactLocalStorage.set('clicked_count', i++);
+    console.log("the counter value: ",localStorage);    
   }
 
 
 let indexNum = [];
-let count = -1;
+let count = 0;
 
-let catID = [];//for testing
-console.log('catID', catID);
   return (
     <div className={classes.root}>
         
@@ -145,9 +152,9 @@ console.log('catID', catID);
       >
 
         {category.map((cat, index) =>{
-          count++
-          indexNum.push(count);
-          catID.push(cat.id);//testing
+
+          indexNum.push(count++);
+          
           //onClick={function (){sendCategoryId(cat.id)}} 
             return(
                 <Tab key={index} onClick={function (){sendCategoryId(cat.id, count, cat.name, cat.rank)}} className={classes2.tab} label={cat.name} {...anyProps(0)} style={{minWidth:'60px',marginRight:'10px',fontSize: '12px', fontWeight: '600'}}/>
@@ -162,23 +169,18 @@ console.log('catID', catID);
           CategoryId !=null ?   indexNum.map(val =>{
                                         return(
                                             <TabPanel value={value} index={val}>
-                                                  {productList}
+                                                 {CategoryId && <LocalFavourites cId={CategoryId} /> }
+                                                
                                               </TabPanel>
                                               
                                             )
 
                                       })
 
-                          : indexNum.map(val =>{
-                                        return(
-                                          <TabPanel value={value} index={val}>
-                                              {defaultList}
-                                          </TabPanel>
-                                              
-                                            )
-
-                                      }) 
-                       
+                          : <TabPanel>
+                               {CategoryId && <LocalFavourites cId={CategoryId} />}
+                             
+                            </TabPanel>
         }                  
 
      

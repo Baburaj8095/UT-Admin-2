@@ -9,7 +9,6 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import { reactLocalStorage } from 'reactjs-localstorage';
 
 
 const styles = (theme) => ({
@@ -56,34 +55,16 @@ const DialogActions = withStyles((theme) => ({
 
 
 
+
 const AddInventoryModal = (props) => {
 
     const {openModal, setOpenModal} = props;
 
+  
+
     const handleClose = () => {
         setOpenModal(false);
       };
-
-      
-
-//reactLocalStorage.setObject('invenotry_details',{invId:invID, prodName:  productName});
-
-//retrieve data from localstorage
-const prod_data = reactLocalStorage.getObject('invenotry_details');
-
- //body
- const [body, setbody] = useState({
-                                    id: prod_data.invId,
-                                    name: prod_data.Pname,
-                                    description: prod_data.Pdesc,
-                                    productImage : prod_data.Pimage,
-                                    archieved: false,
-                                    rank: prod_data.Prank,
-                                    dateInventory:true,
-                                    productCategory:{
-                                        id:prod_data.PCatID, // or reactLocalStorage.get('cat_id')
-                                    }
-                                    });
     
 
   return (

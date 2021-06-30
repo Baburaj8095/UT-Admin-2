@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -77,9 +77,13 @@ const Login=()=> {
     const [data, setData] = useState({
                                       email:'',
                                       password:'',
-                                      market:'Singapore',
                                       showPassword: false,
                                     });
+
+    const [market,setMarket] = useState(''); 
+
+    const [marketValue,setmarketValue] = useState(''); 
+
 
     const handleClickShowPassword = ()=>{
       setData({...data, showPassword: !data.showPassword});
@@ -91,6 +95,32 @@ const Login=()=> {
         setData(newData);
         console.log(newData);
     }
+
+    const handleLoginData1=(event) =>{
+      setmarketValue(event.target.value);
+      console.log(event.target.value);
+  }
+
+
+    
+  useEffect(() => {
+
+    
+      fetchData()
+    
+
+ 
+
+  }, []);
+
+   const fetchData = () => {
+      axios.get('/tenants' )
+      .then(res=>{
+        setMarket({ data : res.data})
+              
+      })
+    }
+
                                     
 
 
@@ -99,29 +129,21 @@ const Login=()=> {
         
       let authApi ='/';
 
-          if(data.market === 'India'){
-            //reactLocalStorage.set('tenet', 1); 
-             authApi = "/1/authenticate";
+      authApi = "/"+marketValue+"/authenticate";
 
-          }else{
-            //reactLocalStorage.set('tenet', 2);
-            authApi = "/2/authenticate";
-          }
-
-          console.log("tenet name: "+data.market+" tenet id: "+ parseInt(reactLocalStorage.get('tenet')));
                                         
-          //const tenet_id = parseInt(reactLocalStorage.get('tenet'));
-
-         // const authApi = "/"+tenet_id+"/authenticate";
-
-          const body = {username:data.email, password:data.password};
+      const body = {username:data.email, password:data.password};
           
+
+
           axios.post(authApi, body)
               .then(response =>{
 
                 reactLocalStorage.set('id_token',response.data.id_token);
+                stores(response.data.id_token)
+
                   //window.location='/homepage';
-                return history.push("/homepage");
+                //return history.push("/homepage");
 
               }).catch(error=>{
                 console.log("Error: ", error);
@@ -129,7 +151,36 @@ const Login=()=> {
 
         
     }
+
+    const stores = (token_id) => {
+
+
+      axios.get('/store', {
+      headers: {
+        'Authorization': 'Bearer '+ token_id,
+        'Accept' : '*/*',
+        'Content-Type': 'application/json',
+        'App-Token' : 'A14BC'
+      }
+          })
+              .then(response1 =>{
+
+                console.log(response1.data)
+                reactLocalStorage.set('country',response1.data.country);
+                validation()
+
+
+              }).catch(error=>{
+                console.log("Error: ", error);
+              })
+    }
     
+
+    const validation = () =>{
+
+      return history.push("/homepage");
+
+    }
 
 
   const classes = useStyles();
@@ -140,15 +191,12 @@ const Login=()=> {
       
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
-        
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
-
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-
           <form onSubmit={(event) =>handleLogin(event)} method="get" className={classes.form} noValidate>
             <TextField
             InputProps={{
@@ -208,20 +256,26 @@ const Login=()=> {
                
               <FormControl variant="outlined" style={{marginLeft:'0px'}} fullWidth className={classes.formControl}>
                 <InputLabel id="market">Market</InputLabel>
-                <Select              
+                <Select
+                
                   labelId="market"
                   id="market"
                   value={data.market}
-                  onChange={(event) =>handleLoginData(event)}
+                  onChange={(event) =>handleLoginData1(event)}
                   label="Market"
                 >
-                  
-                  <MenuItem value={'India'}>India</MenuItem>
-                  <MenuItem value={'Singapore'}>Singapore</MenuItem>
+
+{
+
+  market.data
+   && market.data.map( category => <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem> )     
+               
+
+} 
                 </Select>
               </FormControl>
       
-    
+
 
 
 

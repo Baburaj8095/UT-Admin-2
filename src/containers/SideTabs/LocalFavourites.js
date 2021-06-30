@@ -54,9 +54,7 @@ class PaginatedData extends Component{
                 });
 
 
-            //get the product list .... use the 1101 id for default local fav
-            //const api = "/products?page=0&productCategoryId.specified=true&productCategoryId.equals="+this.props.cId;
-            const api = "/products?page=0&productCategoryId.specified=true&productCategoryId.equals=1101";
+            const api = "/products?page=0&productCategoryId.specified=true&productCategoryId.equals="+this.props.cId+"";
 
             const jwt = reactLocalStorage.get('id_token');
             const jwtToken ='Bearer '+jwt;

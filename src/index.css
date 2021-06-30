@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.MuiTab-wrapper
+{
+  text-align: left !important;
+  align-items: flex-start !important;
+}
