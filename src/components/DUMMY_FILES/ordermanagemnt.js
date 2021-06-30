@@ -12,7 +12,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Box, Card, CardContent, Grid, IconButton, Tooltip } from '@material-ui/core';
+import { Box, Card, Grid, IconButton, Tooltip } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import Typography from '@material-ui/core/Typography';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
@@ -34,7 +34,6 @@ import "antd/dist/antd.css";
 
 import Auxiliary from '../../../hoc/Auxiliary';
 import { useHistory } from 'react-router';
-import NodataFound from './NodataFound';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -84,17 +83,11 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
 
  
- ///////////////////////////////////////// datepicker start
-    //get tomorrow's date
-    var d = new Date();
-    d.setDate(d.getDate() + 1)
+ //datepicker start
 
-    //console.log("tomorrow's date: ", moment(d).format('YYYY-MM-DD'));
-
-   const [deliveryDate, setDeliveryDate] = useState( moment(d) );
+   const [deliveryDate, setDeliveryDate] = useState( moment() );
   
    const chosenDeliveryStartDate = moment(deliveryDate).format('YYYY-MM-DD')+"T00:00:00.000Z";
-   console.log("tomorrow's date: ", chosenDeliveryStartDate);
 
    const token = reactLocalStorage.get('id_token');
    //api for product inventories
@@ -136,7 +129,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
         setPageNumber(selected);
     }
 
-    let itemsPerPage = 6;
+    let itemsPerPage = 3;
 
     // if(products.length <=5){
     //     itemsPerPage = 11;
@@ -148,18 +141,12 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
     const pageCount = Math.ceil(InventoryData.length / itemsPerPage);
     
-    console.log("pagesVisited: "+pagesVisited+", pageCount: "+pageCount);
     //pagination setup ends
 
 
     //////////////////////////////////////////      modal setUp starts     ///////////////////////////////////////////////////
 
     const [openModal, setOpenModal] = useState(false);
-
-    const openModalWithInvId = (invID, productName, isModalOpen) =>{
-            setOpenModal(isModalOpen);
-            reactLocalStorage.setObject('invenotry_details',{invId:invID, prodName:  productName});
-    }
 
     const removeProductHandler = () =>{
         const confirmation = window.confirm("Are you sure you want to remove a unit of this product from the inventory?");
@@ -179,11 +166,9 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                 if(res){
                                 
                                     return(                           
-                                        //  <Grid item  sm={6} xs={12} lg={4} key={res.id}> 
-                                            // <TableContainer component={Card} className={classes.theCard}>
-                                        <Card className={classes.theCard} key={res.id} >
+                                        <Grid item sm={6} xs={12} lg={4} key={res.id}> 
+                                            <TableContainer component={Card} className={classes.theCard}>
 
-                                            <CardContent>
                                                 <Table className={classes.table} >
                                                         <TableHead>
                                                             <TableRow>
@@ -203,7 +188,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                                                             <Grid item >
                                                                                 <Tooltip title="Add" placement="top">
                                                                                         <IconButton style={{color:'green'}}>
-                                                                                            <AddCircleOutlineIcon onClick={ (event) =>openModalWithInvId(res.id, res.product.name, true) }/>
+                                                                                            <AddCircleOutlineIcon onClick={ () =>setOpenModal(true) }/>
                                                                                         </IconButton>                                          
                                                                                 </Tooltip>                                                  
                                                                             </Grid>
@@ -241,10 +226,8 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                                                 
                                                         </TableBody>
                                                     </Table>
-                                                    </CardContent>
-                                                </Card>
-                                           /* </TableContainer> */
-                                      /*  </Grid> */ 
+                                            </TableContainer>
+                                        </Grid>
                 
 
                                     )
@@ -270,58 +253,62 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
     
             <div style={{display:'flex', position:'fixed',marginLeft:'8px', marginTop:'30px'}}>
                 <div>
-                    <h5>All Inventories</h5>
-                </div>         
+                <h5>All Inventories</h5>
+                </div>
+            </div>
+
+
+            <div  style={{float:'right', display:'flex'}}>
             
-                <div style={{ marginTop:'4px', marginLeft:'900px',marginRight:'8px', float:'right'}}>
+                <div style={{display:'inline-block', marginTop:'4px',marginRight:'8px', float:'left'}}>
                     <h6>Date: </h6>
                 </div>
 
-                <div style={{ float:'right'}}>
-                        <DatePicker 
-                        style={{marginTop:'-10px',width:'309px',height: '43px', borderRadius:'4px', border:'2px solid #DAF7A6'}}
-                        value={deliveryDate}
-                        onChange={(newValue) => {
-                        setDeliveryDate(newValue);
-                        }}
-                    />                          
-                </div>
+                    <div style={{display:'inline-block', float:'right'}}>
+                         <DatePicker 
+                            style={{marginTop:'-10px',width:'309px',height: '43px', borderRadius:'4px', border:'2px solid #DAF7A6'}}
+                            value={deliveryDate}
+                            onChange={(newValue) => {
+                            setDeliveryDate(newValue);
+                            }}
+                        />                          
+                    </div>
             </div>
           
 
 
-    {/*///////////////// body content /////////////// pagesVisited /*/}
+    {/*///////////////// body content ////////////////*/}
         <div style={{marginTop:'100px', width:'100%'}}>
-          <div style={ pagesVisited === 18 ? {overflow:'hidden',width:'150%', height:'480px'} : {overflow:'scroll',overflowX:'hidden', height:'480px'}}>
+          <div style={{overflow:'scroll',overflowX:'hidden', height:'480px', width:'170%'}}>
            
-{InventoryData.length !== 0 ?  <div>
-                                    <Grid container  style={{margin:'5px', justifyContent: 'center'}}>
-                                        {InventoryItems}           
-                                    </Grid>
+            <div>
+                <Grid container spacing={5}>
+                    {InventoryItems}           
+                </Grid>
 
-                                    <AddInventoryModal 
-                                        openModal={openModal}
-                                        setOpenModal = {setOpenModal}
-                                    />
+                <AddInventoryModal 
+                    openModal={openModal}
+                    setOpenModal = {setOpenModal}
+                />
 
-                                    <Paginator
-                                        previousLabel = {"<"}
-                                        nextLabel = {">"}
-                                        pageCount = {pageCount}
-                                        onPageChange = {changePage}
-                                        containerClassName={InventoryTabContentCss.paginationButtons}
-                                        previousLinkClassName = {InventoryTabContentCss.previousButton}
-                                        nextLinkClassName={InventoryTabContentCss.nextButton}
-                                        disabledClassName = {InventoryTabContentCss.paginationDisabled}
-                                        activeClassName = {InventoryTabContentCss.activePageNumberButton}                  
-                                        />
-                                        
-                                    <div style={ pagesVisited === 18 ? {backgroundColor: 'grey', color:'white',  width:'96.7%', marginTop:'45px', bottom:0, height:'140px'}: {backgroundColor: 'grey', color:'white',  width:'98%', marginTop:'45px', bottom:0, height:'140px'}}>
-                                            <Footer />
-                                    </div>
-                                </div>
-                      :<NodataFound /> 
-                }
+                <Paginator
+                    previousLabel = {"<"}
+                    nextLabel = {">"}
+                    pageCount = {pageCount}
+                    onPageChange = {changePage}
+                    containerClassName={InventoryTabContentCss.paginationButtons}
+                    previousLinkClassName = {InventoryTabContentCss.previousButton}
+                    nextLinkClassName={InventoryTabContentCss.nextButton}
+                    disabledClassName = {InventoryTabContentCss.paginationDisabled}
+                    activeClassName = {InventoryTabContentCss.activePageNumberButton}
+                    
+                    />
+                    
+                <div style={{backgroundColor: 'grey', color:'white', position:'fixed', width:'97%', marginTop:'45px', bottom:0, height:'140px'}}>
+                        <Footer />
+                </div>
+            </div>
+
           </div>
         </div>
 

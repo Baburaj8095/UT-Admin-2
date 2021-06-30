@@ -38,21 +38,18 @@ function Row(props) {
 
   const classes2 = useStyles();
 
-
   const { row } = props; //outer table data
-
 
   //storing the order_id in a local storage
   const handleOrderClick =(id) =>{
       reactLocalStorage.set("order_id", id);
-      console.log("order_id from the loalStorage: ",reactLocalStorage.get("order_id"));
   }
 
 
   return (
     <React.Fragment>
       <TableRow className={classes2.paper}>
-              <TableCell component="th" scope="row"> <NavLink to="/order-details" style={{textDecoration:'none'}} onClick={(order_id)=>handleOrderClick(row.id)}> { row.id }</NavLink></TableCell>
+              <TableCell component="th" scope="row"> <NavLink to="/order-details" style={{textDecoration:'none'}} onClick={()=>handleOrderClick(row.id)}> { row.id }</NavLink></TableCell>
               <TableCell cocomponent="th">{moment(row.placedDate).format('DD-MM-YYYY, hh:mm A')}</TableCell>
               <TableCell cocomponent="th">{row.status}</TableCell>
               <TableCell cocomponent="th">{row.customer.firstName}</TableCell>
