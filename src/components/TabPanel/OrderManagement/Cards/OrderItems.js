@@ -1,17 +1,31 @@
 import { Card, CardContent, makeStyles, Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import React from 'react';
 import Auxiliary from '../../../../hoc/Auxiliary';
-
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      width: 650,
-      height:900,
+     
+      maxWidth: 345,
+      backgroundColor: '#fff',
+      backgroundClip: 'border-box',
+      border: '1px solid rgba(0,0,0,.125)',
+      borderRadius: '.25rem',
+      margin : '10px',
+
     },
     media: {
       height: 0,
       paddingTop: '56.25%', // 16:9
+    },
+    button :{
+      position: 'inherit'
+
     },
     expand: {
       transform: 'rotate(0deg)',
@@ -20,26 +34,12 @@ const useStyles = makeStyles((theme) => ({
         duration: theme.transitions.duration.shortest,
       }),
     },
-//table
-    paper: {
-      minWidth: 710,
-      minHeight:424,
-      },
-      dataRows:{
-          height: 93,
-      },
-      //drop-down
-      formControl: {
-        margin: theme.spacing(1),
-        minWidth: 200,
-      },
-      selectEmpty: {
-        marginTop: theme.spacing(2),
-      },
-   
+
     
   }));
   
+
+
 
 const OrderItems = (props) => {
 
@@ -48,68 +48,55 @@ const OrderItems = (props) => {
     const classes = useStyles();   
 
     return (
-        <div style={{marginLeft:'65px'}}>                                  
-                <CardContent className={classes.root}>
+        <div style={{marginLeft:'10px'}}>                                  
 
-                <Paper className={classes.paper}>
-                <div  style={{overflowY:'auto',width:'710px',height:'423px'}}>
+                <div  style={{overflowY:'auto',display:'flex'}}>
 
-                    <Table >
-                        <TableHead>
-                        <TableRow style={{backgroundColor:'#E6E6FA', textAlign:'center', overflow:'scroll'}}>
-                            <TableCell style={{fontSize:'17px'}}>Customer Name</TableCell>
-                            <TableCell style={{fontSize:'17px'}} component="th">Unit Name</TableCell>
-                            <TableCell style={{fontSize:'17px'}} component="th">Quantity</TableCell>
-                            <TableCell style={{fontSize:'17px'}} component="th">Price</TableCell>
-
-                            <TableCell style={{fontSize:'17px'}} component="th">Total Price</TableCell>
-                        </TableRow>
-                     </TableHead>
-                    <TableBody>
+                  
                       
                     {
                       OrderItems.orderItems && OrderItems.orderItems.map(res=>{
                         return(
                           <Auxiliary>
-                              
-                            <TableRow key={res.name} className={classes.dataRows}>
-                              <TableCell cocomponent="th">{res.name}</TableCell>
-                              <TableCell cocomponent="th">{res.unitName}</TableCell>
-                              <TableCell cocomponent="th">{res.quantity}</TableCell>
-                              <TableCell cocomponent="th">{res.unitPrice}</TableCell>
-                              <TableCell cocomponent="th">{res.totalPrice}</TableCell>                       
-                            </TableRow>
-                          </Auxiliary>
+
+<Card className={classes.root}>
+      <CardActionArea style={{    position: 'initial'}}>
+        <CardMedia
+          component="img"
+          alt="Contemplative Reptile"
+          height="140"
+          image={res.product.productImage}
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+          {res.name}
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+         Unit Name : {res.unitName}
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+         Delivery Date : {res.deliveryDate}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <CardActions >
+        <Button size="small" color="primary" style={{    position: 'initial'}}>
+          Unit Price : {res.totalPrice}
+        </Button>
+        <Button size="small" color="primary" style={{    position: 'initial'}}>
+        Quantity : {res.quantity}
+        </Button>
+      </CardActions>
+    </Card>
+</Auxiliary>
                          
                         )
                     })
                     }
 
-                          <TableRow >
-                            <TableCell rowSpan={4} />
-                            <TableCell rowSpan={4} />
-                            <TableCell rowSpan={4} />
-                            <TableCell align="right">Total before discount:</TableCell>
-                            <TableCell cocomponent="td">{OrderItems.totalBeforeDiscount}</TableCell>
-                          </TableRow>
-
-                          <TableRow>
-                            <TableCell align="right">Total tax:</TableCell>
-                            <TableCell cocomponent="th">{OrderItems.totalTax}.00</TableCell>
-                          </TableRow>
-
-                          <TableRow>
-                            <TableCell align="right">Discount:</TableCell>
-                            <TableCell cocomponent="th">{OrderItems.discount}.00</TableCell>
-                          </TableRow>
-                                    
-                    </TableBody>
-                  
-                    </Table>
+                         
                     </div>
-                </Paper>
 
-            </CardContent>
                                         
        
     </div>

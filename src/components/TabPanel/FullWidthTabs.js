@@ -73,6 +73,7 @@ const AntTab = withStyles((theme) => ({ // main header tabs panel
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    width : '100%',
     // position:'fixed'
   },
   padding: {
@@ -116,7 +117,8 @@ const HeaderBelowMenu = ()=> {
 
 
   return (
-    <div className={classes.root}>
+    <div 
+    >
 
       <div className={classes.demo1}>
         <AntTabs value={value} onChange={handleChange} >
