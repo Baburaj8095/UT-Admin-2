@@ -34,6 +34,18 @@ import Paper from '@material-ui/core/Paper';
 
 
 const useStyles = makeStyles((theme) => ({
+  '@global': {
+    '*::-webkit-scrollbar': {
+      width: '0.4em'
+    },
+    '*::-webkit-scrollbar-track': {
+      '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
+    },
+    '*::-webkit-scrollbar-thumb': {
+      backgroundColor: 'rgba(0,0,0,.1)',
+      outline: '1px solid slategrey'
+    }
+  },
     root: {
       minWidth: 650,
       marginLeft: '20px',
@@ -258,7 +270,7 @@ return (
                             </div>
 
                               {/* TimeLine orderitem table */}
-                            <div style={{display: "flex", height:'500px',marginTop:'50px'}}> 
+                            <div style={{marginTop:'50px',width:'80%'}}> 
                               <div>
                                 <Card className={classes.root}>
 
@@ -272,7 +284,7 @@ return (
 
                                           {/*---------- stepper --------------*/}
                                         <div className={classes.timeLine}>
-                                            <Stepper activeStep={activeStep} orientation="vertical">
+                                            <Stepper activeStep={activeStep} orientation="horizontal">
                                               {statuses.map((label, index) => (
                                                 <Step key={label}>
 
@@ -326,16 +338,19 @@ return (
 
                             {/* OrderItems table */}
 
-                            <div>
+                           
+                      </div>
+
+
+                      <div style={{marginTop:'10px',display:'flex'}}>
                               <OrderItems OrderItem={orders}/>
                             </div>
 
-                      </div>
 
 
                    {/* CustomerDetails, DeliveryInfo, deliverySlot and paymentdetails*/}
 
-                            <div style={{display:'flex', marginTop:'30px'}}>
+                            <div style={{display:'flex', marginTop:'30px',marginBottom:'30px'}}>
 
                                   <div style={{marginLeft:'20px'}}>
                                     <CustomerDetails theOrder={orders} />
