@@ -73,7 +73,7 @@ const AntTab = withStyles((theme) => ({ // main header tabs panel
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    position:'fixed'
+    // position:'fixed'
   },
   padding: {
     padding: theme.spacing(3),

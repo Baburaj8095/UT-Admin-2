@@ -36,7 +36,6 @@ import Auxiliary from '../../../hoc/Auxiliary';
 import { useHistory } from 'react-router';
 import NodataFound from './NodataFound';
 
-
 const useStyles = makeStyles((theme) => ({
     theCard:{
         // maxWidth:450,
@@ -63,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+
   
 }));
 
@@ -98,14 +98,12 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
    const token = reactLocalStorage.get('id_token');
    //api for product inventories
-   let regionCode = 1050;
+   let regionCode = 1050; //check login.js or set it up there in localStorage
    const api = "/product-inventories/"+chosenDeliveryStartDate+"/"+regionCode;
    //const jwt = reactLocalStorage.get('id_token');
    const jwtToken ='Bearer '+token;
-
-  //const api2="orders/details/?placedDate.specified=true&placedDate.greaterThanOrEqual="+chosenDeliveryStartDate+"&placedDate.lessThanOrEqual="+endDeliveryDate+"&sort="+sortBy+",desc&status.in="+selected.join(',')+"";
   
-  const [InventoryData, setInventoryProducts] = useState([]);
+   const [InventoryData, setInventoryProducts] = useState([]);
 
   useEffect( () =>{
       axios.get(api, {
@@ -125,7 +123,6 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                 return inv;
               })
     },[api, jwtToken]);
-
 
     
     //pagination setup starts
@@ -156,9 +153,15 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
     const [openModal, setOpenModal] = useState(false);
 
-    const openModalWithInvId = (invID, productName, isModalOpen) =>{
-            setOpenModal(isModalOpen);
-            reactLocalStorage.setObject('invenotry_details',{invId:invID, prodName:  productName});
+    const openModalWithInvId = (inv_ID, prod_ID, product_Name, unit_Name, unit_Price, stock, unit_Value, region_ID, isModal_Open) =>{
+
+            setOpenModal(isModal_Open);
+
+            reactLocalStorage.setObject('inventory_details',{invId:inv_ID, prodID:prod_ID,
+                                                             prodName: product_Name, unitName: unit_Name, 
+                                                             unitPrice: unit_Price, Stock: stock,
+                                                             unitValue:unit_Value, regionID:region_ID
+                                                            });
     }
 
     const removeProductHandler = () =>{
@@ -201,9 +204,9 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                                                             </Grid>
 
                                                                             <Grid item >
-                                                                                <Tooltip title="Add" placement="top">
+                                                                                <Tooltip title="Add" arrow  placement="top">
                                                                                         <IconButton style={{color:'green'}}>
-                                                                                            <AddCircleOutlineIcon onClick={ (event) =>openModalWithInvId(res.id, res.product.name, true) }/>
+                                                                                            <AddCircleOutlineIcon onClick={ (event) =>openModalWithInvId(res.id,res.product.id, res.product.name, res.unitName, res.price, res.stock,res.unitValue,res.regionId, true) }/>
                                                                                         </IconButton>                                          
                                                                                 </Tooltip>                                                  
                                                                             </Grid>
@@ -214,10 +217,26 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                                             </TableRow>
 
                                                             <TableRow> 
-                                                                
-                                                                <TableCell >Unit</TableCell>
+                                                                <Tooltip title="edit"
+                                                                  placement="right"
+                                                                  arrow
+                                                                  PopperProps={{
+                                                                    popperOptions: {
+                                                                        modifiers: {
+                                                                        offset: {
+                                                                            enabled: true,
+                                                                            offset: '1px, -20px',
+                                                                             },
+                                                                          },
+                                                                        },
+                                                                     }}
+                                                                    >
+                                                                    <TableCell style={{color:"blue", cursor:'pointer'}} onClick={ (event) =>openModalWithInvId(res.id, res.product.name, true) }>Unit</TableCell>                                                         
+                                                                </Tooltip> 
+                                                                                                           
                                                                 <TableCell >Price</TableCell>
-                                                                <TableCell colspan={2} >Stock</TableCell>
+                                                                <TableCell colspan={1} >Stock</TableCell>
+                                                                <TableCell style={{color:'grey'}}>{moment(res.date).format('YYYY-MM-DD')}</TableCell>
                                                                 
                                                             </TableRow>
                                                         </TableHead>
@@ -228,7 +247,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                                                     <TableCell style={{border:'0px solid grey'}}>{res.price}</TableCell>
                                                                     <TableCell style={res.stock === 0 ? {border:'0px solid grey', color:'red'} : {border:'0px solid grey', color:'green'} }>{res.stock}</TableCell>
                                                                     <TableCell style={{border:'0px solid grey'}}>
-                                                                        <Tooltip  title={res.stock === 0 ? "not allowed" : "Remove"}  placement="top">
+                                                                        <Tooltip  title={res.stock === 0 ? "not allowed" : "Remove"} arrow  placement="right">
                                                                             <IconButton  style={{color:'red'}}>
                                                                                 <RemoveCircleOutlineIcon
                                                                                         onClick={removeProductHandler} 
@@ -279,12 +298,12 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
                 <div style={{ float:'right'}}>
                         <DatePicker 
-                        style={{marginTop:'-10px',width:'309px',height: '43px', borderRadius:'4px', border:'2px solid #DAF7A6'}}
-                        value={deliveryDate}
-                        onChange={(newValue) => {
-                        setDeliveryDate(newValue);
-                        }}
-                    />                          
+                            style={{width:'309px',height: '43px', borderRadius:'4px', border:'2px solid #DAF7A6'}}
+                            value={deliveryDate}
+                            onChange={(newValue) => {
+                            setDeliveryDate(newValue);
+                            }}
+                        />                          
                 </div>
             </div>
           
@@ -292,7 +311,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
     {/*///////////////// body content /////////////// pagesVisited /*/}
         <div style={{marginTop:'100px', width:'100%'}}>
-          <div style={ pagesVisited === 18 ? {overflow:'hidden',width:'150%', height:'480px'} : {overflow:'scroll',overflowX:'hidden', height:'480px'}}>
+          <div style={ pagesVisited === 18 ? {overflow:'hidden',width:'98%', height:'480px'} : {overflow:'scroll',overflowX:'hidden', height:'480px'}}>
            
 {InventoryData.length !== 0 ?  <div>
                                     <Grid container  style={{margin:'5px', justifyContent: 'center'}}>
@@ -316,7 +335,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                         activeClassName = {InventoryTabContentCss.activePageNumberButton}                  
                                         />
                                         
-                                    <div style={ pagesVisited === 18 ? {backgroundColor: 'grey', color:'white',  width:'96.7%', marginTop:'45px', bottom:0, height:'140px'}: {backgroundColor: 'grey', color:'white',  width:'98%', marginTop:'45px', bottom:0, height:'140px'}}>
+                                    <div style={ pagesVisited === 18 ? {backgroundColor: 'grey', color:'white',  width:'100%', marginTop:'45px', bottom:0, height:'140px'}: {backgroundColor: 'grey', color:'white',  width:'98%', marginTop:'45px', bottom:0, height:'140px'}}>
                                             <Footer />
                                     </div>
                                 </div>
