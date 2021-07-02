@@ -199,7 +199,7 @@ const [orders, setOrders] = useState([]);
                 }
               return order;
             })
-  },[api, jwtToken]);
+  },[api, jwtToken,statuses]);
 
 
 
@@ -214,7 +214,7 @@ const getStepContent=(step)=> {
     case 0:
       return `Order placed`;
     case 1:
-      return 'Order is being processing';
+      return 'Order is processing';
     case 2:
       return `Order is being Confirmed`;
     case 3:

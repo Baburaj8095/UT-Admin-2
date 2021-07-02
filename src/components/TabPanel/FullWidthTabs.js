@@ -156,9 +156,8 @@ const HeaderBelowMenu = ()=> {
         onChangeIndex={handleChangeIndex}
         >
           <TabPanel value={value} index={0}  style={{marginTop: '-42px'}}>
-<br/>
+              <br/>
             <ProductTabContent />
-
           </TabPanel>
           
           <TabPanel value={value} index={1} style={{marginTop: '10px'}}>

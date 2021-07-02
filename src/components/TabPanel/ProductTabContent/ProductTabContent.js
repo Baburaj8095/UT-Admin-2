@@ -54,6 +54,16 @@ export default function ProductTabContent() {
   const [CategoryId, setCategoryId] = useState();
   const [localStorage, setlocalStorage] = useState(null);
 
+  //part of ==> se below end ==>storing the category data in the LocalStorage
+  let i=0;
+
+  //storing the rank in the localStorage to be used while creating a product(AddProductsLink.js)
+  const [Rank, setRank] = useState(1);
+
+  //storing the category name
+  const [catName, setCatName] = useState(null);
+
+  
 
 //get the product category
   useEffect( () =>{
@@ -79,7 +89,7 @@ export default function ProductTabContent() {
                 reactLocalStorage.set('clicked_count', i++);
                 console.log("the counter value: ",localStorage);    
 
-      },[jwtToken, api, token,localStorage]);
+      },[jwtToken, api, token,localStorage,i, Rank, catName]);
   
 
 
@@ -98,15 +108,7 @@ export default function ProductTabContent() {
 
   const [productList, setproductList] = useState(defaultList);
 
-  //storing the category id in the useState hook
   
-
-  //storing the category name
-  const [catName, setCatName] = useState(null);
-
-  //storing the rank in the localStorage to be used while creating a product(AddProductsLink.js)
-  const [Rank, setRank] = useState(1);
-
   const [counterr, setcount] = useState(0); //to test if counter is incrementing or not
 
   const sendCategoryId =(id,counter, name, rank) =>{
@@ -125,7 +127,7 @@ export default function ProductTabContent() {
   }
 
   //storing the category data in the LocalStorage
-  let i=0;
+
   const setLocal=()=>{
     reactLocalStorage.set('category_id', localStorage);
     reactLocalStorage.set('cat_name', catName);

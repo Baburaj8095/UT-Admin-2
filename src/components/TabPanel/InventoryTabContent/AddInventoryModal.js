@@ -100,6 +100,7 @@ const prod_data = reactLocalStorage.getObject('inventory_details');
                                     unitValue: parseInt(prod_data.unitValue),
 
                                     totalStock:0,
+                                    totalId: prod_data.totalStockID
                                    
                                     });
 
@@ -143,8 +144,6 @@ if(isCorrect){
   'Content-Type': 'application/json',
   'App-Token' : 'A14BC'
 }
- //if success != 200 then do PUT and setIsModalOpen to false in the else condition
-
 
           
 //for adding new inventory
@@ -165,6 +164,9 @@ if(isCorrect){
 
 const [date, setDate] = useState(moment());
 
+//product-inv body to create a new record
+//check if the selected date is already present for the prod_id
+
 const addInventoryBodyData = {
                                   price: body.price,
                                   product: {
@@ -176,13 +178,28 @@ const addInventoryBodyData = {
                                   unitValue: parseInt(body.unitValue),
                                   date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z'
                             }
-//check if the selected date 
+
 const checkInventoryAPI= "/product-inventories/product/"+addInventoryBodyData.date+"/"+addInventoryBodyData.regionId+"/"+addInventoryBodyData.product.id;
 
-const postAPI = "/product-inventories";
+const productPostAPI = "/product-inventories";
+                            
 
-const putAPI = "/product-inventories"
-const bodyToUpdate={
+//product-total-inv body to create a new record
+const productTotalPostAPI = "/product-total-inventories";
+const totalProductInventory = {
+                                product: {
+                                      id: Number(body.product.id)
+                                    },
+                                regionCluster: {
+                                      id: Number(body.regionId)    
+                                    },
+                                totalStock: Number(body.totalStock),
+                                date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z'  
+                              }
+
+//product-inv update body
+const productInvPutAPI = "/product-inventories"
+const productInvBodyToUpdate={
           id:body.inventoryId,
           price: body.price,
           product: {
@@ -195,6 +212,21 @@ const bodyToUpdate={
           date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z'
 }
 
+//product-total-inv update body
+
+const productTotalInvPutAPI = "/product-total-inventories";
+const productTotalInvBodyToUpdate = {
+                                id: body.totalId,
+                                product: {
+                                    id: Number(body.product.id)
+                                  },
+                                regionCluster: {
+                                    id: Number(body.regionId)    
+                                  },
+                                totalStock: Number(body.totalStock),
+                                date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z'
+                            }
+
 const submitData=()=>{
 
   axios.get(checkInventoryAPI,
@@ -202,28 +234,56 @@ const submitData=()=>{
             )
           .then(response=>{
               console.log("does inventory exist: "+response.data);
-                if(response.data == null){
+                if(response.data.productInventory.length === 0 && response.data.productTotalInventory === null){
 
-                    axios.post(postAPI,
-                      addInventoryBodyData,
-                      {headers: headerObject} 
-                      )
-                    .then(response=>{
-                        console.log("submitted inventory details: "+response.data);
-                        setOpenModal(false);
-                          }
-                      )
+                  //post request for new product inventory
+                    axios.post(productPostAPI,
+                              addInventoryBodyData,
+                              {headers: headerObject} 
+                            )
+                          .then(response=>{
+                              console.log("submitted inventory details: "+response.data);
+                              
+                                }
+                            )
+
+                      //post request for product-total inventory
+                      axios.post(productTotalPostAPI,
+                                totalProductInventory,
+                                {headers: headerObject} 
+                              )
+                            .then(response=>{
+                                console.log("submitted product-total-inventory details: "+response.data);
+                                setOpenModal(false);
+                                  }
+                              )
+
                           
                   }else{
-                    axios.put(putAPI,
-                      bodyToUpdate,
+                    //product inventory update
+                    axios.put(productInvPutAPI,
+                      productInvBodyToUpdate,
                       {headers: headerObject} 
                       )
                      .then(response=>{
                          console.log("updated inventory details: "+response.data);
+                         
+                           }
+                       )
+
+                    //product-total-inventory update
+                    axios.put(productTotalInvPutAPI,
+                      productTotalInvBodyToUpdate,
+                      {headers: headerObject} 
+                      )
+                     .then(response=>{
+                         console.log("updated product total inventory details: "+response.data);
                          setOpenModal(false);
                            }
                        )
+
+
+
                   }
 
 
@@ -251,15 +311,7 @@ const submitData=()=>{
 // 
 
 
-const totalProductInventory = {
-                                product: {
-                                      id: body.product.id
-                                    },
-                                regionCluster: {
-                                      id: body.regionId    
-                                    },
-                                totalStock: body.totalStock  
-                              }
+
 
 
 

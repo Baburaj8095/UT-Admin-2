@@ -99,7 +99,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
    const token = reactLocalStorage.get('id_token');
    //api for product inventories
    let regionCode = 1050; //check login.js or set it up there in localStorage
-   const api = "/product-inventories/"+chosenDeliveryStartDate+"/"+regionCode;
+   const api = "/product-inventories/details/"+chosenDeliveryStartDate+"/"+regionCode;
    //const jwt = reactLocalStorage.get('id_token');
    const jwtToken ='Bearer '+token;
   
@@ -153,14 +153,15 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
     const [openModal, setOpenModal] = useState(false);
 
-    const openModalWithInvId = (inv_ID, prod_ID, product_Name, unit_Name, unit_Price, stock, unit_Value, region_ID, isModal_Open) =>{
+    const openModalWithInvId = (inv_ID, prod_ID, product_Name, unit_Name, unit_Price, stock, unit_Value, region_ID,total_ID, isModal_Open) =>{
 
             setOpenModal(isModal_Open);
 
             reactLocalStorage.setObject('inventory_details',{invId:inv_ID, prodID:prod_ID,
                                                              prodName: product_Name, unitName: unit_Name, 
                                                              unitPrice: unit_Price, Stock: stock,
-                                                             unitValue:unit_Value, regionID:region_ID
+                                                             unitValue:unit_Value, regionID:region_ID,
+                                                             totalStockID: total_ID
                                                             });
     }
 
@@ -190,7 +191,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                                 <Table className={classes.table} >
                                                         <TableHead>
                                                             <TableRow>
-                                                                <TableCell colSpan={4}>
+                                                                <TableCell colSpan={5}>
 
                                                                     <Box className={classes.toolbar}>
                                                                         <Grid container>
@@ -198,7 +199,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                                                             <Grid item xs style={{width:'80px'}}>
 
                                                                                 <Typography variant="h6" className={classes.title}>
-                                                                                    {res.product.name}
+                                                                                    {res.name}
                                                                                 </Typography>
                                                                                 
                                                                             </Grid>
@@ -206,7 +207,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                                                             <Grid item >
                                                                                 <Tooltip title="Add" arrow  placement="top">
                                                                                         <IconButton style={{color:'green'}}>
-                                                                                            <AddCircleOutlineIcon onClick={ (event) =>openModalWithInvId(res.id,res.product.id, res.product.name, res.unitName, res.price, res.stock,res.unitValue,res.regionId, true) }/>
+                                                                                            <AddCircleOutlineIcon onClick={ (event) =>openModalWithInvId(res.id,res.productId, res.name, res.unitName, res.price, res.stock,res.unitValue,res.regionId, res.totalId, true) }/>
                                                                                         </IconButton>                                          
                                                                                 </Tooltip>                                                  
                                                                             </Grid>
@@ -231,12 +232,12 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                                                         },
                                                                      }}
                                                                     >
-                                                                    <TableCell style={{color:"blue", cursor:'pointer'}} onClick={ (event) =>openModalWithInvId(res.id, res.product.name, true) }>Unit</TableCell>                                                         
+                                                                    <TableCell style={{color:"blue", cursor:'pointer'}} onClick={ (event) =>openModalWithInvId(res.id, res.name, true) }>Unit</TableCell>                                                         
                                                                 </Tooltip> 
                                                                                                            
                                                                 <TableCell >Price</TableCell>
                                                                 <TableCell colspan={1} >Stock</TableCell>
-                                                                <TableCell style={{color:'grey'}}>{moment(res.date).format('YYYY-MM-DD')}</TableCell>
+                                                                <TableCell colspan={2} >Delivery Date</TableCell>
                                                                 
                                                             </TableRow>
                                                         </TableHead>
@@ -246,6 +247,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                                                     <TableCell style={ {border:'0px solid grey'}}>{res.unitName}</TableCell>
                                                                     <TableCell style={{border:'0px solid grey'}}>{res.price}</TableCell>
                                                                     <TableCell style={res.stock === 0 ? {border:'0px solid grey', color:'red'} : {border:'0px solid grey', color:'green'} }>{res.stock}</TableCell>
+                                                                    <TableCell style={{border:'0px solid grey'}}>{moment(res.date).format('YYYY-MM-DD')}</TableCell>
                                                                     <TableCell style={{border:'0px solid grey'}}>
                                                                         <Tooltip  title={res.stock === 0 ? "not allowed" : "Remove"} arrow  placement="right">
                                                                             <IconButton  style={{color:'red'}}>
@@ -321,6 +323,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                     <AddInventoryModal 
                                         openModal={openModal}
                                         setOpenModal = {setOpenModal}
+                                        
                                     />
 
                                     <Paginator

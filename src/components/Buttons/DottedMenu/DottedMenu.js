@@ -12,19 +12,13 @@ import {reactLocalStorage} from 'reactjs-localstorage';
 const options = [
   'Edit',
   'Archieve',
+  'Add inventory for this product'
   
 ];
 
 const ITEM_HEIGHT = 48;
 
 export default function LongMenu(props) {
-
-
-  const [productData, setProductData] = useState({
-                                                  Pname:props.name,
-                                                  Pdesc: props.desc,
-                                                  Pimage: props.image
-                                                  });
 
  
    reactLocalStorage.setObject("productData",{
