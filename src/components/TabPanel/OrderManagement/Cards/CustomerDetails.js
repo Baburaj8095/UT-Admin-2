@@ -8,7 +8,11 @@ const useStyles = makeStyles((theme) => ({
     root: {//this changes the width and height of the card
       width: 300,
       height:350,
-      overflowY:'scroll'
+      overflowY:'scroll',
+      backgroundColor: '#fff',
+      backgroundClip: 'border-box',
+      border: '1px solid rgba(0,0,0,.125)',
+      borderRadius: '.25rem',
     },
     media: {
       height: 0,
