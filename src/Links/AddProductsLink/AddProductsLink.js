@@ -212,11 +212,13 @@ const submitData =()=>{
                                     name="productCategory"
                                     defaultValue={reactLocalStorage.get('cat_name')}
                                     onChange={(e) => handleInput(e)}  
-                                    readOnly
                                     label="Product Category"
                                     style={{ marginLeft: 2,marginTop: 12 }}
                                     placeholder="product category...."
                                     helperText=""
+                                    inputProps={
+                                        { readOnly: true, }
+                                      }
                                     fullWidth
                                     size="small"
                                     margin="normal"
