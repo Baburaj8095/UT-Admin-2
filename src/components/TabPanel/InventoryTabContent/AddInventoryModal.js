@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -19,6 +19,7 @@ import {DatePicker } from 'antd';
 import "antd/dist/antd.css";
 import moment from 'moment';
 import axios from 'axios';
+import { useHistory } from 'react-router';
 
 
 const styles = (theme) => ({
@@ -66,10 +67,11 @@ const DialogActions = withStyles((theme) => ({
 
 
 const AddInventoryModal = (props) => {
+  const   history = useHistory();
 
 
-  const {openModal, setOpenModal} = props;
-
+  const {openModal, setOpenModal, modal_data} = props;
+ 
   //modal close handler
   const handleClose = () => {
     setOpenModal(false);
@@ -84,26 +86,56 @@ const AddInventoryModal = (props) => {
     // prodName: product_Name, unitName: unit_Name, 
     // unitPrice: unit_Price, Stock: stock,
     // unitValue:unit_Value, regionID:region_ID
-const prod_data = reactLocalStorage.getObject('inventory_details');
+
+    let prod_data=null;
+    if(modal_data){
+      prod_data = modal_data;
+    }
+
 
  //body
  const [body, setbody] = useState({
                                     inventoryId: prod_data.invId,
-                                    price: parseInt(prod_data.unitPrice),
+                                    price: parseFloat(prod_data.unitPrice),
                                     product:{
-                                        id: prod_data.prodID
+                                        id: Number(prod_data.prodID)
                                       },
-                                    productName:prod_data.prodName,
-                                    regionId: parseInt(prod_data.regionID),
-                                    stock: parseInt(prod_data.Stock),
+                                    productName: prod_data.prodName,
+                                    regionId: Number(prod_data.regionID),
+                                    stock: Number(prod_data.Stock),
                                     unitName: prod_data.unitName,
-                                    unitValue: parseInt(prod_data.unitValue),
+                                    unitValue: Number(prod_data.unitValue),
 
                                     totalStock:0,
                                     totalId: prod_data.totalStockID
                                    
                                     });
 
+// const { path, value, info, update } = props;
+
+// const [val, setVal] = useState(value);
+// useEffect(() => { setVal(value)}, [value] )
+useEffect(() => { setbody({
+                            inventoryId: prod_data.invId,
+                            price: parseFloat(prod_data.unitPrice),
+                            product:{
+                                id: Number(prod_data.prodID)
+                              },
+                            productName: prod_data.prodName,
+                            regionId: Number(prod_data.regionID),
+                            stock: Number(prod_data.Stock),
+                            unitName: prod_data.unitName,
+                            unitValue: Number(prod_data.unitValue),
+
+                            totalStock:0,
+                            totalId: prod_data.totalStockID
+                          
+                            })
+                  },[prod_data.Stock,prod_data.invId,
+                    prod_data.unitPrice, prod_data.prodID,
+                    prod_data.unitName,prod_data.unitValue,
+                    prod_data.totalStockID,
+                    prod_data.prodName, prod_data.regionID]);
 
  const handleFormInput = (e) =>{
   const newData= {...body};
@@ -161,14 +193,17 @@ if(isCorrect){
 //   "unitValue": 1.00,
 //   "date": "2021-07-02T00:00:00Z"
 // }
+//get tomorrow's date
+var d = new Date();
+d.setDate(d.getDate() + 1);
 
-const [date, setDate] = useState(moment());
-
+const [date, setDate] = useState(moment(d));
+console.log(date);
 //product-inv body to create a new record
 //check if the selected date is already present for the prod_id
 
 const addInventoryBodyData = {
-                                  price: body.price,
+                                  price: parseFloat(body.price),
                                   product: {
                                     id: parseInt(body.product.id)
                                     },
@@ -201,15 +236,15 @@ const totalProductInventory = {
 const productInvPutAPI = "/product-inventories"
 const productInvBodyToUpdate={
           id:body.inventoryId,
-          price: body.price,
+          price: parseFloat(body.price),
           product: {
             id: parseInt(body.product.id)
             },
           regionId: body.regionId,
-          stock: body.stock,
+          stock: parseInt(body.stock),
           unitName: body.unitName,
-          unitValue: body.unitValue,
-          date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z'
+          unitValue: parseInt(body.unitValue),
+          date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z' //date can't be updated
 }
 
 //product-total-inv update body
@@ -223,8 +258,8 @@ const productTotalInvBodyToUpdate = {
                                 regionCluster: {
                                     id: Number(body.regionId)    
                                   },
-                                totalStock: Number(body.totalStock),
-                                date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z'
+                                totalStock: parseInt(body.totalStock),
+                                date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z' //date can't be updated
                             }
 
 const submitData=()=>{
@@ -255,6 +290,7 @@ const submitData=()=>{
                             .then(response=>{
                                 console.log("submitted product-total-inventory details: "+response.data);
                                 setOpenModal(false);
+                                history.push("/homepage");
                                   }
                               )
 
@@ -279,6 +315,8 @@ const submitData=()=>{
                      .then(response=>{
                          console.log("updated product total inventory details: "+response.data);
                          setOpenModal(false);
+                         history.push("/homepage");
+
                            }
                        )
 
@@ -308,9 +346,6 @@ const submitData=()=>{
 //   "totalStock": 200, //( UNIT_VALUE * STOCK) EX:  unitValue=5, stock=10, totalStock = unitValue * stock
 //   "date": "2021-07-10T00:00:00Z"
 // }            
-// 
-
-
 
 
 
@@ -324,7 +359,7 @@ const submitData=()=>{
 
         <DialogContent dividers>
           <TextField
-            autoFocus
+            
             margin="dense"
             id="productName"
             inputProps={
@@ -362,14 +397,14 @@ const submitData=()=>{
 
         <TextField
           type="number"
-            autoFocus
+            
             margin="dense"
             id="price"
             label="Price"      
             placeholder="price...."
             fullWidth
             onChange={(e) => { handleFormInput(e) }}
-            defaultValue={body.price}
+            defaultValue={parseFloat(body.price)}
             style={{marginTop:'30px'}}
             size="normal"
             InputLabelProps={{
@@ -381,14 +416,14 @@ const submitData=()=>{
 
         <TextField
           type="number"
-            autoFocus
+            
             margin="dense"
             id="stock"
             label="Stock"      
             placeholder="stock...."
             fullWidth
             onChange={(e) => { handleFormInput(e) }}
-            defaultValue={parseInt(body.stock)}
+            defaultValue={Number(body.stock)}
             style={{marginTop:'30px'}}
             size="normal"
             InputLabelProps={{
@@ -400,7 +435,7 @@ const submitData=()=>{
 
           <TextField
             type="number"
-            autoFocus
+            
             margin="dense"
             onChange={(e) => { handleFormInput(e) }}
             id="unitValue"
@@ -419,7 +454,7 @@ const submitData=()=>{
           
           <TextField
             type="number"
-            autoFocus
+            
             margin="dense"
             id="totalStock"
             label="Total Stock"      
@@ -434,7 +469,7 @@ const submitData=()=>{
             InputLabelProps={{
               shrink: true,
             
-            }}
+              }}
             variant="outlined"
             required
           />

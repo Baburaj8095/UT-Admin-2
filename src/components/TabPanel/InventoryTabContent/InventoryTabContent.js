@@ -35,6 +35,7 @@ import "antd/dist/antd.css";
 import Auxiliary from '../../../hoc/Auxiliary';
 import { useHistory } from 'react-router';
 import NodataFound from './NodataFound';
+import SearchBar from './SearchBar';
 
 const useStyles = makeStyles((theme) => ({
     theCard:{
@@ -98,7 +99,9 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
    const token = reactLocalStorage.get('id_token');
    //api for product inventories
-   let regionCode = 1050; //check login.js or set it up there in localStorage
+   const countryClode= reactLocalStorage.getObject("regionID");
+   console.log(countryClode.id);
+   const regionCode = Number(countryClode.id); //check login.js or set it up there in localStorage
    const api = "/product-inventories/details/"+chosenDeliveryStartDate+"/"+regionCode;
    //const jwt = reactLocalStorage.get('id_token');
    const jwtToken ='Bearer '+token;
@@ -152,22 +155,54 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
     //////////////////////////////////////////      modal setUp starts     ///////////////////////////////////////////////////
 
     const [openModal, setOpenModal] = useState(false);
+    const [ModalData, setModalData] = useState({});
 
-    const openModalWithInvId = (inv_ID, prod_ID, product_Name, unit_Name, unit_Price, stock, unit_Value, region_ID,total_ID, isModal_Open) =>{
+    const openModalWithInvId = (inv_ID, prod_ID, product_Name, unit_Name, unit_Price, stock, unit_Value,total_ID, isModal_Open) =>{
 
             setOpenModal(isModal_Open);
 
-            reactLocalStorage.setObject('inventory_details',{invId:inv_ID, prodID:prod_ID,
-                                                             prodName: product_Name, unitName: unit_Name, 
-                                                             unitPrice: unit_Price, Stock: stock,
-                                                             unitValue:unit_Value, regionID:region_ID,
-                                                             totalStockID: total_ID
-                                                            });
+            setModalData({invId:inv_ID, prodID:prod_ID,
+                prodName: product_Name, unitName: unit_Name, 
+                unitPrice: unit_Price, Stock: stock,
+                unitValue:unit_Value, regionID:regionCode,
+                totalStockID: total_ID
+                });
+
+                                                   
     }
 
-    const removeProductHandler = () =>{
-        const confirmation = window.confirm("Are you sure you want to remove a unit of this product from the inventory?");
-        console.log("do you want to delete this item from thr inventory? ", confirmation);
+    //delete an inventory
+    const removeProductHandler = (inventoryID, totalInvID) =>{
+        const invDeleteAPI = "/product-inventories/"+inventoryID;
+        const productTotalInvDeleteAPI = "/product-total-inventories/"+totalInvID;
+        const confirmation = window.confirm("Are you sure you want to delete this inventory?");
+        if(confirmation){
+            axios.delete(invDeleteAPI, {
+                        headers: {
+                        'Authorization': jwtToken,
+                        'Accept' : '*/*',
+                        'Content-Type': 'application/json',
+                        'App-Token' : 'A14BC'
+                        }
+                }).then(res=> {
+
+                    axios.delete(productTotalInvDeleteAPI, {
+                        headers: {
+                        'Authorization': jwtToken,
+                        'Accept' : '*/*',
+                        'Content-Type': 'application/json',
+                        'App-Token' : 'A14BC'
+                        }
+                }).then(res=>{
+                        console.log("Deleted successfully");
+                        //window.location.reload();
+                        history.push("/homepage");
+                    })
+
+
+                })
+                  .catch(error=> window.alert("something went wrong! Try again."))
+        }
     }
 
 
@@ -207,7 +242,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                                                             <Grid item >
                                                                                 <Tooltip title="Add" arrow  placement="top">
                                                                                         <IconButton style={{color:'green'}}>
-                                                                                            <AddCircleOutlineIcon onClick={ (event) =>openModalWithInvId(res.id,res.productId, res.name, res.unitName, res.price, res.stock,res.unitValue,res.regionId, res.totalId, true) }/>
+                                                                                            <AddCircleOutlineIcon onClick={ (event) =>openModalWithInvId(res.id,res.productId, res.name, res.unitName, res.price, res.stock,res.unitValue,res.totalId, true) }/>
                                                                                         </IconButton>                                          
                                                                                 </Tooltip>                                                  
                                                                             </Grid>
@@ -252,7 +287,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                                                         <Tooltip  title={res.stock === 0 ? "not allowed" : "Remove"} arrow  placement="right">
                                                                             <IconButton  style={{color:'red'}}>
                                                                                 <RemoveCircleOutlineIcon
-                                                                                        onClick={removeProductHandler} 
+                                                                                        onClick={(event)=>removeProductHandler(res.id, res.totalId)} 
                                                                                         style={res.stock === 0 ? {cursor:'not-allowed',pointerEvents:'none'} : {cursor: 'pointer'} }
                                                                                         />
                                                                             </IconButton>                                          
@@ -282,6 +317,18 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
     }//end of else
 
 
+//checking internet connection
+const [getInternetStatus, setInternetStatus] = useState(true)
+    window.addEventListener('offline', function(e) {
+        setInternetStatus(false) 
+        console.log(getInternetStatus)
+    });
+        
+    window.addEventListener('online', function(e) { 
+        setInternetStatus(true);
+        console.log(getInternetStatus)
+
+    });
 
 
   return (
@@ -290,17 +337,20 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
     <div style={{display:'flex'}}>
     
             <div style={{display:'flex', position:'fixed',marginLeft:'8px', marginTop:'30px'}}>
-                <div>
-                    <h5>All Inventories</h5>
-                </div>         
+                <div style={{display:'flex'}}>
+                    <strong style={{width:'200px'}}>All Inventories</strong>
+                    <SearchBar />
+                </div>   
+                
+                      
             
-                <div style={{ marginTop:'4px', marginLeft:'900px',marginRight:'8px', float:'right'}}>
+                <div style={{ marginTop:'5px', marginLeft:'500px',marginRight:'8px', float:'right'}}>
                     <h6>Date: </h6>
                 </div>
 
                 <div style={{ float:'right'}}>
                         <DatePicker 
-                            style={{width:'309px',height: '43px', borderRadius:'4px', border:'2px solid #DAF7A6'}}
+                            style={{marginTop:'-10px', width:'309px',height: '42px', borderRadius:'4px', border:'2px solid #DAF7A6'}}
                             value={deliveryDate}
                             onChange={(newValue) => {
                             setDeliveryDate(newValue);
@@ -315,7 +365,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
         <div style={{marginTop:'100px', width:'100%'}}>
           <div style={ pagesVisited === 18 ? {overflow:'hidden',width:'98%', height:'480px'} : {overflow:'scroll',overflowX:'hidden', height:'480px'}}>
            
-{InventoryData.length !== 0 ?  <div>
+{InventoryData.length !== 0 && getInternetStatus === true ?  <div>
                                     <Grid container  style={{margin:'5px', justifyContent: 'center'}}>
                                         {InventoryItems}           
                                     </Grid>
@@ -323,7 +373,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                     <AddInventoryModal 
                                         openModal={openModal}
                                         setOpenModal = {setOpenModal}
-                                        
+                                        modal_data={ModalData}
                                     />
 
                                     <Paginator

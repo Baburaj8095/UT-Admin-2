@@ -6,10 +6,10 @@ import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissa
 const NodataFound = () => {
     return (
         <Auxiliary>
-            <div style={{backgroundColor:'#8FBC8B',width:'64.7%', height:'70%'}}>
+            <div style={{backgroundColor:'#8FBC8B',width:'99.7%', height:'70%'}}>
                 <div>
-                    <h1 style={{marginLeft:'150px', color:'white'}}>No data found for the selected date. Please choose a different one.</h1>
-                    <SentimentVeryDissatisfiedIcon style={{marginLeft:'660px',marginTop:'50px',fontSize:'150px'}}/>
+                    <h1 style={{marginLeft:'150px', color:'white'}}>No data found for the selected date. Please choose a different one<br/><span style={{marginLeft:'55px'}}>and make sure you're connected to an internet connection.</span></h1>
+                    <SentimentVeryDissatisfiedIcon style={{marginLeft:'660px',marginTop:'30px',fontSize:'150px'}}/>
                 </div>
             </div>
 

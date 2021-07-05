@@ -9,6 +9,7 @@ import classes2 from './LocalFavourites.module.css';
 import Spinner from '../../components/Spinner/Spinner';
 import DottedMenu from '../../components/Buttons/DottedMenu/DottedMenu';
 import {reactLocalStorage} from 'reactjs-localstorage';
+import AddInventoryModalProductPage from '../../components/Buttons/DottedMenu/AddInventoryModalProductPage';
 
 
 
@@ -36,11 +37,13 @@ const useStyles = theme=>({
 
 
 class PaginatedData extends Component{
+////modal setup:  const [openModal, setOpenModal] = useState(false);
 
         state={
             dataItems:[],
             isLoading: false,
             pageNumber: 0,
+            modal:false
     }
         
 
@@ -160,7 +163,6 @@ class PaginatedData extends Component{
                                                                 </table>
                                                                                       
                                                             </CardContent>
-
                                                 
                                                         </Card>
 

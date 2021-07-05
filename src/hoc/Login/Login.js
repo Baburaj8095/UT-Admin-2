@@ -140,17 +140,37 @@ const Login=()=> {
               .then(response =>{
 
                 reactLocalStorage.set('id_token',response.data.id_token);
-                stores(response.data.id_token)
-
-                  //window.location='/homepage';
-                //return history.push("/homepage");
+                storeRegionCode(response.data.id_token);
+                stores(response.data.id_token);
 
               }).catch(error=>{
-                console.log("Error: ", error);
+                  window.alert("Wrong credentials!")
               })
 
         
     }
+
+    //storing the regionCode Ex: Singapore:1050
+    const regionClusterAPI = "/region-cluster";
+    const storeRegionCode =(JWT_token) =>{
+        axios.get(regionClusterAPI,
+              {
+                headers: {
+                  'Authorization': 'Bearer '+JWT_token,
+                  'Accept' : '*/*',
+                  'Content-Type': 'application/json',
+                  'App-Token' : 'A14BC'
+                      }
+                }
+                ).then(clusterID=>{
+                    console.log("clusterID code: ", clusterID.data[0].id)
+                    reactLocalStorage.setObject("regionID", clusterID.data[0]);
+                });
+
+    }
+
+
+
 
     const stores = (token_id) => {
 

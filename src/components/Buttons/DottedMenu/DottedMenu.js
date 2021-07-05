@@ -5,6 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useHistory } from 'react-router';
 import {reactLocalStorage} from 'reactjs-localstorage';
+import AddInventoryModalProductPage from './AddInventoryModalProductPage';
 
 
 
@@ -12,7 +13,7 @@ import {reactLocalStorage} from 'reactjs-localstorage';
 const options = [
   'Edit',
   'Archieve',
-  'Add inventory for this product'
+  'Add inventory'
   
 ];
 
@@ -45,7 +46,30 @@ export default function LongMenu(props) {
     setAnchorEl(null);
    
   };
+ 
 
+  // const checkChosenOption = (choice) =>{
+  //   console.log("choice: ", choice.target.value)
+  //   switch (choice) {
+  //     case 'Edit':
+  //       history.push('/edit-product');
+  //       break;
+  //     case 'Archieve':
+  //       history.push('/archieve-product');
+  //       break;
+  //     case 'Add inventory':
+  //       history.push('/add-inventory');
+  //       break;
+  //     default:
+  //       window.alert("Invalid choice")
+  //       break;
+  //   }
+  // }
+
+    
+//modal setup
+
+  const [openModal, setOpenModal] = useState(false);
 
 
   const editProduct=()=>{
@@ -56,6 +80,20 @@ export default function LongMenu(props) {
   const archieveProduct=()=>{
     history.push('/archieve-product');
   }
+
+  const addInventory = () =>{
+    setAnchorEl(null);//to close down the small dialogue box
+    setOpenModal(true)
+
+  }
+
+
+  // bar === 'a' ? 1 : // if 
+  // bar === 'b' ? 2 : // else if 
+  // bar === 'c' ? 3 : // else if
+  // null // else 
+
+   // bar === 'a' ? 1 : bar === 'b' ? 2 : bar === 'c' ? 3 : null
 
   return (
     <div>
@@ -78,16 +116,21 @@ export default function LongMenu(props) {
         PaperProps={{
           style: {
             maxHeight: ITEM_HEIGHT * 4.5,
-            width: '12ch',
+            width: '16ch',
           },
         }}
       >
         {options.map((option) => (
-          <MenuItem key={option} selected={option === 'Pyxis'} onClick={ option === 'Edit' ? editProduct: archieveProduct}>
+          <MenuItem key={option} selected={option === 'Pyxis'} onClick={option === 'Edit' ? editProduct: option === 'Edit' ? archieveProduct : option === 'Add inventory' ? addInventory: null}>
             {option}
           </MenuItem>
         ))}
       </Menu>
+
+      <AddInventoryModalProductPage 
+          openModal={openModal}
+          setOpenModal = {setOpenModal}
+        />
     </div>
   );
 }

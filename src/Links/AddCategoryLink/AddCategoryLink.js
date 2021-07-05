@@ -199,7 +199,7 @@ const submitData =(event)=>{
                                   label="Category Description"
                              
                                   autoComplete="description"
-                                  autoFocus
+                                  
                                   value={body.description}
                                   onChange={(event) =>handleInputData(event)}                                  
                                   style={{ marginLeft: 2,marginTop: 12 }}
@@ -223,7 +223,7 @@ const submitData =(event)=>{
                                   label="Category Rank"
                                   
                                   autoComplete="CategoryRank"
-                                  autoFocus
+                                  
                                   value={body.rank}
                                   onChange={(event) =>handleInputData(event)}                                  
                                   style={{ marginLeft: 2,marginTop: 12 }}
@@ -245,7 +245,7 @@ const submitData =(event)=>{
                                   label="Category Image URl"
                                  
                                   autoComplete="CategoryImageURl"
-                                  autoFocus
+                                  
                                   value={body.categoryImage}
                                   onChange={(event) =>handleInputData(event)}                                  
                                   style={{ marginLeft: 2,marginTop: 12 }}

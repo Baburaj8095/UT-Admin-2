@@ -8,6 +8,7 @@ import EditProduct from "../Links/EditProduct/EditProduct";
 import ArchieveProduct from "../Links/ArchieveProduct/ArchieveProduct";
 import OrderDetailsPage from '../components/TabPanel/OrderManagement/OrderDetailsPage';
 import SeparateOrderManagement from '../components/TabPanel/OrderManagement/SeparateOrderManagement';
+import AddInventoryModalProductPage from '../components/Buttons/DottedMenu/AddInventoryModalProductPage';
 
 
 function App() {
@@ -21,13 +22,16 @@ function App() {
     {/* <ProtectedRoutes path="/homepage" component={HomePage} isAuth={isAuth}/>  */}
        
     <Route  path="/homepage" exact component={ withRouter(HomePage) } />
+
     <Route  path="/edit-product" exact component={ withRouter(EditProduct) } />
     <Route  path="/archieve-product" exact component={ withRouter(ArchieveProduct) } />
+
     <Route  path="/add-category" exact component={ withRouter(AddCategoryLink) } />
-    <Route  path="/add-product" exact component={ withRouter(AddProductsLink) } />  
+    <Route  path="/add-product" exact component={ withRouter(AddProductsLink) } />
+
     <Route  path="/order-details" exact component={ withRouter(OrderDetailsPage) } />
-    
     <Route  path="/orders" exact component={ withRouter(SeparateOrderManagement) } />
+
     <Route exact path="/" component={ withRouter(Login) } />
 
   </Switch>
