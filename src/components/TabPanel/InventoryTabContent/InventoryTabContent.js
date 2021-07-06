@@ -36,6 +36,7 @@ import Auxiliary from '../../../hoc/Auxiliary';
 import { useHistory } from 'react-router';
 import NodataFound from './NodataFound';
 import SearchBar from './SearchBar';
+import EditInventoryModal from './EditInventoryModal';
 
 const useStyles = makeStyles((theme) => ({
     theCard:{
@@ -156,7 +157,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
     const [openModal, setOpenModal] = useState(false);
     const [ModalData, setModalData] = useState({});
-
+//for AddInventoryModal.js
     const openModalWithInvId = (inv_ID, prod_ID, product_Name, unit_Name, unit_Price, stock, unit_Value,total_ID, isModal_Open) =>{
 
             setOpenModal(isModal_Open);
@@ -170,6 +171,24 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
                                                    
     }
+
+
+    //for EditInventoryModal.js
+    const [openEditModal, setOpenEditModal] = useState(false);
+
+    const openEditModalWithInvId = (inv_ID, prod_ID, product_Name, unit_Name, unit_Price, stock, unit_Value,total_ID, isModal_Open) =>{
+
+        setOpenEditModal(isModal_Open);
+
+        setModalData({invId:inv_ID, prodID:prod_ID,
+            prodName: product_Name, unitName: unit_Name, 
+            unitPrice: unit_Price, Stock: stock,
+            unitValue:unit_Value, regionID:regionCode,
+            totalStockID: total_ID
+            });
+
+                                               
+}
 
     //delete an inventory
     const removeProductHandler = (inventoryID, totalInvID) =>{
@@ -200,8 +219,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                     })
 
 
-                })
-                  .catch(error=> window.alert("something went wrong! Try again."))
+                }).catch(error=> window.alert("something went wrong! Try again."))
         }
     }
 
@@ -253,23 +271,8 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                                             </TableRow>
 
                                                             <TableRow> 
-                                                                <Tooltip title="edit"
-                                                                  placement="right"
-                                                                  arrow
-                                                                  PopperProps={{
-                                                                    popperOptions: {
-                                                                        modifiers: {
-                                                                        offset: {
-                                                                            enabled: true,
-                                                                            offset: '1px, -20px',
-                                                                             },
-                                                                          },
-                                                                        },
-                                                                     }}
-                                                                    >
-                                                                    <TableCell style={{color:"blue", cursor:'pointer'}} onClick={ (event) =>openModalWithInvId(res.id, res.name, true) }>Unit</TableCell>                                                         
-                                                                </Tooltip> 
-                                                                                                           
+                                                 
+                                                                <TableCell >Unit</TableCell>                       
                                                                 <TableCell >Price</TableCell>
                                                                 <TableCell colspan={1} >Stock</TableCell>
                                                                 <TableCell colspan={2} >Delivery Date</TableCell>
@@ -279,16 +282,31 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                                         <TableBody>
                                                             
                                                                 <TableRow>
-                                                                    <TableCell style={ {border:'0px solid grey'}}>{res.unitName}</TableCell>
+                                                                    <Tooltip title="edit"
+                                                                    placement="right"
+                                                                    arrow
+                                                                    PopperProps={{
+                                                                        popperOptions: {
+                                                                            modifiers: {
+                                                                            offset: {
+                                                                                enabled: true,
+                                                                                offset: '1px, -20px',
+                                                                                },
+                                                                            },
+                                                                            },
+                                                                        }}
+                                                                        >
+                                                                        <TableCell style={{color:"blue", border:'0px', cursor:'pointer'}} onClick={ (event) =>openEditModalWithInvId(res.id,res.productId, res.name, res.unitName, res.price, res.stock,res.unitValue,res.totalId, true) }>{res.unitName}</TableCell>                                                         
+                                                                    </Tooltip>
+                                                                    
                                                                     <TableCell style={{border:'0px solid grey'}}>{res.price}</TableCell>
                                                                     <TableCell style={res.stock === 0 ? {border:'0px solid grey', color:'red'} : {border:'0px solid grey', color:'green'} }>{res.stock}</TableCell>
                                                                     <TableCell style={{border:'0px solid grey'}}>{moment(res.date).format('YYYY-MM-DD')}</TableCell>
                                                                     <TableCell style={{border:'0px solid grey'}}>
-                                                                        <Tooltip  title={res.stock === 0 ? "not allowed" : "Remove"} arrow  placement="right">
+                                                                        <Tooltip  title="Remove" arrow  placement="right">
                                                                             <IconButton  style={{color:'red'}}>
                                                                                 <RemoveCircleOutlineIcon
                                                                                         onClick={(event)=>removeProductHandler(res.id, res.totalId)} 
-                                                                                        style={res.stock === 0 ? {cursor:'not-allowed',pointerEvents:'none'} : {cursor: 'pointer'} }
                                                                                         />
                                                                             </IconButton>                                          
                                                                         </Tooltip>
@@ -375,6 +393,13 @@ const [getInternetStatus, setInternetStatus] = useState(true)
                                         setOpenModal = {setOpenModal}
                                         modal_data={ModalData}
                                     />
+
+                                    <EditInventoryModal
+                                        openEditModal={openEditModal}
+                                        setOpenEditModal = {setOpenEditModal}
+                                        modal_data={ModalData}
+
+                                     />
 
                                     <Paginator
                                         previousLabel = {"<"}

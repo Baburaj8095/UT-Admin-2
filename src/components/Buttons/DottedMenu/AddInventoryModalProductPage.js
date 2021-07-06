@@ -395,7 +395,7 @@ const submitData=()=>{
 
                                 }
                             ).catch(error=>{
-                                window.alert("something went wrong while updating in the else part where no match was found! Please try again")
+                                window.alert("something went wrong while updating. Please try again")
                                 //history.push("/homepage")
                               }) 
                       }//closing of if

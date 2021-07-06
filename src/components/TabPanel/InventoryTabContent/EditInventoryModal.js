@@ -66,26 +66,18 @@ const DialogActions = withStyles((theme) => ({
 
 
 
-const AddInventoryModal = (props) => {
+const EditInventoryModal = (props) => {
   const   history = useHistory();
 
 
-  const {openModal, setOpenModal, modal_data} = props;
+  const {openEditModal, setOpenEditModal, modal_data} = props;
  
   //modal close handler
   const handleClose = () => {
-    setOpenModal(false);
+    setOpenEditModal(false);
   };
 
       
-
-//reactLocalStorage.setObject('invenotry_details',{invId:invID, prodName:  productName});
-
-//retrieve data from localstorage
-    // invId:inv_ID, prodID:prod_ID,
-    // prodName: product_Name, unitName: unit_Name, 
-    // unitPrice: unit_Price, Stock: stock,
-    // unitValue:unit_Value, regionID:region_ID
 
     let prod_data=null;
     if(modal_data){
@@ -177,10 +169,16 @@ if(isCorrect){
   'App-Token' : 'A14BC'
 }
 
-          
-//for adding new inventory
-//POST
-//CHCECK THE INVENTORY IS EXIST, IF EXISTS THEN UPDATE(PUT) ELSE NEW POST
+        
+
+//get tomorrow's date
+var d = new Date();
+d.setDate(d.getDate() + 1);
+
+const date= moment(d);
+
+//product-inv body to create a new record
+//PUT
 // https://ecom.xircular.io/test/api/product-inventories
 //  {
 //   "price": 15.00,
@@ -193,14 +191,6 @@ if(isCorrect){
 //   "unitValue": 1.00,
 //   "date": "2021-07-02T00:00:00Z"
 // }
-//get tomorrow's date
-var d = new Date();
-d.setDate(d.getDate() + 1);
-
-const [date, setDate] = useState(moment(d));
-console.log(date);
-//product-inv body to create a new record
-//check if the selected date is already present for the prod_id
 
 const addInventoryBodyData = {
                                   price: parseFloat(body.price),
@@ -214,23 +204,9 @@ const addInventoryBodyData = {
                                   date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z'
                             }
 
+//check if the selected date is already present for the prod_id
 const checkInventoryAPI= "/product-inventories/product/"+addInventoryBodyData.date+"/"+addInventoryBodyData.regionId+"/"+addInventoryBodyData.product.id;
 
-const productPostAPI = "/product-inventories";
-                            
-
-//product-total-inv body to create a new record
-const productTotalPostAPI = "/product-total-inventories";
-const totalProductInventory = {
-                                product: {
-                                      id: Number(body.product.id)
-                                    },
-                                regionCluster: {
-                                      id: Number(body.regionId)    
-                                    },
-                                totalStock: Number(body.totalStock),
-                                date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z'  
-                              }
 
 //product-inv update body
 const productInvPutAPI = "/product-inventories"
@@ -249,56 +225,42 @@ const productInvBodyToUpdate={
 
 //product-total-inv update body
 
+// https://ecom.xircular.io/test/api/product-total-inventories
+// PUT
+// {
+//     id: body.totalId,
+//     product: {
+//         id: Number(body.product.id)
+//     },
+//     regionCluster: {
+//         id: Number(body.regionId)    
+//     },
+//     totalStock: parseInt(body.totalStock),
+//     date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z' //date can't be updated
+// }
 const productTotalInvPutAPI = "/product-total-inventories";
 const productTotalInvBodyToUpdate = {
-                                id: body.totalId,
-                                product: {
-                                    id: Number(body.product.id)
-                                  },
-                                regionCluster: {
-                                    id: Number(body.regionId)    
-                                  },
-                                totalStock: parseInt(body.totalStock),
-                                date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z' //date can't be updated
+                                    id: body.totalId,
+                                    product: {
+                                        id: Number(body.product.id)
+                                    },
+                                    regionCluster: {
+                                        id: Number(body.regionId)    
+                                    },
+                                    totalStock: parseInt(body.totalStock),
+                                    date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z' //date can't be updated
                             }
-//to rename conditionally save button as update
-const [isInvPresent, setIsInvPresent] = useState(false);
 
 const submitData=()=>{
 
+    //check if the selected date is already present for the prod_id
   axios.get(checkInventoryAPI,
               {headers: headerObject} 
             )
           .then(response=>{
               console.log("does inventory exist: "+response.data);
-                if(response.data.productInventory.length === 0 && response.data.productTotalInventory === null){
+                if(response.data.productInventory.length !== 0 && response.data.productTotalInventory !== null){
 
-                  //post request for new product inventory
-                    axios.post(productPostAPI,
-                              addInventoryBodyData,
-                              {headers: headerObject} 
-                            )
-                          .then(response=>{
-                              console.log("submitted inventory details: "+response.data);
-                              
-                                }
-                            )
-
-                      //post request for product-total inventory
-                      axios.post(productTotalPostAPI,
-                                totalProductInventory,
-                                {headers: headerObject} 
-                              )
-                            .then(response=>{
-                                console.log("submitted product-total-inventory details: "+response.data);
-                                setOpenModal(false);
-                                history.push("/homepage");
-                                  }
-                              )
-
-                          
-                  }else{
-                    setIsInvPresent(true);
                     //product inventory update
                     axios.put(productInvPutAPI,
                       productInvBodyToUpdate,
@@ -317,52 +279,35 @@ const submitData=()=>{
                       )
                      .then(response=>{
                          console.log("updated product total inventory details: "+response.data);
-                         setOpenModal(false);
-                         history.push("/homepage");
+                         setOpenEditModal(false);
+                         //history.push("/homepage");
 
                            }
                        )
 
 
 
-                  }
+                  }//end of if
 
 
             }
               )//first axios get req
 
 }
-
-
-
-//for inventory total
-// https://ecom.xircular.io/test/api/product-total-inventories
-//QUERY THE DATA FROM THE TOTALINVE AND CHCECK IF THE TOTAL_INVE EXISTS OR NOT, IF EXISTS THEN UPDATE ELSE NEW POST
-// POST 
-// {
-//   "product": {
-//     "id": 3741
-//   },
-//   "regionCluster": {
-//     "id": 1050    
-//   },
-//   "totalStock": 200, //( UNIT_VALUE * STOCK) EX:  unitValue=5, stock=10, totalStock = unitValue * stock
-//   "date": "2021-07-10T00:00:00Z"
-// }            
+            
 
 
 
 
   return (
     <div >
-      <Dialog  onClose={handleClose} aria-labelledby="customized-dialog-title" open={openModal}>
+      <Dialog  onClose={handleClose} aria-labelledby="customized-dialog-title" open={openEditModal}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          Add Inventory
+          Update Inventory
         </DialogTitle>
 
         <DialogContent dividers>
-          <TextField
-            
+          <TextField           
             margin="dense"
             id="productName"
             inputProps={
@@ -381,7 +326,6 @@ const submitData=()=>{
             required
           />
           <TextField
-            autoFocus
             margin="dense"
             id="unitName"
             label="Unit Name"      
@@ -396,11 +340,14 @@ const submitData=()=>{
             }}
             variant="outlined"
             required
+            inputProps={
+                { readOnly: true, }
+              }
           />
 
         <TextField
           type="number"
-            
+            autoFocus
             margin="dense"
             id="price"
             label="Price"      
@@ -476,17 +423,12 @@ const submitData=()=>{
             variant="outlined"
             required
           />
-          <DatePicker
-              style={{marginTop:'30px',minWidth:'550px',maxWidth:'180px',height: '43px', borderRadius:'4px', border:'2px solid #bfbfbf'}}
-              value={date}
-              label="Date"
-              onChange={(e) => { setDate(e) }}
-            /> 
+
            
         </DialogContent>
         <DialogActions>
           <Button onClick={submitData} style={{color:'green'}}>
-            {isInvPresent ? 'Update' : 'Save'}
+            Update
           </Button>
           <Button onClick={handleClose} style={{color:'red'}}>
             Cancel
@@ -498,4 +440,4 @@ const submitData=()=>{
 }
 
 
-export default  AddInventoryModal;
+export default  EditInventoryModal;
