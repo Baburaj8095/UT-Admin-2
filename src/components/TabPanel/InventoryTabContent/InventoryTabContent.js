@@ -12,12 +12,13 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Box, Card, CardContent, Grid, IconButton, Tooltip } from '@material-ui/core';
+import { Box, Card, CardContent, Grid, IconButton, TextField, Tooltip } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import Typography from '@material-ui/core/Typography';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import Paginator from 'react-paginate';
-
+import SearchIcon from '@material-ui/icons/Search';
+import {InputAdornment} from '@material-ui/core';
 import InventoryTabContentCss from './InventoryTabContent.module.css';
 import Spinner from '../../Spinner/Spinner';
 import Footer from '../../Footer/Footer';
@@ -35,8 +36,8 @@ import "antd/dist/antd.css";
 import Auxiliary from '../../../hoc/Auxiliary';
 import { useHistory } from 'react-router';
 import NodataFound from './NodataFound';
-import SearchBar from './SearchBar';
 import EditInventoryModal from './EditInventoryModal';
+import SearchFilterResult from './SearchFilterResult';
 
 const useStyles = makeStyles((theme) => ({
     theCard:{
@@ -224,10 +225,21 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
     }
 
 
+
+    //search filter input data
+    const [searchedWord, setsearchedWord] = useState('');
+
+    const handleOnSearchIconClicked =() =>{
+        console.log("searched icon clicked")
+    }
+
+
+
+
     let InventoryItems = '';  
 
-    if(isLoading){
-        InventoryItems = <Spinner />;
+    if(searchedWord && searchedWord !== ' ' && searchedWord !==  null){
+        InventoryItems = <SearchFilterResult invDATA={InventoryData} searchWORD={searchedWord}/>;
     }else{
 
         InventoryItems = InventoryData.slice(pagesVisited, pagesVisited + itemsPerPage )
@@ -348,6 +360,7 @@ const [getInternetStatus, setInternetStatus] = useState(true)
 
     });
 
+   
 
   return (
     <Auxiliary>
@@ -357,7 +370,37 @@ const [getInternetStatus, setInternetStatus] = useState(true)
             <div style={{display:'flex', position:'fixed',marginLeft:'8px', marginTop:'30px'}}>
                 <div style={{display:'flex'}}>
                     <strong style={{width:'200px'}}>All Inventories</strong>
-                    <SearchBar />
+                    
+
+                    <TextField 
+                        style={{marginTop:'-10px',marginLeft :'40px',width:'340px', borderRadius:'4px', border:'2px solid #DAF7A6'}}
+                                
+                        InputProps={{       
+                            
+                            endAdornment:(
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleOnSearchIconClicked}
+                                        edge="end"
+                                        >
+                                        <SearchIcon />
+                                    </IconButton>
+                                </InputAdornment>
+                                )
+                            
+                            }}
+                        placeholder="search inventory with product name.."
+                        variant="outlined"
+                        //margin="normal"
+                        required
+                        size="small"
+                        name="search"
+                        id="search"
+                        value={searchedWord}
+                        onChange={(event) =>setsearchedWord(event.target.value)}
+                        />
+
                 </div>   
                 
                       
@@ -401,19 +444,21 @@ const [getInternetStatus, setInternetStatus] = useState(true)
 
                                      />
 
-                                    <Paginator
-                                        previousLabel = {"<"}
-                                        nextLabel = {">"}
-                                        pageCount = {pageCount}
-                                        onPageChange = {changePage}
-                                        containerClassName={InventoryTabContentCss.paginationButtons}
-                                        previousLinkClassName = {InventoryTabContentCss.previousButton}
-                                        nextLinkClassName={InventoryTabContentCss.nextButton}
-                                        disabledClassName = {InventoryTabContentCss.paginationDisabled}
-                                        activeClassName = {InventoryTabContentCss.activePageNumberButton}                  
-                                        />
+                                 { searchedWord ? null : <Paginator
+                                                            previousLabel = {"<"}
+                                                            nextLabel = {">"}
+                                                            pageCount = {pageCount}
+                                                            onPageChange = {changePage}
+                                                            containerClassName={InventoryTabContentCss.paginationButtons}
+                                                            previousLinkClassName = {InventoryTabContentCss.previousButton}
+                                                            nextLinkClassName={InventoryTabContentCss.nextButton}
+                                                            disabledClassName = {InventoryTabContentCss.paginationDisabled}
+                                                            activeClassName = {InventoryTabContentCss.activePageNumberButton}                  
+                                                            />
                                         
-                                    <div style={ pagesVisited === 18 ? {backgroundColor: 'grey', color:'white',  width:'100%', marginTop:'45px', bottom:0, height:'140px'}: {backgroundColor: 'grey', color:'white',  width:'98%', marginTop:'45px', bottom:0, height:'140px'}}>
+                                    }
+                                        
+                                    <div style={ pagesVisited === 18 ? {backgroundColor: 'grey', color:'white',  width:'100%', marginTop:'45px', bottom:0, height:'140px'}: {backgroundColor: 'grey', color:'white',  width:'98%', marginTop:'45px',height:'180px'}}>
                                             <Footer />
                                     </div>
                                 </div>
