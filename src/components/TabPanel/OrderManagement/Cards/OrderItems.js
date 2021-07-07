@@ -1,4 +1,4 @@
-import { Card, CardContent, makeStyles, Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { Card, CardContent, Grid, makeStyles } from '@material-ui/core';
 import React from 'react';
 import Auxiliary from '../../../../hoc/Auxiliary';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 const useStyles = makeStyles((theme) => ({
     root: {
      
+      minHeight:340,
       maxWidth: 345,
       backgroundColor: '#fff',
       backgroundClip: 'border-box',
@@ -48,57 +49,55 @@ const OrderItems = (props) => {
     const classes = useStyles();   
 
     return (
-        <div style={{marginLeft:'10px'}}>                                  
+        <div style={{marginLeft:'15px', display:'flex', flexGrow:1}}>  
+            <Grid container  style={{marginTop:'10px',display:'absolute',flexGrow:1, spacing:1,  justifyContent: 'center'}}>
 
-                <div  style={{overflowY:'auto',display:'flex'}}>
-
-                  
-                      
                     {
                       OrderItems.orderItems && OrderItems.orderItems.map(res=>{
                         return(
-                          <Auxiliary>
+                          <Grid item xs={12} sm={6} lg={3}>
+                            <Grid container justifyContent="center" spacing={1}>
+                              <Grid item>
+                            <Card className={classes.root}>
+                                  <CardActionArea style={{position: 'initial'}}>
+                                    <CardMedia
+                                      component="img"
+                                      alt="Contemplative Reptile"
+                                      height="140"
+                                      image={res.product.productImage}
+                                    />
+                                    <CardContent>
+                                      <Typography gutterBottom variant="h5" component="h2">
+                                      {res.name}
+                                      </Typography>
+                                      <Typography variant="body2" color="textSecondary" component="p">
+                                        Unit Name : {res.unitName}
+                                      </Typography>
+                                      <Typography variant="body2" color="textSecondary" component="p">
+                                        Delivery Date : {res.deliveryDate}
+                                      </Typography>
+                                    </CardContent>
+                                  </CardActionArea>
+                                  <CardActions >
+                                    <Button size="small" color="primary" style={{    position: 'initial'}}>
+                                      Unit Price : {res.totalPrice}
+                                    </Button>
+                                    <Button size="small" color="primary" style={{    position: 'initial'}}>
+                                    Quantity : {res.quantity}
+                                    </Button>
+                                  </CardActions>
+                                </Card>
 
-<Card className={classes.root}>
-      <CardActionArea style={{    position: 'initial'}}>
-        <CardMedia
-          component="img"
-          alt="Contemplative Reptile"
-          height="140"
-          image={res.product.productImage}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-          {res.name}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-         Unit Name : {res.unitName}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-         Delivery Date : {res.deliveryDate}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <CardActions >
-        <Button size="small" color="primary" style={{    position: 'initial'}}>
-          Unit Price : {res.totalPrice}
-        </Button>
-        <Button size="small" color="primary" style={{    position: 'initial'}}>
-        Quantity : {res.quantity}
-        </Button>
-      </CardActions>
-    </Card>
-</Auxiliary>
+                              </Grid>
+                            </Grid>
+                          </Grid>
                          
-                        )
-                    })
+                          )
+                      })
                     }
 
-                         
-                    </div>
-
-                                        
-       
+                                                              
+      </Grid> 
     </div>
     )
 }

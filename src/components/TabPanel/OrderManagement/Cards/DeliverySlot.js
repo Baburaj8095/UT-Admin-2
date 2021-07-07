@@ -7,7 +7,7 @@ import React from 'react'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      width: 300,
+      width: 345,
       height:350,
       overflowY:'scroll',
       backgroundColor: '#fff',

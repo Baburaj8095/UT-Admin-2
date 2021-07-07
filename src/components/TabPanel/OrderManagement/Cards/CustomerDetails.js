@@ -6,7 +6,7 @@ import React from 'react'
 
 const useStyles = makeStyles((theme) => ({
     root: {//this changes the width and height of the card
-      width: 300,
+      width: 345,
       height:350,
       overflowY:'scroll',
       backgroundColor: '#fff',

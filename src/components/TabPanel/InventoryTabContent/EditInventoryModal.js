@@ -297,8 +297,6 @@ const submitData=()=>{
             
 
 
-
-
   return (
     <div >
       <Dialog  onClose={handleClose} aria-labelledby="customized-dialog-title" open={openEditModal}>

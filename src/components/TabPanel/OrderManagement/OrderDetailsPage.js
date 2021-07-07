@@ -30,6 +30,7 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
 import Paper from '@material-ui/core/Paper';
+import Grid from 'antd/lib/card/Grid';
 
 
 
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
     root: {
       minWidth: 650,
-      marginLeft: '20px',
+      marginLeft: '5px',
       marginTop:'18px',
     },
     media: {
@@ -145,10 +146,15 @@ const [OrderStatus, setOrderStatus] = useState({
 
 
   //timeline
-  const dropDownstatuses = ['CREATED', 'PROCESSING', 'CONFIRMED', 'COMPLETED','PENDING', 'CANCELLED'];
+  const getAllStatuses = React.useCallback(() => { 
+    const dropDownstatuses = ['CREATED', 'PROCESSING', 'CONFIRMED', 'COMPLETED','PENDING', 'CANCELLED'];
+    return dropDownstatuses;
+  }, []);
+
+
   const statuses = ['CREATED', 'PROCESSING', 'CONFIRMED', 'COMPLETED'];  
 
-const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(0);
    
 
  //update button
@@ -159,6 +165,8 @@ const [activeStep, setActiveStep] = useState(0);
                         id: OrderStatus.id,
                         status: OrderStatus.status,
                       }
+
+const statusArray  = getAllStatuses();
 const handleUpdateClick = () => {
 
     axios.put(apiToUpdate,
@@ -168,9 +176,9 @@ const handleUpdateClick = () => {
             .then(response=>{
               console.log("staus updated: ",response)
                 //for timeline
-                if(statuses.includes(response.data.status)){
+                if(statusArray.includes(response.data.status)){
 
-                  let index = statuses.indexOf(response.data.status);
+                  let index = statusArray.indexOf(response.data.status);
                     setActiveStep((prevActiveStep) => prevActiveStep + index);
               
                 }
@@ -203,15 +211,15 @@ const [orders, setOrders] = useState([]);
               setOrders(order.data);
                 console.log("ORDERS based on order id : ",order.data.status);
                 setisLoading(false);
-                if(statuses.includes(order.data.status)){
+                if(statusArray.includes(order.data.status)){
 
-                  let index = statuses.indexOf(order.data.status);
+                  let index = statusArray.indexOf(order.data.status);
                     setActiveStep((prevActiveStep) => prevActiveStep + index);
               
                 }
               return order;
             })
-  },[api, jwtToken,statuses]);
+  },[api, jwtToken]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
 
@@ -228,14 +236,12 @@ const getStepContent=(step)=> {
     case 1:
       return 'Order is processing';
     case 2:
-      return `Order is being Confirmed`;
+      return `Order is Confirmed`;
     case 3:
-      return `Order is confirmed`;
-    case 4:
       return `The order is completed`;
-    case 5:
+    case 4:
       return `Order cancelled`;
-    case 6:
+    case 5:
       return `Order is Pending`;
     default:
       return 'Unknown status';
@@ -270,7 +276,7 @@ return (
                             </div>
 
                               {/* TimeLine orderitem table */}
-                            <div style={{marginTop:'50px',width:'80%'}}> 
+                            <div style={{marginTop:'50px',width:'98.5%'}}> 
                               <div>
                                 <Card className={classes.root}>
 
@@ -315,11 +321,10 @@ return (
                                             value={OrderStatus.status}
                                             onChange={(event)=>{handleStatusChange(event)}}
                                             label="Update Order Status"
-                                            
-                                            
+                                            disabled={activeStep === 4 ? true : false}                                           
                                             >
                                             <option aria-label="None" value="" />
-                                            {dropDownstatuses.map((res, index)=>{
+                                            {statusArray.map((res, index)=>{
                                                 return(<option id={index} key={index} value={res}>{res}</option>
                                                 )
                                             })}
@@ -333,45 +338,43 @@ return (
                                         
                                 </Card>
                             </div>
-
-
-
-                            {/* OrderItems table */}
-
                            
                       </div>
+              </div>
 
+                <div style={{display:'absolute', marginTop:'30px'}}>
 
-                      <div style={{marginTop:'10px',display:'flex'}}>
-                              <OrderItems OrderItem={orders}/>
-                            </div>
+                      <div style={{display:'flex'}}>
+                            <OrderItems OrderItem={orders}/>
+  
+                      </div>        
 
-
+                      <hr style={{width:'50%', marginTop:'50px', borderTop:'4px dotted green'}}/>
 
                    {/* CustomerDetails, DeliveryInfo, deliverySlot and paymentdetails*/}
+                        
+                            <div style={{display:'flex', marginTop:'50px',marginBottom:'30px'}}>
 
-                            <div style={{display:'flex', marginTop:'30px',marginBottom:'30px'}}>
-
-                                  <div style={{marginLeft:'20px'}}>
+                                  <div style={{marginLeft:'25px'}}>
                                     <CustomerDetails theOrder={orders} />
                                   </div>
                                   
-                                  <div style={{marginLeft:'50px'}}>
+                                  <div style={{marginLeft:'35px'}}>
                                     <DeliveryInfo delInfo={orders}/>
                                   </div>
 
 
-                                  <div style={{ marginLeft:'85px'}}>
+                                  <div style={{ marginLeft:'35px'}}>
                                     <DeliverySlot delSlots={orders} />
                                   </div>
                               
-                                  <div style={{ marginLeft:'80px'}}>
+                                  <div style={{ marginLeft:'35px'}}>
                                     <PaymentDetails paymentDetails={orders}/>
                                   </div>
 
                             </div>     
-                      </div>
-
+                      
+                    </div>
 
                 {/* <div style={{backgroundColor: 'grey', color:'white', position:'absolute', bottom:'0', width:'100%', height:'149px'}}>
                       <Footer />
