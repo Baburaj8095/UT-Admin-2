@@ -6,7 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import InputBase from '@material-ui/core/InputBase';
-import { ListItemIcon, NativeSelect } from '@material-ui/core';
+import { Button, ListItemIcon, NativeSelect, Tooltip } from '@material-ui/core';
  import 'react-date-range/dist/styles.css'; // main css file
  import 'react-date-range/dist/theme/default.css'; // theme css file
  import moment from 'moment';
@@ -25,6 +25,11 @@ import Footer from '../../Footer/Footer';
 import Auxiliary from '../../../hoc/Auxiliary';
 import CollapsibleOrderTable from './CollapsibleOrderTable';
 import { useHistory } from 'react-router';
+import ExcelImage from '../../../assets/images/excel.png';
+import * as XLSX from 'xlsx';
+import {saveAs} from 'file-saver';
+
+
 
 
 const BootstrapInput = withStyles((theme) => ({
@@ -218,7 +223,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
 //http://localhost:8999/api/orders/?page=0&placedDate.specified=true&placedDate.greaterThanOrEqual=2020-12-09T00:00:00.000Z&placedDate.lessThanOrEqual=2021-01-04T23:59:59.000Z&size=500&sort=deliveryInfo.slotStart,desc&status.in=CREATED,PROCESSING,DISPATCHED,COMPLETED,PENDING,CANCELLED,CONFIRMED,PAY_FAILED  //url:"/orders/?page=0&placedDate.specified=true&placedDate.greaterThanOrEqual="+startdate+"&placedDate.lessThanOrEqual="+enddate+"&size=20&sort="+sorts+",desc&status.in="+year+"",
      
-  const api = "/orders/details/?placedDate.specified=true&placedDate.greaterThanOrEqual="+startDate+"&placedDate.lessThanOrEqual="+endDate+"&sort="+sortBy+",desc&status.in="+selected.join(',')+"";
+  const api = "/orders/details/?page=0&placedDate.specified=true&placedDate.greaterThanOrEqual="+startDate+"&placedDate.lessThanOrEqual="+endDate+"&size=1000&sort="+sortBy+",desc&status.in="+selected.join(',')+"";
   const token = reactLocalStorage.get('id_token');
   const jwtToken ='Bearer '+token;
 
@@ -251,7 +256,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
    const endDeliveryDate = moment(deliveryDate).format('YYYY-MM-DD')+'T23:59:59.000Z';
 
    //get the axios orders
-  const api2="orders/details/?placedDate.specified=true&placedDate.greaterThanOrEqual="+chosenDeliveryStartDate+"&placedDate.lessThanOrEqual="+endDeliveryDate+"&sort="+sortBy+",desc&status.in="+selected.join(',')+"";
+  const api2="orders/details/?page=0&placedDate.specified=true&placedDate.greaterThanOrEqual="+chosenDeliveryStartDate+"&placedDate.lessThanOrEqual="+endDeliveryDate+"&size=1000&sort="+sortBy+",desc&status.in="+selected.join(',')+"";
   
   const [placedDateOrders, setPlacedDateOrders] = useState([]); 
 
@@ -288,6 +293,48 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
   console.log("dataHolder: ",dataHolder);
 
 
+
+  //order excel export handler
+  const handleExcelExport = () =>{
+
+    var workBook = XLSX.utils.book_new();
+            
+            workBook.SheetNames.push("Order ExcelSheet");
+
+           const flattenData =  dataHolder.map(res=>{
+              
+               return     {
+                      'Order ID': res.id,
+                      'Placed Date': res.placedDate,
+                      'Status': res.status,
+                      'Customer Name': res.customer.firstName,
+                      'Email': res.customer.email,
+                      'Phone': res.customer.phone,
+                      'Delivery Slot': res.deliveryInfo.slotStart+" - "+res.deliveryInfo.slotEnd
+                    }
+              
+            });
+ 
+            
+            var workSheet = XLSX.utils.json_to_sheet(flattenData);
+
+            workBook.Sheets["Order ExcelSheet"] = workSheet;
+            var parsedExcelSheetData = XLSX.write(workBook, {bookType:'xlsx',  type: 'binary'});
+            
+            function sheetToArrayBuffer(s) {
+      
+                    var buffer = new ArrayBuffer(s.length);
+                    var view = new Uint8Array(buffer);
+                    for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+                    return buffer;
+                    
+            }
+
+            //to let the user save the file with saveAS()
+            saveAs(new Blob([sheetToArrayBuffer(parsedExcelSheetData)],{type:"application/octet-stream"}), 'orders.xlsx');
+  }
+
+
   return (
     <Auxiliary>
       
@@ -322,7 +369,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
         </div>
 
 
-        <div style={{marginLeft:'80px', marginTop:'-16px'}}>
+        <div style={{marginLeft:'50px', marginTop:'-16px'}}>
 
             <div style={{display:'inline-block', marginTop:'20px', float:'left'}}>
               <h6>Filter by:</h6>
@@ -366,11 +413,31 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                 </Select>
               </FormControl>
           </div>
+
     </div>
 
+    <Tooltip
+      title="export"
+      placement="top"
+      arrow
+      PopperProps={{
+          popperOptions: {
+              modifiers: {
+              offset: {
+                  enabled: true,
+                  offset: '1px, 0px',
+                  },
+              },
+              },
+          }}
+        >
+        <Button onClick={handleExcelExport} style={{marginLeft:'70px', marginTop:'-15px'}}>
+                <img src={ExcelImage} style={{height:'35px',width:'35px'}} alt="excel_import_image"/>
+        </Button>
+    </Tooltip>
+   
 
-    <div  style={{marginLeft:'170px', display:'flex'}}>
-
+    <div  style={{marginLeft:'60px', display:'flex'}}>
         <div style={{display:'inline-block', marginTop:'4px',marginRight:'8px', float:'left'}}>
           <h6>Date range: </h6>
         </div>
@@ -395,18 +462,21 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                             }
           </div>
     </div>
+   
           
     </div>
 
     {/*///////////////// table content ////////////////*/}
-        <div style={{marginTop:'100px', width:'100%'}}>
-          <div style={{overflow:'scroll',overflowX:'hidden', height:'480px', width:'170%'}}>
-            <div>
-                <CollapsibleOrderTable  tableData = {dataHolder}/>
-            </div>
-          </div>
-        </div>
+     { !isLoading ?  <div style={{marginTop:'100px', width:'100%'}}>
+                      <div style={{overflow:'scroll',overflowX:'hidden', height:'480px', width:'100%'}}>
+                        <div>
+                            <CollapsibleOrderTable  tableData = {dataHolder}/>
+                        </div>
+                      </div>
+                    </div>
 
+                 : <Spinner />
+    }
         {/* <div style={{backgroundColor: 'grey', color:'white', position:'fixed', width:'97%',bottom:0, height:'130px'}}>
               <Footer />
         </div> */}

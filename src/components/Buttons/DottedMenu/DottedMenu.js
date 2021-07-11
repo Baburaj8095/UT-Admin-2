@@ -81,6 +81,7 @@ export default function LongMenu(props) {
     history.push('/archieve-product');
   }
 
+  
   const addInventory = () =>{
     setAnchorEl(null);//to close down the small dialogue box
     setOpenModal(true)

@@ -20,6 +20,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "date-fns": "^2.22.1",
+    "file-saver": "^2.0.5",
     "moment": "^2.29.1",
     "rc-time-picker": "^3.7.3",
     "react": "^17.0.2",
@@ -33,7 +34,8 @@
     "react-scripts": "^4.0.3",
     "react-swipeable-views": "^0.14.0",
     "reactjs-localstorage": "^1.0.1",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "xlsx": "^0.17.0"
   },
   "scripts": {
     "start": "react-scripts start",

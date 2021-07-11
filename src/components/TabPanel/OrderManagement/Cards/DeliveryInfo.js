@@ -111,6 +111,16 @@ const DeliveryInfo = (props) => {
                         </span>
                   </div>
                 <br />
+                <div style={{marginTop:'12px'}}>
+                        <span>
+                            <strong>Delivery Note: </strong>                  
+                            <Typography variant="body2" color="textSecondary" component="span">
+                                {!deliveryInf.deliveryInfo.go? 'not specified' :deliveryInf.deliveryInfo.deliveryNote}
+
+                            </Typography>                      
+                        </span>
+                  </div>
+                <br />
 
                 <div style={{marginTop:'12px'}}>
                     

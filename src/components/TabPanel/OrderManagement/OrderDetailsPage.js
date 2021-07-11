@@ -167,6 +167,7 @@ const [OrderStatus, setOrderStatus] = useState({
                       }
 
 const statusArray  = getAllStatuses();
+
 const handleUpdateClick = () => {
 
     axios.put(apiToUpdate,

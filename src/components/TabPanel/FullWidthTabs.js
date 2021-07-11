@@ -17,7 +17,9 @@ import AddProduct from '../Buttons/AddProduct/AddProduct';
 import InventoryTabContent from './InventoryTabContent/InventoryTabContent';
 import TimeAndSlot from './TimeAndSlot/TimeAndSlot';
 import OrderManagement from './OrderManagement/OrderManagement';
-
+import ImportExcelProducts from './ProductTabContent/ImportExcelProducts';
+import ExcelImage from '../../assets/images/excel.png';
+import { Button, Tooltip } from '@material-ui/core';
 
 //to enable scrollbar in all the main pages, remove the styling in the App.js
 
@@ -116,6 +118,16 @@ const HeaderBelowMenu = ()=> {
     let history = useHistory();
 
 
+    //modal setup
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleExcelImport = () =>{
+    setOpenModal(true)
+
+  }
+
+
+
   return (
     <div 
     >
@@ -136,9 +148,12 @@ const HeaderBelowMenu = ()=> {
                         <h5 style={{opacity: '0.8'}}>Category</h5>
                       </div>
 
+                      
+
                       <div style={{display:'inline-block', marginRight:'445px'}}>
                         <span style={{fontSize:'18px'}}> All Products</span>
                       </div>
+
                       
                       <div style={{display:'inline-block', float:'right', marginRight:'115px'}}>
                         <NavLink to="/add-category" style={{textDecoration:'none'}}><AddCategory /></NavLink>
@@ -147,6 +162,36 @@ const HeaderBelowMenu = ()=> {
                       <div style={{display:'inline-block', float:'right'}}>
                         <NavLink to="/add-product" style={{textDecoration:'none'}}><AddProduct /></NavLink>
                       </div>
+
+                      <div style={{display:'inline-block',marginTop:'15px', marginRight:'15px', float:'right'}}>
+                        <span>OR</span>
+                      </div>
+
+                      <div style={{display:'inline-block',marginLeft:'15px',marginTop:'3px', float:'right'}}>
+                      <Tooltip
+                        title="import"
+                        placement="top"
+                        arrow
+                        PopperProps={{
+                            popperOptions: {
+                                modifiers: {
+                                offset: {
+                                    enabled: true,
+                                    offset: '1px, 0px',
+                                    },
+                                },
+                                },
+                            }}
+                          >
+                          <Button onClick={handleExcelImport} >
+                              <img src={ExcelImage} style={{height:'35px',width:'35px'}} alt="excel_import_image"/>
+                          </Button>
+                      </Tooltip>
+
+                          
+                      </div>
+
+
                   </div>
 
              : null}
@@ -162,6 +207,11 @@ const HeaderBelowMenu = ()=> {
             <ProductTabContent />
           </TabPanel>
           
+          <ImportExcelProducts
+            openModal={openModal}
+            setOpenModal = {setOpenModal}
+          />
+
           <TabPanel value={value} index={1} style={{marginTop: '10px'}}>
             <InventoryTabContent />
           </TabPanel>

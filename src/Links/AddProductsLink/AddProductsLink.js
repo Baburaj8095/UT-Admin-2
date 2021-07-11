@@ -296,7 +296,6 @@ const submitData =()=>{
                 </div>  
 
 
-
           </div>
             {/* <Grid item xs={false} sm={4} md={7} className={classes.image} /> */}
               

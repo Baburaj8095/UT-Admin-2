@@ -6,7 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import InputBase from '@material-ui/core/InputBase';
-import { ListItemIcon, NativeSelect } from '@material-ui/core';
+import { ListItemIcon, NativeSelect, Tooltip } from '@material-ui/core';
  import 'react-date-range/dist/styles.css'; // main css file
  import 'react-date-range/dist/theme/default.css'; // theme css file
  import moment from 'moment';
@@ -30,6 +30,11 @@ import CollapsibleOrderTable from './CollapsibleOrderTable';
 import { useHistory } from 'react-router';
 import { Button } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
+import ExcelImage from '../../../assets/images/excel.png';
+import * as XLSX from 'xlsx';
+import {saveAs} from 'file-saver';
+
+
 
 
 const BootstrapInput = withStyles((theme) => ({
@@ -259,7 +264,7 @@ const logout=()=>{
    const chosenDeliveryStartDate = moment(deliveryDate).format('YYYY-MM-DD')+"T00:00:00.000Z";
    const endDeliveryDate = moment(deliveryDate).format('YYYY-MM-DD')+'T23:59:59.000Z';
 
-  const api2="orders/details/?placedDate.specified=true&placedDate.greaterThanOrEqual="+chosenDeliveryStartDate+"&placedDate.lessThanOrEqual="+endDeliveryDate+"&sort="+sortBy+",desc&status.in="+selected.join(',')+"";
+  const api2="orders/details/?page=0&placedDate.specified=true&placedDate.greaterThanOrEqual="+chosenDeliveryStartDate+"&placedDate.lessThanOrEqual="+endDeliveryDate+"&size=1000&sort="+sortBy+",desc&status.in="+selected.join(',')+"";
   
   const [placedDateOrders, setPlacedDateOrders] = useState([]); 
 
@@ -296,6 +301,49 @@ const logout=()=>{
   console.log("dataHolder: ",dataHolder);
 
 
+
+  //order excel export handler
+  const handleExcelExport = () =>{
+
+    var workBook = XLSX.utils.book_new();
+            
+            workBook.SheetNames.push("Order ExcelSheet");
+
+           const flattenData =  dataHolder.map(res=>{
+              
+               return     {
+                      'Order ID': res.id,
+                      'Placed Date': res.placedDate,
+                      'Status': res.status,
+                      'Customer Name': res.customer.firstName,
+                      'Email': res.customer.email,
+                      'Phone': res.customer.phone,
+                      'Delivery Slot': res.deliveryInfo.slotStart+" - "+res.deliveryInfo.slotEnd
+                    }
+              
+            });
+ 
+            
+            var workSheet = XLSX.utils.json_to_sheet(flattenData);
+
+            workBook.Sheets["Order ExcelSheet"] = workSheet;
+            var parsedExcelSheetData = XLSX.write(workBook, {bookType:'xlsx',  type: 'binary'});
+            
+            function sheetToArrayBuffer(s) {
+      
+                    var buffer = new ArrayBuffer(s.length);
+                    var view = new Uint8Array(buffer);
+                    for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+                    return buffer;
+                    
+            }
+
+            //to let the user save the file with saveAS()
+            saveAs(new Blob([sheetToArrayBuffer(parsedExcelSheetData)],{type:"application/octet-stream"}), 'orders.xlsx');
+  }
+
+
+
   return (
     <Auxiliary>
       
@@ -318,13 +366,13 @@ const logout=()=>{
               </Typography>                           
           </div>
 
-    <div style={{display:'flex', position:'fixed',marginLeft:'15px', marginTop:'30px'}}>
+    <div style={{display:'flex', position:'fixed',marginLeft:'12px', marginTop:'30px'}}>
 
         <div>
           <h5>All Orders </h5>
         </div>
 
-        <div style={{marginLeft:'80px', marginTop:'-16px'}}>
+        <div style={{marginLeft:'70px', marginTop:'-16px'}}>
 
             <div style={{display:'inline-block', marginTop:'20px', float:'left'}}>
               <h6>Sort by:</h6>
@@ -346,7 +394,7 @@ const logout=()=>{
         </div>
 
 
-        <div style={{marginLeft:'80px', marginTop:'-16px'}}>
+        <div style={{marginLeft:'50px', marginTop:'-16px'}}>
 
             <div style={{display:'inline-block', marginTop:'20px', float:'left'}}>
               <h6>Filter by:</h6>
@@ -392,8 +440,27 @@ const logout=()=>{
           </div>
     </div>
 
+    <Tooltip 
+      title="export"
+      placement="top"
+      arrow
+      PopperProps={{
+          popperOptions: {
+              modifiers: {
+              offset: {
+                  enabled: true,
+                  offset: '1px, 0px',
+                  },
+              },
+              },
+          }}
+        >
+        <Button onClick={handleExcelExport} style={{marginLeft:'80px', marginTop:'-15px'}}>
+                <img src={ExcelImage} style={{height:'35px',width:'35px'}} alt="excel_import_image"/>
+        </Button>
+    </Tooltip>
 
-    <div  style={{marginLeft:'170px', display:'flex'}}>
+    <div  style={{marginLeft:'80px', display:'flex'}}>
 
         <div style={{display:'inline-block', marginTop:'4px',marginRight:'8px', float:'left'}}>
           <h6>Date range: </h6>
@@ -423,14 +490,16 @@ const logout=()=>{
     </div>
 
     {/*///////////////// table content ////////////////*/}
-        <div style={{marginTop:'100px', width:'100%'}}>
-          <div style={{overflow:'scroll',overflowX:'hidden', height:'480px', width:'170%'}}>
-            <div>
-                <CollapsibleOrderTable  tableData = {dataHolder}/>
-            </div>
-          </div>
-        </div>
+    { !isLoading ?   <div style={{marginTop:'120px', width:'100%'}}>
+                      <div style={{overflow:'scroll',overflowX:'hidden', height:'480px', width:'100%'}}>
+                        <div>
+                            <CollapsibleOrderTable  tableData = {dataHolder}/>
+                        </div>
+                      </div>
+                    </div>
+                : <Spinner />
 
+    }
         {/* <div style={{backgroundColor: 'grey', color:'white', position:'fixed', width:'97%',bottom:0, height:'130px'}}>
               <Footer />
         </div> */}

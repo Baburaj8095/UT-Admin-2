@@ -380,7 +380,6 @@ const [getInternetStatus, setInternetStatus] = useState(true)
                             endAdornment:(
                                 <InputAdornment position="end">
                                     <IconButton
-                                        aria-label="toggle password visibility"
                                         onClick={handleOnSearchIconClicked}
                                         edge="end"
                                         >
