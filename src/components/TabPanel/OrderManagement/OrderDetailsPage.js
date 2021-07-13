@@ -276,6 +276,7 @@ return (
                             </Typography>
                             </div>
 
+                              {/* TimeLine */}
                               {/* TimeLine orderitem table */}
                             <div style={{marginTop:'50px',width:'98.5%'}}> 
                               <div>
@@ -312,6 +313,29 @@ return (
 
                                     </CardContent>
 
+                                    
+                                    <CardActions className={classes.expand} >
+                                        <Button variant="contained" style={{backgroundColor:'#5ABC0F', color:'white',width:'100px', height:'54px'}} onClick={handleUpdateClick}>Update</Button>
+                                    </CardActions>
+
+                                    {/* status drop-down */}
+                                    <FormControl variant="outlined" className={classes.formControl}>
+                                        <InputLabel id="status">Update Order Status</InputLabel>
+                                        <Select
+                                        native
+                                        id= 'status'
+                                        value={OrderStatus.status}
+                                        onChange={(event)=>{handleStatusChange(event)}}
+                                        label="Update Order Status"
+                                        disabled={activeStep === 4 ? true : false}                                           
+                                        >
+                                        <option aria-label="None" value="" />
+                                        {statusArray.map((res, index)=>{
+                                            return(<option id={index} key={index} value={res}>{res}</option>
+                                            )
+                                        })}
+                                        </Select>
+                                    </FormControl>                                       
                                     {/* status drop-down */}
                                     
                                         <FormControl variant="outlined" className={classes.formControl}>
