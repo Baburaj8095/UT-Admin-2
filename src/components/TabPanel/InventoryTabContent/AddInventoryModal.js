@@ -146,7 +146,7 @@ useEffect(() => { setbody({
  }
 
  //validating the totalStock EX: unitValue=5, stock=10, totalStock = unitValue * stock
- const unitVal = Number(body.unitValue);
+ const unitVal = body.unitName && parseInt(body.unitName.replace(/\D/g,''));
  const stockVal = Number(body.stock);
  const totalEnteredSTOCK = Number(body.totalStock);
  const correct_total_stock = unitVal * stockVal;
@@ -438,14 +438,16 @@ const submitData=()=>{
 
           <TextField
             type="number"
-            
+            inputProps={
+                { readOnly: true, }
+              }
             margin="dense"
             onChange={(e) => { handleFormInput(e) }}
             id="unitValue"
             label="Unit Value"      
             placeholder="unit value...."
             fullWidth
-            defaultValue={parseInt(body.unitValue)}
+            defaultValue={body.unitName && parseInt(body.unitName.replace(/\D/g,''))}
             style={{marginTop:'30px'}}
             size="normal"
             InputLabelProps={{
