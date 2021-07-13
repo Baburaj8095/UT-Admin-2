@@ -174,7 +174,7 @@ const OrderItems = (props) => {
                                         Unit Name : {res.unitName}
                                       </Typography>
                                       <Typography variant="body2" color="textSecondary" component="p">
-                                        Delivery Date : {res.deliveryDate}
+                                        Status : <span style={{color:'green'}}>{res.status}</span>
                                       </Typography>
                                     </CardContent>
                                   </CardActionArea>

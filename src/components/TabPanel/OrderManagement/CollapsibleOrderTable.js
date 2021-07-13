@@ -87,6 +87,8 @@ const completeOrderStatus = (orderID) =>{
 
             ).then(success=>{
               window.location = '/orders';
+            }).catch(error=>{
+              window.alert("someting went wrong. Please try again.")
             })
 
 }

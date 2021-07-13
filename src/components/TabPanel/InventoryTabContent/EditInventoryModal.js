@@ -117,7 +117,7 @@ useEffect(() => { setbody({
                             regionId: Number(prod_data.regionID),
                             stock: Number(prod_data.Stock),
                             unitName: prod_data.unitName,
-                            unitValue: Number(prod_data.unitValue),
+                            unitValue: body.unitName && parseInt(body.unitName.replace(/\D/g,'')),
 
                             totalStock:0,
                             totalId: prod_data.totalStockID
@@ -126,7 +126,7 @@ useEffect(() => { setbody({
                   },[prod_data.Stock,prod_data.invId,
                     prod_data.unitPrice, prod_data.prodID,
                     prod_data.unitName,prod_data.unitValue,
-                    prod_data.totalStockID,
+                    prod_data.totalStockID,body.unitName,
                     prod_data.prodName, prod_data.regionID]);
 
  const handleFormInput = (e) =>{
@@ -200,7 +200,7 @@ const addInventoryBodyData = {
                                   regionId: body.regionId,
                                   stock: parseInt(body.stock),
                                   unitName: body.unitName,
-                                  unitValue: parseInt(body.unitValue),
+                                  unitValue: body.unitName && parseInt(body.unitName.replace(/\D/g,'')),
                                   date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z'
                             }
 
@@ -219,7 +219,7 @@ const productInvBodyToUpdate={
           regionId: body.regionId,
           stock: parseInt(body.stock),
           unitName: body.unitName,
-          unitValue: parseInt(body.unitValue),
+          unitValue: body.unitName && parseInt(body.unitName.replace(/\D/g,'')),
           date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z' //date can't be updated
 }
 

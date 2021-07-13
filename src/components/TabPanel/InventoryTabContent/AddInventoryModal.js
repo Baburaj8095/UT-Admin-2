@@ -79,13 +79,14 @@ const AddInventoryModal = (props) => {
 
       
 
-//reactLocalStorage.setObject('invenotry_details',{invId:invID, prodName:  productName});
 
-//retrieve data from localstorage
-    // invId:inv_ID, prodID:prod_ID,
-    // prodName: product_Name, unitName: unit_Name, 
-    // unitPrice: unit_Price, Stock: stock,
-    // unitValue:unit_Value, regionID:region_ID
+  //get tomorrow's date
+  var d = new Date();
+  d.setDate(d.getDate() + 1);
+
+  const [date, setDate] = useState(moment(d));
+
+
 
     let prod_data=null;
     if(modal_data){
@@ -93,18 +94,19 @@ const AddInventoryModal = (props) => {
     }
 
 
+
  //body
  const [body, setbody] = useState({
                                     inventoryId: prod_data.invId,
-                                    price: parseFloat(prod_data.unitPrice),
+                                    price: 0,
                                     product:{
                                         id: Number(prod_data.prodID)
                                       },
                                     productName: prod_data.prodName,
                                     regionId: Number(prod_data.regionID),
-                                    stock: Number(prod_data.Stock),
-                                    unitName: prod_data.unitName,
-                                    unitValue: Number(prod_data.unitValue),
+                                    stock: 0,
+                                    unitName: null,
+                                    unitValue: 0,
 
                                     totalStock:0,
                                     totalId: prod_data.totalStockID
@@ -117,15 +119,15 @@ const AddInventoryModal = (props) => {
 // useEffect(() => { setVal(value)}, [value] )
 useEffect(() => { setbody({
                             inventoryId: prod_data.invId,
-                            price: parseFloat(prod_data.unitPrice),
+                            price: null,
                             product:{
                                 id: Number(prod_data.prodID)
                               },
                             productName: prod_data.prodName,
                             regionId: Number(prod_data.regionID),
-                            stock: Number(prod_data.Stock),
-                            unitName: prod_data.unitName,
-                            unitValue: Number(prod_data.unitValue),
+                            stock: 0,
+                            unitName: null,
+                            unitValue: null,
 
                             totalStock:0,
                             totalId: prod_data.totalStockID
@@ -137,6 +139,11 @@ useEffect(() => { setbody({
                     prod_data.totalStockID,
                     prod_data.prodName, prod_data.regionID]);
 
+
+
+
+
+                    
  const handleFormInput = (e) =>{
   const newData= {...body};
   newData[e.target.id] = e.target.value;
@@ -146,7 +153,7 @@ useEffect(() => { setbody({
  }
 
  //validating the totalStock EX: unitValue=5, stock=10, totalStock = unitValue * stock
- const unitVal = body.unitName && parseInt(body.unitName.replace(/\D/g,''));
+ const unitVal = Number(body.unitValue);
  const stockVal = Number(body.stock);
  const totalEnteredSTOCK = Number(body.totalStock);
  const correct_total_stock = unitVal * stockVal;
@@ -193,14 +200,14 @@ if(isCorrect){
 //   "unitValue": 1.00,
 //   "date": "2021-07-02T00:00:00Z"
 // }
-//get tomorrow's date
-var d = new Date();
-d.setDate(d.getDate() + 1);
 
-const [date, setDate] = useState(moment(d));
-console.log(date);
+
+
+
 //product-inv body to create a new record
 //check if the selected date is already present for the prod_id
+let prodID = null;
+let totalProductInvID = null;
 
 const addInventoryBodyData = {
                                   price: parseFloat(body.price),
@@ -214,7 +221,8 @@ const addInventoryBodyData = {
                                   date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z'
                             }
 
-const checkInventoryAPI= "/product-inventories/product/"+addInventoryBodyData.date+"/"+addInventoryBodyData.regionId+"/"+addInventoryBodyData.product.id;
+ //check the inventory data for the product with the product id
+const productInventoryFetchApi= "/product-inventories/product/"+addInventoryBodyData.date+"/"+addInventoryBodyData.regionId+"/"+addInventoryBodyData.product.id;
 
 const productPostAPI = "/product-inventories";
                             
@@ -249,6 +257,19 @@ const productInvBodyToUpdate={
 
 //product-total-inv update body
 
+// https://ecom.xircular.io/test/api/product-total-inventories
+//QUERY THE DATA FROM THE TOTALINVE AND CHCECK IF THE TOTAL_INVE EXISTS OR NOT, IF EXISTS THEN UPDATE ELSE NEW POST
+// POST 
+// {
+//   "product": {
+//     "id": 3741
+//   },
+//   "regionCluster": {
+//     "id": 1050    
+//   },
+//   "totalStock": 200, //( UNIT_VALUE * STOCK) EX:  unitValue=5, stock=10, totalStock = unitValue * stock
+//   "date": "2021-07-10T00:00:00Z"
+// }
 const productTotalInvPutAPI = "/product-total-inventories";
 const productTotalInvBodyToUpdate = {
                                 id: body.totalId,
@@ -261,30 +282,162 @@ const productTotalInvBodyToUpdate = {
                                 totalStock: parseInt(body.totalStock),
                                 date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z' //date can't be updated
                             }
-//to rename conditionally save button as update
-const [isInvPresent, setIsInvPresent] = useState(false);
 
+
+
+
+//submit the form data
 const submitData=()=>{
 
-  axios.get(checkInventoryAPI,
+  //checking if the date is already present for the product inv
+  axios.get(productInventoryFetchApi,
               {headers: headerObject} 
             )
           .then(response=>{
               console.log("does inventory exist: "+response.data);
-                if(response.data.productInventory.length === 0 && response.data.productTotalInventory === null){
+              
+                if(response.data.productInventory.length !== 0 && response.data.productTotalInventory !== null){
+                   //to be used for the product-total-inv update
+                    totalProductInvID = response.data.productTotalInventory.id;
+                    const totalProdStock = response.data.productTotalInventory.totalStock;
+                    
+                      
+                  let found = false;
+                      for(var i = 0; i < response.data.productInventory.length; i++) {
 
-                  //post request for new product inventory
-                    axios.post(productPostAPI,
-                              addInventoryBodyData,
-                              {headers: headerObject} 
+                          if (response.data.productInventory[i].unitName.toLowerCase() === body.unitName.toLowerCase()) {
+                              found = true;
+
+                            //storing the data in a useState hook
+                              prodID = response.data.productInventory[i].id;
+                              const totalCalc = totalProdStock - response.data.productInventory[i].stock;
+                              console.log("prodInvID: ", response.data.productInventory[i].id);
+ response.data.productInventory[i].id && setbody({
+                                                          inventoryId: response.data.productInventory[i].id,
+                                                          price: body.price,
+                                                          product:{
+                                                              id: Number(body.product.id)
+                                                          },
+                                                          productName: body.productName,
+                                                          regionId: Number(body.regionId),
+                                                          stock: body.stock,
+                                                          unitName: body.unitName,
+                                                          unitValue: body.unitValue,
+
+                                                          totalStock: parseInt(body.totalStock) + totalCalc,
+                                                          totalId: totalProductInvID
+
+                                                        })
+                                console.log("productInvBodyToUpdate", productInvBodyToUpdate);
+                                console.log("productTotalInvBodyToUpdate", productTotalInvBodyToUpdate);
+
+
+                              //now update the product-inventory and product-total-inventory
+                               const editConfirmation= window.confirm("Inventory for the product with the selected date and unit name already exists. You can proceed for an update or choose a different date to add new inventory details.")
+                                 
+                                 if(editConfirmation){
+
+                                      //product inventory update
+                                        axios.put(productInvPutAPI,
+                                          productInvBodyToUpdate,
+                                          {headers: headerObject} 
+                                          )
+                                        
+
+                                        //product-total-inventory update
+                                        axios.put(productTotalInvPutAPI,
+                                          productTotalInvBodyToUpdate,
+                                          {headers: headerObject} 
+                                          )
+                                        .then(response=>{
+                                            console.log("updated product total inventory details: "+response.data);
+                                            setOpenModal(false);
+                                            //history.push("/homepage");
+                    
+                                              }
+                                          ).catch(error=>{
+                                              window.alert("something went wrong while updating! Please try again")
+                                              //history.push("/homepage")
+                                            })     
+                                  }  // window.alert if closing                       
+                            break;
+                          }
+
+                      }//end of for loop
+              
+              // if there is no match for the entered unit name in the Databs
+              // but the date is present so create a new unit with the same date  and update   the tproduct-total-inv
+             
+              const productTotalInvBodyToUpdate2 = {
+                                                  id: totalProductInvID,
+                                                  product: {
+                                                      id: Number(body.product.id)
+                                                    },
+                                                  regionCluster: {
+                                                      id: Number(body.regionId)    
+                                                    },
+                                                  totalStock: parseInt(body.totalStock)+totalProdStock,
+                                                  date: moment(date).format('YYYY-MM-DD')+'T00:00:00Z' //date can't be updated
+                                            }
+
+                  if(!found){
+
+                        setbody({
+                          inventoryId: null,
+                          price: body.price,
+                          product:{
+                              id: Number(body.product.id)
+                          },
+                          productName: body.productName,
+                          regionId: Number(body.regionId),
+                          stock: body.stock,
+                          unitName: body.unitName,
+                          unitValue: body.unitValue,
+
+                          totalStock:body.totalStock,
+                          totalId: totalProductInvID
+
+                        })
+
+                        //post request for a new product-inv
+                          axios.post(productPostAPI,
+                            addInventoryBodyData,
+                            {headers: headerObject} 
+                          )
+                          .then(response=>{
+                            console.log("created inventory details: "+response.data);                            
+                            }
+                          ) 
+                            //product-total-inventory update.  updating product-total-inventory for the exisiting date but for a new product-inv unitname
+                          axios.put(productTotalInvPutAPI,
+                            productTotalInvBodyToUpdate2,
+                            {headers: headerObject} 
                             )
                           .then(response=>{
-                              console.log("submitted inventory details: "+response.data);
-                              
-                                }
-                            )
+                              console.log("updated product total inventory details: "+response.data);
+                              setOpenModal(false);
+                              //history.push("/homepage");
 
-                      //post request for product-total inventory
+                                }
+                            ).catch(error=>{
+                                window.alert("something went wrong while updating. Please try again")
+                                //history.push("/homepage")
+                              }) 
+                      }//closing of if
+                          
+                  }else{ //parent else
+
+                    
+                    //post request for a new product-inv
+                    axios.post(productPostAPI,
+                      addInventoryBodyData,
+                      {headers: headerObject} 
+                    )
+                    .then(response=>{
+                      console.log("created inventory details: "+response.data);                            
+                      }
+                    ) 
+                      //post request for a new product-total inventory
                       axios.post(productTotalPostAPI,
                                 totalProductInventory,
                                 {headers: headerObject} 
@@ -292,44 +445,20 @@ const submitData=()=>{
                             .then(response=>{
                                 console.log("submitted product-total-inventory details: "+response.data);
                                 setOpenModal(false);
-                                history.push("/homepage");
+                                //history.push("/homepage");
                                   }
-                              )
-
-                          
-                  }else{
-                    setIsInvPresent(true);
-                    //product inventory update
-                    axios.put(productInvPutAPI,
-                      productInvBodyToUpdate,
-                      {headers: headerObject} 
-                      )
-                     .then(response=>{
-                         console.log("updated inventory details: "+response.data);
-                         
-                           }
-                       )
-
-                    //product-total-inventory update
-                    axios.put(productTotalInvPutAPI,
-                      productTotalInvBodyToUpdate,
-                      {headers: headerObject} 
-                      )
-                     .then(response=>{
-                         console.log("updated product total inventory details: "+response.data);
-                         setOpenModal(false);
-                         history.push("/homepage");
-
-                           }
-                       )
-
-
-
+                              ).catch(error=>{
+                                window.alert("something went wrong! Please try again")
+                                //history.push("/homepage")
+                              }) 
+                    
                   }
 
 
             }
-              )//first axios get req
+              ).catch(error=>{
+                window.alert("something went wrong! Please try again")
+              }) //first axios get req
 
 }
 
@@ -438,16 +567,14 @@ const submitData=()=>{
 
           <TextField
             type="number"
-            inputProps={
-                { readOnly: true, }
-              }
+            
             margin="dense"
             onChange={(e) => { handleFormInput(e) }}
             id="unitValue"
             label="Unit Value"      
             placeholder="unit value...."
             fullWidth
-            defaultValue={body.unitName && parseInt(body.unitName.replace(/\D/g,''))}
+            defaultValue={parseInt(body.unitValue)}
             style={{marginTop:'30px'}}
             size="normal"
             InputLabelProps={{
@@ -488,7 +615,7 @@ const submitData=()=>{
         </DialogContent>
         <DialogActions>
           <Button onClick={submitData} style={{color:'green'}}>
-            {isInvPresent ? 'Update' : 'Save'}
+            Save
           </Button>
           <Button onClick={handleClose} style={{color:'red'}}>
             Cancel
