@@ -210,7 +210,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
  ////////////////////////////////// get the order lists START ////////////////////////
 
   //sorting data selected
-  const [sortBy, setSortBy] = useState('placedDate');
+  const [sortBy, setSortBy] = useState('deliveryInfo.slotStart');
 
   const handleSortBy = (event) => {
     setSortBy(event.target.value);
@@ -271,7 +271,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
               })
               .then(order =>{
                 setPlacedDateOrders(order.data);
-                  console.log("ORDERS  based on placed date: ",order.data);
+                  console.log("ORDERS  based on delivery date: ",order.data);
                   setisLoading(false);
                 return order;
               })
@@ -282,15 +282,13 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
     let dataHolder = orders;
 
   //use the above products response based on sort data selected
-  if(sortBy === 'placedDate'){
-    dataHolder = orders
+  if(sortBy === 'deliveryInfo.slotStart'){
+    dataHolder = placedDateOrders;
 
   }else{
-    dataHolder = placedDateOrders;
+    dataHolder = orders
+
   }
-
-
-  console.log("dataHolder: ",dataHolder);
 
 
 
@@ -468,7 +466,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
     {/*///////////////// table content ////////////////*/}
      { !isLoading ?  <div style={{marginTop:'100px', width:'100%'}}>
-                      <div style={{overflow:'scroll',overflowX:'hidden', height:'480px', width:'100%'}}>
+                      <div style={{overflow:'auto',overflowX:'hidden', height:'480px', width:'100%'}}>
                         <div>
                             <CollapsibleOrderTable  tableData = {dataHolder}/>
                         </div>
