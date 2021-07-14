@@ -63,7 +63,7 @@ const token = reactLocalStorage.get('id_token');
 const jwtToken ='Bearer '+token;
 const headerObject = {
     'Authorization': jwtToken,
-    'Accept' : '*/*',
+    'Accept' : '/',
     'Content-Type': 'application/json',
     'App-Token' : 'A14BC'
   }
@@ -145,44 +145,51 @@ const CollapsibleOrderTable = (props)=> {
 
 
 //marking all confirmed orders as completed
-  const [state, setState] = React.useState({
-    isChecked: false,
-  });
+  const [state, setState] = React.useState(false);
 
   const handleMarkAll = (event) => {
 
-      setState({[event.target.name]: event.target.checked });
-      
-      if(!state.isChecked){ //when true
 
-        data.map(orders =>{
 
-          if(orders.status === 'CONFIRMED'){
+      let confirmWindow = window.confirm("Please confirm to mark all the CONFIRMED orders as COMPLETED");
 
-              const api = "/orders";
+      setState(confirmWindow);
 
-              const statusUpdate = {
-                            id: orders.id,
-                            status: 'COMPLETED',
-                          }
-          
-              axios.put(
-                        api,
-                        statusUpdate,
-                        {headers: headerObject}
-            
-                        ).then(success=>{
-                          history.push('/orders');
-                        })
+          if(confirmWindow===true)
+          {
+            data.map(orders =>{
 
-          }else{
-            console.log(orders.id+" is not confirmed yet. status: "+orders.status)
-          }
+                if(orders.status === 'CONFIRMED'){
 
-        })
+                    const api = "/orders";
 
-        }
-  };
+                    const statusUpdate = {
+                                  id: orders.id,
+                                  status: 'COMPLETED',
+                                }
+                
+                    axios.put(
+                              api,
+                              statusUpdate,
+                              {headers: headerObject}
+                  
+                              ).then(success=>{
+                                history.push('/orders');
+                              })
+                  }else{
+                    setState(confirmWindow)
+
+                  }
+
+                })
+
+            }//inner if
+
+           
+
+
+  
+  }; //func closing
 
 
 
@@ -205,7 +212,7 @@ const CollapsibleOrderTable = (props)=> {
                    { 
                      <FormGroup row>     
                         <FormControlLabel
-                          control={<GreenCheckbox checked={state.isChecked} onChange={handleMarkAll} name="isChecked" />}
+                          control={<GreenCheckbox checked={state} onChange={handleMarkAll} name="isChecked" />}
                           label="Mark all as completed"
                           labelPlacement="end"
                         />   
