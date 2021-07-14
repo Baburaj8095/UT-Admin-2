@@ -175,8 +175,6 @@ const handleUpdateClick = () => {
             {headers: headerObject} 
             )
             .then(response=>{
-              console.log("staus updated: ",response)
-                //for timeline
                 if(statusArray.includes(response.data.status)){
 
                   let index = statusArray.indexOf(response.data.status);
@@ -195,11 +193,7 @@ const handleUpdateClick = () => {
 //order details
 const [orders, setOrders] = useState([]);
 
-//orderitems
-
-
-  //get the orders based on order id
-  useEffect( () =>{
+useEffect( () =>{
     axios.get(api, {
             headers: {
             'Authorization': jwtToken,
@@ -210,7 +204,6 @@ const [orders, setOrders] = useState([]);
             })
             .then(order =>{
               setOrders(order.data);
-                console.log("ORDERS based on order id : ",order.data.status);
                 setisLoading(false);
                 if(statusArray.includes(order.data.status)){
 
@@ -260,18 +253,16 @@ return (
 
                   {/* header start */}
   
-                    <div>
-                        <div className={HeaderClass.Header}>
+                        <div className={HeaderClass.Header} style={{zIndex: '11'}}>
                                   <Button style={{float:'left', margin:'15px', opacity: '0.7', fontWeight:'1000', fontSize: '16px'}}><strong>URBAN TILLER</strong></Button>
                                   <Button onClick={logout} variant="outlined" style={{float:'right', color: 'white', margin:'18px', borderColor: 'white'}}><strong>Logout</strong></Button>          
                           </div>
-                    </div>
                   {/* header end */}
 
                       <div style={{margin:0,marginTop:'110px', marginLeft: '20px'}}>
                             
                             <div>
-                            <Typography gutterBottom variant="h4" component="h4">
+                            <Typography gutterBottom variant="h4" component="h4" style={{marginLeft:'10px'}}>
                                     <NavLink to="/orders" style={{textDecoration:'none'}}>Orders</NavLink> / <span style={{color:'grey'}}>order-details</span>
                             </Typography>
                             </div>
@@ -344,9 +335,9 @@ return (
                       </div>
               </div>
 
-                <div style={{display:'absolute', marginTop:'30px'}}>
+                <div style={{marginTop:'30px'}}>
 
-                      <div style={{display:'flex'}}>
+                      <div >
                             <OrderItems OrderItem={orders}/>
   
                       </div>        
@@ -378,10 +369,7 @@ return (
                       
                     </div>
 
-                {/* <div style={{backgroundColor: 'grey', color:'white', position:'absolute', bottom:'0', width:'100%', height:'149px'}}>
-                      <Footer />
-                    </div>   */}
-
+              
 
 
           </div>

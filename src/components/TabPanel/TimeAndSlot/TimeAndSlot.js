@@ -199,7 +199,7 @@ export default class extends React.Component {
           <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             headerToolbar={{
-              left: 'prev,next today',
+              left: 'prev,next',
               center: 'title',
             }}
             timezone = {this.state.country}

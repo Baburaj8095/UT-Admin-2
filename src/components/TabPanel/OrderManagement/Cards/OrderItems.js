@@ -51,8 +51,11 @@ const OrderItems = (props) => {
 
     const OrderItems = props.OrderItem;
 
+    var appends = "";
+
+
+
     const classes = useStyles();  
-    
 
     const   history = useHistory();
 
@@ -91,7 +94,7 @@ const OrderItems = (props) => {
 
           const statusUpdate = {
                                   id: orderId,
-                                  status:'CREATED',
+                                  status:'COMPLETED',
                                   orderItems:[
                                                 {
                                                   id: parseInt(orderItemID),
@@ -121,15 +124,22 @@ const OrderItems = (props) => {
 
 
     return (
-        <div style={{marginLeft:'15px', display:'flex', flexGrow:1}}>  
-            <Grid container  style={{marginTop:'10px',display:'absolute',flexGrow:1, spacing:1}}>
+        <div style={{marginLeft:'15px'}}>  
+
+       
 
                     {
-                      OrderItems.orderItems && OrderItems.orderItems.map(res=>{
+                      OrderItems.orderItems && OrderItems.orderItems.map((res, index)=>                       
+                    {
+
+
+                      if(res.deliveryDate == OrderItems.orderItems[index].deliveryDate)
+                      {
                         return(
-                          <Grid item xs={12} sm={6} lg={3}>
-                            <Grid container justifyContent="center" spacing={1}>
-                              <Grid item>
+                         <>
+                          <span style={{color:'blue'}}>Delivery Date:</span><br />  {moment(res.deliveryDate).format('YYYY-MM-DD, HH:MM:SS')}
+
+                         <h3>{res.deliveryDate}</h3>
                             <Card className={classes.root}>                               
 
                                 <CardActionArea style={{position: 'initial'}}>
@@ -137,7 +147,6 @@ const OrderItems = (props) => {
                                         <CardActions >
 
                                           <Typography gutterBottom variant="hh6" component="h6">
-                                            <span style={{color:'blue'}}>Delivery Date:</span><br />  {moment(res.deliveryDate).format('YYYY-MM-DD, HH:MM:SS')}
                                           </Typography>
 
                                           <FormControl variant="outlined" className={classes.formControl}>
@@ -187,17 +196,13 @@ const OrderItems = (props) => {
                                     </Button>
                                   </CardActions>
                                 </Card>
-
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                         
-                          )
+                                            
+                         </>
+                          )}
                       })
                     }
 
                                                               
-      </Grid> 
     </div>
     )
 }
