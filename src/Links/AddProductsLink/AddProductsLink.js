@@ -46,19 +46,6 @@ const logout=()=>{
 }
 
 
-  //body
-  //{
-  //   "name": "Mango Juice",
-  //   "description": "mango juice",
-  //   "productImage": "https://unsplash.com/photos/2TxmAfd3bxU",
-  //   "archieved": false,
-  //   "rank":3,
-  //   "dateInventory":true,
-  //   "productCategory": {
-  //       "id":1752
-  //     }
-  //   } 
-
   const [body, setbody] = useState({
                                       name: '',
                                       description: '',
@@ -89,20 +76,6 @@ const logout=()=>{
 
  //jwt token
  const jwtToken ='Bearer '+id_token;
-
-  //for product post
-  //body
-  // {
-  //   "name": "Mango Juice",
-  //   "description": "mango juice",
-  //   "productImage": "https://unsplash.com/photos/2TxmAfd3bxU",
-  //   "archieved": false,
-  //   "rank":3, parseInt
-  //   "dateInventory":true,
-  //   "productCategory": {
-  //       "id":1752
-  //     }
-  //   } 
 
   const product = {
                       name: body.name,

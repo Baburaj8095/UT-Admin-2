@@ -95,7 +95,7 @@ const OrderItems = (props) => {
                                   orderItems:[
                                                 {
                                                   id: parseInt(orderItemID),
-                                                  status: toString(event.target.value),
+                                                  status: (event.target.value),
                                                 }
                                               ]
                               }

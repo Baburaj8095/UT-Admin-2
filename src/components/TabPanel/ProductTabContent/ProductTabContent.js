@@ -78,7 +78,8 @@ export default function ProductTabContent() {
                 })
                 .then(productCategory =>{
                   setCategory(productCategory.data);
-                  setCategoryId(productCategory.data[0].id)
+                  setCategoryId(productCategory.data[0].id);
+                  setCatName(productCategory.data[0].name)
                   return productCategory;
                 })
 
@@ -87,7 +88,7 @@ export default function ProductTabContent() {
                 reactLocalStorage.set('cat_name', catName);
                 reactLocalStorage.set('rank', Rank);
                 reactLocalStorage.set('clicked_count', i++);
-                console.log("the counter value: ",localStorage);    
+                console.log("the counter value: ",catName);    
 
       },[jwtToken, api, token,localStorage,i, Rank, catName]);
   
@@ -134,7 +135,7 @@ export default function ProductTabContent() {
     reactLocalStorage.set('rank', Rank);
     // i++;
     reactLocalStorage.set('clicked_count', i++);
-    console.log("the counter value: ",localStorage);    
+    console.log("the counter value1: ",catName);    
   }
 
 
