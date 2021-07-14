@@ -122,7 +122,7 @@ export default function LongMenu(props) {
         }}
       >
         {options.map((option) => (
-          <MenuItem key={option} selected={option === 'Pyxis'} onClick={option === 'Edit' ? editProduct: option === 'Edit' ? archieveProduct : option === 'Add inventory' ? addInventory: null}>
+          <MenuItem key={option} selected={option === 'Pyxis'} onClick={option === 'Edit' ? editProduct: option === 'Archieve' ? archieveProduct : option === 'Add inventory' ? addInventory: null}>
             {option}
           </MenuItem>
         ))}
