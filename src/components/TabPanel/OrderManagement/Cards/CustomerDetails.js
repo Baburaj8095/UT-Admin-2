@@ -31,81 +31,34 @@ const useStyles = makeStyles((theme) => ({
 
 const CustomerDetails = (props) => {
 
-    const classes = useStyles();
-
     const Orders = props.theOrder;
 
     return (
-    <div>
-    {  Orders.customer &&    <Card className={classes.root}>
+    <div style={{border:'1px solid #DEDBDB'}}>
+    {  Orders.customer &&   
+          <table>
+              <tr rowSpan="3" style={{backgroundColor:'#DEDBDB'}}> <th></th> <td rowSpan="1" style={{ minWidth:'260px' }}><strong style={{fontSize:'26px', opacity:'0.7'}}>Customer Details</strong> </td>    <th></th></tr>
+              <tr>
+                  <th><h6>First Name</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{Orders.customer.firstName}</Typography></td> <td></td>
+              </tr>
 
-              <CardContent>
+              <tr>
+                  <th><h6>Last Name</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{Orders.customer.lastName}</Typography></td><td></td>
+              </tr>
 
-              <div>
-                <span style={{marginTop:'20px', width:'50px'}}>
-                    <strong style={{fontSize:'26px'}}>Customer Details</strong>
-                </span>
-                  <br />
+              <tr>
+                <th style={{minWidth:'240px'}}><h6>Gender</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{Orders.customer.gender === null || Orders.customer.gender === '' ? 'not specified': Orders.customer.gender}</Typography></td><td style={{minWidth:'130px'}}></td>
+              </tr>
+              <tr>
+                <th><h6>Email</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{Orders.customer.email}</Typography></td><td></td>
+              </tr>
 
-                  <div style={{marginTop:'12px'}}>
-                        <span>
-                            <strong>First Name: </strong>                  
-                            <Typography variant="body2" color="textSecondary" component="span">
-                                    {Orders.customer.firstName}
-                            </Typography>                      
-                        </span>
-                  </div>
-                <br />
-                <div >
-                      <span >
-                          <strong>Last Name: </strong>
-                            
-                              <Typography variant="body2" color="textSecondary" component="span">
-                                  {Orders.customer.lastName}
-                              </Typography> 
-                          
-                      </span>
-                </div>
-                <br />
-                <div>
-                      <span>
-                          <strong>Gender: </strong>
-                            
-                              <Typography variant="body2" color="textSecondary" component="span">
-                                  {Orders.customer.gender === null || Orders.customer.gender === '' ? 'not specified': Orders.customer.gender}
-                              </Typography> 
-                          
-                      </span>
-                </div>
-                <br />
-                <div>
-                      <span>
-                          <strong>Email: </strong>
-                            
-                              <Typography variant="body2" color="textSecondary" component="span">
-                                  {Orders.customer.email}
-                              </Typography> 
-                          
-                      </span>
-                  </div>
-                <br />
-                <div>
-                    <span >
-                        <strong>Phone: </strong>
-                          
-                            <Typography variant="body2" color="textSecondary" component="span">
-                                {Orders.customer.phone}
-                            </Typography> 
-                        
-                    </span>
-              </div>
-
-            </div>
-
-        </CardContent>
-
-        </Card>
-        
+              <tr>
+                <th><h6>Phone</h6></th>  <td><Typography  variant="body2"  style={{color:'grey'}} component="h6">{Orders.customer.email}</Typography></td><td></td>
+              </tr>
+          </table>
+    
+  
     }
     </div>
     )
