@@ -49,22 +49,22 @@ const DeliverySlot = (props) => {
 
     const deliverySlots = props.delSlots;
     return (
-    <div style={{border:'1px solid #DEDBDB'}}>
+    <div style={{border:'1px solid #DEDBDB', marginRight:'20px'}}>
 
       { deliverySlots && 
       
         <table>
-              <tr rowSpan="3" style={{backgroundColor:'#DEDBDB'}}> <th></th> <td rowSpan="1" style={{ minWidth:'260px' }}><strong style={{fontSize:'26px', opacity:'0.7'}}>Delivery Slot</strong> </td>    <th></th></tr>
+              <tr rowSpan="3" style={{backgroundColor:'#DEDBDB'}}> <th></th> <td rowSpan="1" style={{ minWidth:'365px' }}><strong style={{fontSize:'26px', opacity:'0.7'}}>Delivery Slot</strong> </td>    <th></th></tr>
               <tr>
-                  <th><h6>Contactless</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliverySlots.contactless}</Typography></td> <td></td>
+                  <th><h6 style={{marginLeft:'15px'}}>Contactless</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliverySlots.contactless}</Typography></td> <td></td>
               </tr>
 
               <tr>
-                  <th><h6>Slot start</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliverySlots.deliveryInfo && moment(deliverySlots.deliveryInfo.slotStart).format('DD-MM-YYYY, hh:mm A')}</Typography></td><td></td>
+                  <th><h6 style={{marginLeft:'15px'}}>Slot start</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliverySlots.deliveryInfo && moment(deliverySlots.deliveryInfo.slotStart).format('DD-MM-YYYY, hh:mm A')}</Typography></td><td></td>
               </tr>
 
               <tr>
-                <th style={{minWidth:'240px'}}><h6>Slot end</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliverySlots.deliveryInfo && moment(deliverySlots.deliveryInfo.slotEnd).format('DD-MM-YYYY, hh:mm A')}</Typography></td><td style={{minWidth:'130px'}}></td>
+                <th style={{minWidth:'240px'}}><h6 style={{marginLeft:'15px'}}>Slot end</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliverySlots.deliveryInfo && moment(deliverySlots.deliveryInfo.slotEnd).format('DD-MM-YYYY, hh:mm A')}</Typography></td><td style={{minWidth:'130px'}}></td>
               </tr>
               
           </table>
