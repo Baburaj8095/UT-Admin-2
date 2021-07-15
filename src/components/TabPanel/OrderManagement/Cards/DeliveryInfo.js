@@ -43,103 +43,48 @@ const DeliveryInfo = (props) => {
 
     const classes = useStyles();
     const deliveryInf = props.delInfo;
-//deliveryInfo
+
+
+
     return (
-        <div>
+        <div style={{border:'1px solid #DEDBDB'}}>
 
-    { deliveryInf.deliveryInfo && <Card className={classes.root}>
-
-            <CardContent>
-
-                <div>
+          {
+            deliveryInf.deliveryInfo && 
                     
-                    <span style={{marginTop:'20px', width:'50px'}}>
-                    <strong style={{fontSize:'26px'}}>Delivery Information</strong>
-                    </span>
-                  <br />
+                    <table>
+                        <tr rowSpan="3" style={{backgroundColor:'#DEDBDB'}}> <th></th> <td rowSpan="1" style={{ minWidth:'260px' }}><strong style={{fontSize:'26px', opacity:'0.7'}}>Delivery Information</strong> </td>    <th></th></tr>
+                        
+                        <tr>
+                            <th><h6>Postal Code</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliveryInf.deliveryInfo.postalCode}</Typography></td> <td></td>
+                        </tr>
 
-                  <div style={{marginTop:'12px'}}>
-                        <span>
-                            <strong>Postal Code: </strong>                  
-                            <Typography variant="body2" color="textSecondary" component="span">
-                                {deliveryInf.deliveryInfo.postalCode}
-                            </Typography>                      
-                        </span>
-                  </div>
-                <br />
+                        <tr>
+                            <th><h6>City</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliveryInf.deliveryInfo.city}</Typography></td><td></td>
+                        </tr>
 
+                        <tr>
+                          <th style={{minWidth:'240px'}}><h6>Country</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliveryInf.deliveryInfo.country}</Typography></td><td style={{minWidth:'130px'}}></td>
+                        </tr>
+                        <tr>
+                          <th><h6>Gift Message</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{!deliveryInf.deliveryInfo.gift? 'Not Specified': deliveryInf.deliveryInfo.gift}</Typography></td><td></td>
+                        </tr>
 
-                <div style={{marginTop:'12px'}}>
-                        <span>
-                            <strong>City: </strong>                  
-                            <Typography variant="body2" color="textSecondary" component="span">
-                                    {deliveryInf.deliveryInfo.city}
-                            </Typography>                      
-                        </span>
-                  </div>
-                <br />
+                        <tr>
+                          <th><h6>Gift Option</h6></th>  <td><Typography  variant="body2"  style={{color:'grey'}} component="h6">  {!deliveryInf.deliveryInfo.go? 'Not Specified' :deliveryInf.deliveryInfo.go}</Typography></td><td></td>
+                        </tr>
 
+                        <tr>
+                          <th><h6>Delivery Note</h6></th>  <td><Typography  variant="body2"  style={{color:'grey'}} component="h6">  {!deliveryInf.deliveryInfo.go? 'Not Specified' :deliveryInf.deliveryInfo.deliveryNote}</Typography></td><td></td>
+                        </tr>
 
-                <div style={{marginTop:'12px'}}>
-                        <span>
-                            <strong>Country: </strong>                  
-                            <Typography variant="body2" color="textSecondary" component="span">
-                                {deliveryInf.deliveryInfo.country}
-                            </Typography>                      
-                        </span>
-                  </div>
-                <br />
-
-
-                <div style={{marginTop:'12px'}}>
-                        <span>
-                            <strong>Gift Message: </strong>                  
-                            <Typography variant="body2" color="textSecondary" component="span">
-                            {!deliveryInf.deliveryInfo.gift? 'not specified': deliveryInf.deliveryInfo.gift}
-                            </Typography>                      
-                        </span>
-                  </div>
-                <br />
-
-                <div style={{marginTop:'12px'}}>
-                        <span>
-                            <strong>Gift Option: </strong>                  
-                            <Typography variant="body2" color="textSecondary" component="span">
-                                {!deliveryInf.deliveryInfo.go? 'not specified' :deliveryInf.deliveryInfo.go}
-
-                            </Typography>                      
-                        </span>
-                  </div>
-                <br />
-                <div style={{marginTop:'12px'}}>
-                        <span>
-                            <strong>Delivery Note: </strong>                  
-                            <Typography variant="body2" color="textSecondary" component="span">
-                                {!deliveryInf.deliveryInfo.go? 'not specified' :deliveryInf.deliveryInfo.deliveryNote}
-
-                            </Typography>                      
-                        </span>
-                  </div>
-                <br />
-
-                <div style={{marginTop:'12px'}}>
-                    
-                        <span>
-                            <strong>Zero Plastic: </strong>                  
-                            <Typography variant="body2" color="textSecondary" component="span">
-                                {!deliveryInf.deliveryInfo.zp? 'not specified' :deliveryInf.deliveryInfo.zp}
-                            </Typography>                      
-                        </span>
-                  </div>
-                <br />
+                        <tr>
+                          <th><h6>Zero Plastic</h6></th>  <td><Typography  variant="body2"  style={{color:'grey'}} component="h6">  {!deliveryInf.deliveryInfo.zp? 'Not Specified' :deliveryInf.deliveryInfo.zp}</Typography></td><td></td>
+                        </tr>
+                    </table>
+                }
                 
-                </div>
-
-            </CardContent>
-
-            </Card>
-            
-    }
+                
         </div>
     )
 }
