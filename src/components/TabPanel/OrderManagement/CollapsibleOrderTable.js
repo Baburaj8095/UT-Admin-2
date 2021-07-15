@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Table from '@material-ui/core/Table';
@@ -19,6 +19,9 @@ import { reactLocalStorage } from 'reactjs-localstorage';
 import { NavLink, useHistory } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import axios from 'axios';
+import Paginator from 'react-paginate';
+import InventoryTabContentCss from '.././InventoryTabContent/InventoryTabContent.module.css';
+import Auxiliary from '../../../hoc/Auxiliary';
 
 
 const useStyles = makeStyles({
@@ -155,7 +158,7 @@ const CollapsibleOrderTable = (props)=> {
 
       setState(confirmWindow);
 
-          if(confirmWindow===true)
+          if(confirmWindow===true && event.target.checked === true)
           {
             data.map(orders =>{
 
@@ -174,8 +177,18 @@ const CollapsibleOrderTable = (props)=> {
                               {headers: headerObject}
                   
                               ).then(success=>{
-                                history.push('/orders');
-                              })
+
+                                  if(success){
+                                    window.location.href='/orders';
+                                  //history.push('/orders');
+                                  
+                                  }
+
+                              });
+                              
+                        history.push('/orders')
+
+
                   }else{
                     setState(confirmWindow)
 
@@ -193,11 +206,36 @@ const CollapsibleOrderTable = (props)=> {
 
 
 
+   //pagination setup starts
+   const [pageNumber, setPageNumber] = useState(0);
+
+   //method to change the paginator number
+   const changePage = ({selected}) =>{
+       setPageNumber(selected);
+   }
+
+   let itemsPerPage = 6;
+
+   // if(products.length <=5){
+   //     itemsPerPage = 11;
+   // }else{
+   //     itemsPerPage = 14;
+   // }
+
+   const pagesVisited = pageNumber * itemsPerPage;
+
+   const pageCount = Math.ceil(data.length / itemsPerPage);
+   
+   console.log("pagesVisited: "+pagesVisited+", pageCount: "+pageCount);
+   //pagination setup ends
+
+
 
 
 
 
   return (
+    <Auxiliary>
     <Paper className={classes2.paper}>
       <Table stickyHeader>
 
@@ -223,13 +261,27 @@ const CollapsibleOrderTable = (props)=> {
         </TableHead>
 
         <TableBody>
-          {data.map((row) => (
+          {data.slice(pagesVisited, pagesVisited + itemsPerPage ).map((row) => (
             <Row key={row.name} row={row} />
           ))}
         </TableBody>
         
       </Table>
     </Paper>
+
+
+        <Paginator
+            previousLabel = {"<"}
+            nextLabel = {">"}
+            pageCount = {pageCount}
+            onPageChange = {changePage}
+            containerClassName={InventoryTabContentCss.paginationButtons}
+            previousLinkClassName = {InventoryTabContentCss.previousButton}
+            nextLinkClassName={InventoryTabContentCss.nextButton}
+            disabledClassName = {InventoryTabContentCss.paginationDisabled}
+            activeClassName = {InventoryTabContentCss.activePageNumberButton}                  
+            />
+</Auxiliary>
   );
 }
 
