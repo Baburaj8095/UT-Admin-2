@@ -56,76 +56,36 @@ const PaymentDetails = (props) => {
     const payment = props.paymentDetails;
 
     return (
-    <div>
+    <div style={{border:'1px solid #DEDBDB'}}>
 
-    { payment &&   <Card className={classes.root}>
+    { payment &&  
+    
+      <table>
+              <tr rowSpan="3" style={{backgroundColor:'#DEDBDB'}}> <th></th> <td rowSpan="1" style={{ minWidth:'260px'}}><strong style={{fontSize:'26px', opacity:'0.7'}}>Payment Details</strong> </td>    <th></th></tr>
+              <tr>
+                  <th><h6>Payment</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{payment.pm}</Typography></td> <td></td>
+              </tr>
 
-        <CardContent>
+              <tr>
+                  <th><h6>Promo Code</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{!payment.promo || payment.promo === null || payment.promo === '' ? 'None is Applied' : payment.promo}</Typography></td><td></td>
+              </tr>
 
-            <div>
-                <span style={{marginTop:'20px'}}>
-                  <strong style={{fontSize:'26px'}}>Payment Details</strong>
-                </span>
-                <br />
+              <tr>
+                <th style={{minWidth:'240px'}}><h6>Total Before Discount</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{payment.totalBeforeDiscount}.00</Typography></td><td style={{minWidth:'130px'}}></td>
+              </tr>
+              <tr>
+                <th><h6>Total Tax</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{payment.totalTax}.00</Typography></td><td></td>
+              </tr>
 
-                <div style={{marginTop:'12px'}}>
-                        <span>
-                            <strong>Payment: </strong>                  
-                            <Typography variant="body2" color="textSecondary" component="span">
-                                {payment.pm}
-                            </Typography>                      
-                        </span>
-                  </div>
-                <br />
+              <tr>
+                <th><h6>Delivery Fee</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{payment.delivery}.00</Typography></td><td></td>
+              </tr>
 
-                <div style={{marginTop:'12px'}}>
-                        <span>
-                            <strong>Promo Code: </strong>                  
-                            <Typography variant="body2" color="textSecondary" component="span">
-                                {moment(payment.promo).format('DD-MM-YYYY, hh:mm A')}
-                            </Typography>                      
-                        </span>
-                  </div>
-                <br />
-
-
-                <div style={{marginTop:'12px'}}>
-                        <span>
-                            <strong>Total Before Discount: </strong>                  
-                            <Typography variant="body2" color="textSecondary" component="span">
-                                  {payment.totalBeforeDiscount}
-                            </Typography>                      
-                        </span>
-                  </div>
-                <br />
-
-
-                <div style={{marginTop:'12px'}}>
-                        <span>
-                            <strong>Total Tax: </strong>                  
-                            <Typography variant="body2" color="textSecondary" component="span">
-                                  {payment.totalTax}
-                            </Typography>                      
-                        </span>
-                  </div>
-                <br />
-
-
-                <div style={{marginTop:'12px'}}>
-                        <span>
-                            <strong>Total: </strong>                  
-                            <Typography variant="body2" color="textSecondary" component="span">
-                                {payment.total}
-                            </Typography>                      
-                        </span>
-                  </div>
-                <br />
-
-        </div>
-
-      </CardContent>
-
-    </Card>
+              <tr>
+                <th><h6>Total</h6></th>  <td><Typography  variant="body2"  style={{color:'grey'}} component="h6">{payment.total}.00</Typography></td><td></td>
+              </tr>
+          </table>
+    
     }
 </div>
     )
