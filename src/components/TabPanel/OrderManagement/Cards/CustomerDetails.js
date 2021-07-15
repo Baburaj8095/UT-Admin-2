@@ -39,22 +39,22 @@ const CustomerDetails = (props) => {
           <table>
               <tr rowSpan="3" style={{backgroundColor:'#DEDBDB'}}> <th></th> <td rowSpan="1" style={{ minWidth:'260px' }}><strong style={{fontSize:'26px', opacity:'0.7'}}>Customer Details</strong> </td>    <th></th></tr>
               <tr>
-                  <th><h6>First Name</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{Orders.customer.firstName}</Typography></td> <td></td>
+                  <th><h6 style={{marginLeft:'15px'}}>First Name</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{Orders.customer.firstName}</Typography></td> <td></td>
               </tr>
 
               <tr>
-                  <th><h6>Last Name</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{Orders.customer.lastName}</Typography></td><td></td>
+                  <th><h6 style={{marginLeft:'15px'}}>Last Name</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{Orders.customer.lastName}</Typography></td><td></td>
               </tr>
 
               <tr>
-                <th style={{minWidth:'240px'}}><h6>Gender</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{Orders.customer.gender === null || Orders.customer.gender === '' ? 'not specified': Orders.customer.gender}</Typography></td><td style={{minWidth:'130px'}}></td>
+                <th style={{minWidth:'240px'}}><h6 style={{marginLeft:'15px'}}>Gender</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{Orders.customer.gender === null || Orders.customer.gender === '' ? 'not specified': Orders.customer.gender}</Typography></td><td style={{minWidth:'130px'}}></td>
               </tr>
               <tr>
-                <th><h6>Email</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{Orders.customer.email}</Typography></td><td></td>
+                <th><h6 style={{marginLeft:'15px'}}>Email</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{Orders.customer.email}</Typography></td><td></td>
               </tr>
 
               <tr>
-                <th><h6>Phone</h6></th>  <td><Typography  variant="body2"  style={{color:'grey'}} component="h6">{Orders.customer.email}</Typography></td><td></td>
+                <th><h6 style={{marginLeft:'15px'}}>Phone</h6></th>  <td><Typography  variant="body2"  style={{color:'grey'}} component="h6">{Orders.customer.email}</Typography></td><td></td>
               </tr>
           </table>
     
