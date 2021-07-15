@@ -34,10 +34,10 @@ const CustomerDetails = (props) => {
     const Orders = props.theOrder;
 
     return (
-    <div style={{border:'1px solid #DEDBDB'}}>
+    <div style={{border:'1px solid #DEDBDB',marginRight:'20px'}}>
     {  Orders.customer &&   
           <table>
-              <tr rowSpan="3" style={{backgroundColor:'#DEDBDB'}}> <th></th> <td rowSpan="1" style={{ minWidth:'260px' }}><strong style={{fontSize:'26px', opacity:'0.7'}}>Customer Details</strong> </td>    <th></th></tr>
+              <tr rowSpan="3" style={{backgroundColor:'#DEDBDB'}}> <th></th> <td rowSpan="1" style={{ minWidth:'365px' }}><strong style={{fontSize:'26px', opacity:'0.7'}}>Customer Details</strong> </td>    <th></th></tr>
               <tr>
                   <th><h6 style={{marginLeft:'15px'}}>First Name</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{Orders.customer.firstName}</Typography></td> <td></td>
               </tr>
