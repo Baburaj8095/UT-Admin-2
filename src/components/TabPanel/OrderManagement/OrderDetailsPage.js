@@ -76,6 +76,7 @@ const useStyles = makeStyles((theme) => ({
       formControl: {
         margin: theme.spacing(1),
         minWidth: 230,
+        float:'right',
       },
       selectEmpty: {
         marginTop: theme.spacing(2),
@@ -245,7 +246,6 @@ const getStepContent=(step)=> {
 
 
 
-
 return (
         <Auxiliary>
       
@@ -335,35 +335,42 @@ return (
                       </div>
               </div>
 
-                <div style={{marginTop:'30px'}}>
+                <div style={{marginTop:'30px', display:'flex'}}>
 
                       <div >
                             <OrderItems OrderItem={orders}/>
   
                       </div>        
 
-                      <hr style={{width:'20%', marginTop:'50px', borderTop:'4px dotted green'}}/>
+                      {/* <hr style={{width:'20%', marginTop:'50px', borderTop:'4px dotted green'}}/> */}
 
                    {/* CustomerDetails, DeliveryInfo, deliverySlot and paymentdetails*/}
                         
-                            <div style={{display:'flex', marginTop:'50px',marginBottom:'30px'}}>
+                            <div style={{display:'flex', marginTop:'25px',marginBottom:'30px'}}>
 
                                   <div style={{marginLeft:'25px'}}>
-                                    <CustomerDetails theOrder={orders} />
+                                        <CustomerDetails theOrder={orders} />
+
+                                        <div style={{marginTop:'20px'}}>
+                                          <DeliveryInfo delInfo={orders}/>
+                                        </div>
+
+
+                                        <div style={{ marginTop:'20px'}}>
+                                          <DeliverySlot delSlots={orders} />
+
+                                          <div style={{marginTop:'20px'}}>
+                                            <PaymentDetails paymentDetails={orders}/>
+                                          </div>
+                                        </div>
+
                                   </div>
                                   
-                                  <div style={{marginLeft:'35px'}}>
-                                    <DeliveryInfo delInfo={orders}/>
-                                  </div>
+                                  
 
-
-                                  <div style={{ marginLeft:'35px'}}>
-                                    <DeliverySlot delSlots={orders} />
-                                  </div>
+                                  
                               
-                                  <div style={{ marginLeft:'35px'}}>
-                                    <PaymentDetails paymentDetails={orders}/>
-                                  </div>
+                                  
 
                             </div>     
                       
