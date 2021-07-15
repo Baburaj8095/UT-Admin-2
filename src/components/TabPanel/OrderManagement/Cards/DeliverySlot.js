@@ -49,55 +49,27 @@ const DeliverySlot = (props) => {
 
     const deliverySlots = props.delSlots;
     return (
-    <div>
+    <div style={{border:'1px solid #DEDBDB'}}>
 
-      { deliverySlots && <Card className={classes.root}>
+      { deliverySlots && 
+      
+        <table>
+              <tr rowSpan="3" style={{backgroundColor:'#DEDBDB'}}> <th></th> <td rowSpan="1" style={{ minWidth:'260px' }}><strong style={{fontSize:'26px', opacity:'0.7'}}>Delivery Slot</strong> </td>    <th></th></tr>
+              <tr>
+                  <th><h6>Contactless</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliverySlots.contactless}</Typography></td> <td></td>
+              </tr>
 
-                    <CardContent>
+              <tr>
+                  <th><h6>Slot start</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliverySlots.deliveryInfo && moment(deliverySlots.deliveryInfo.slotStart).format('DD-MM-YYYY, hh:mm A')}</Typography></td><td></td>
+              </tr>
 
-                        <div>
-                            <span style={{marginTop:'20px'}}>
-                              <strong style={{fontSize:'26px'}}>Delivery Slot</strong>
-                            </span>
+              <tr>
+                <th style={{minWidth:'240px'}}><h6>Slot end</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliverySlots.deliveryInfo && moment(deliverySlots.deliveryInfo.slotEnd).format('DD-MM-YYYY, hh:mm A')}</Typography></td><td style={{minWidth:'130px'}}></td>
+              </tr>
+              
+          </table>
+      
 
-                            <br />
-
-                            <div style={{marginTop:'12px'}}>
-                                  <span>
-                                      <strong>Contactless: </strong>                  
-                                      <Typography variant="body2" color="textSecondary" component="span">
-                                      {deliverySlots.contactless}
-                                      </Typography>                      
-                                  </span>
-                            </div>
-                          <br />
-
-
-                          <div style={{marginTop:'12px'}}>
-                                  <span>
-                                      <strong>Slot start: </strong>                  
-                                      <Typography variant="body2" color="textSecondary" component="span">
-                                          {deliverySlots.deliveryInfo && moment(deliverySlots.deliveryInfo.slotStart).format('DD-MM-YYYY, hh:mm A')}
-                                      </Typography>                      
-                                  </span>
-                            </div>
-                          <br />
-
-                          <div style={{marginTop:'12px'}}>
-                                  <span>
-                                      <strong>Slot end: </strong>                  
-                                      <Typography variant="body2" color="textSecondary" component="span">
-                                      {deliverySlots.deliveryInfo && moment(deliverySlots.deliveryInfo.slotEnd).format('DD-MM-YYYY, hh:mm A')}
-                                      </Typography>                      
-                                  </span>
-                            </div>
-                          <br />
-
-                 </div>
-
-                </CardContent>
-
-            </Card>
                     
           }
   </div>
