@@ -1,11 +1,6 @@
 import { Card, CardContent, FormControl, Grid, InputLabel, makeStyles, Select } from '@material-ui/core';
 import React, {useState} from 'react';
-import Auxiliary from '../../../../hoc/Auxiliary';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+
 import moment from 'moment';
 import axios from 'axios';
 import { reactLocalStorage } from 'reactjs-localstorage';
@@ -23,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: '.25rem',
       margin : '10px',
 
+    },
+    formControl:{
+      float:'right'
     },
     media: {
       height: 0,
@@ -93,8 +91,8 @@ const OrderItems = (props) => {
           const apiToUpdate = "/orders/status";
 
           const statusUpdate = {
-                                  id: orderId,
-                                  status:'COMPLETED',
+                                  id: parseInt(orderId),
+                                  status:'PROCESSING',
                                   orderItems:[
                                                 {
                                                   id: parseInt(orderItemID),
@@ -124,86 +122,68 @@ const OrderItems = (props) => {
 
 
     return (
-        <div style={{marginLeft:'15px'}}>  
 
-       
+       <>
 
                     {
-                      OrderItems.orderItems && OrderItems.orderItems.map((res, index)=>                       
-                    {
+                      OrderItems.orderItems && OrderItems.orderItems.map((res, index) =>{
 
+                                return(
+                                <div style={{margin:'24px', border:'2px solid #DEDBDB', minHeight:'260px', maxHeight:'280px', width:'700px'}}>
 
-                      if(res.deliveryDate == OrderItems.orderItems[index].deliveryDate)
-                      {
-                        return(
-                         <>
-                          <span style={{color:'blue'}}>Delivery Date:</span><br />  {moment(res.deliveryDate).format('YYYY-MM-DD, HH:MM:SS')}
-
-                         <h3>{res.deliveryDate}</h3>
-                            <Card className={classes.root}>                               
-
-                                <CardActionArea style={{position: 'initial'}}>
-                                                      
-                                        <CardActions >
-
-                                          <Typography gutterBottom variant="hh6" component="h6">
-                                          </Typography>
-
-                                          <FormControl variant="outlined" className={classes.formControl}>
-                                              <InputLabel id="status">Update Order Status</InputLabel>
-                                              <Select
-                                              native
-                                              id= 'status'
-                                              value={OrderItemStatus.status}
-                                              onChange={(event, id)=>{handleStatusChange(event, res.id)}}
-                                              label="Update Order Status"
-                                                                                      
-                                              >
-                                              <option aria-label="None" value="" />
-                                              {statuses.map((res, index)=>{
-                                                  return(<option id={index} key={index} value={res}>{res}</option>
-                                                  )
-                                              })}
-                                              </Select>
-                                          </FormControl>
-                                    </CardActions>
-                                    
-                                    <CardMedia
-                                      style={{margin:'15px'}}
-                                      component="img"
-                                      alt={res.name}
-                                      height="150"
-                                      image={res.product.productImage}
-                                    />
-                                    <CardContent>
-                                      <Typography gutterBottom variant="h5" component="h2">
-                                      {res.name}
-                                      </Typography>
-                                      <Typography variant="body2" color="textSecondary" component="p">
-                                        Unit Name : {res.unitName}
-                                      </Typography>
-                                      <Typography variant="body2" color="textSecondary" component="p">
-                                        Status : <span style={{color:'green'}}>{res.status}</span>
-                                      </Typography>
-                                    </CardContent>
-                                  </CardActionArea>
-                                  <CardActions >
-                                    <Button size="small" color="primary" style={{    position: 'initial'}}>
-                                      Unit Price : {res.totalPrice}
-                                    </Button>
-                                    <Button size="small" color="primary" style={{    position: 'initial'}}>
-                                    Quantity : {res.quantity}
-                                    </Button>
-                                  </CardActions>
-                                </Card>
+                                      <div >
+                                            <div style={{textAlign:'center',float:'left',marginLeft:'18px', marginTop:'20px'}}>
+                                                <span style={{color:'black'}}>Delivery Date:</span> {moment(res.deliveryDate).format('YYYY-MM-DD, HH:MM')}
+                                            </div>
+                                            <div style={{float:'right'}}>
+                                                <FormControl variant="outlined" style={{width:'220px', marginRight:'10px'}}>
+                                                                <InputLabel id="status">Update Order Status</InputLabel>
+                                                                <Select
+                                                                  style={{height:'44px',textAlign:'center', margin:'7px'}}
+                                                                  native
+                                                                  id= 'status'
+                                                                  value={OrderItemStatus.status}
+                                                                  onChange={(event, id)=>{handleStatusChange(event, res.id)}}
+                                                                  label="Update Order Status"
+                                                                                                        
+                                                                >
+                                                                <option aria-label="None" value="" />
+                                                                {statuses.map((res, index)=>{
+                                                                    return(<option id={index} key={index} value={res}>{res}</option>
+                                                                    )
+                                                                })}
+                                                                </Select>
+                                                  </FormControl>
+                                              </div>
                                             
-                         </>
-                          )}
-                      })
-                    }
+                                      </div>
+                                
+                                      <div style={{marginTop:'60px'}}>
+                                          <hr style={{width:'94.5%', border:'0.6px solid grey'}}/>
+                                      </div>
 
-                                                              
-    </div>
+                                      <div style={{display:'flex', position:'relative'}}>
+                                        
+                                              <img src={res.product.productImage} style={{border:'1px solid #DEDBDB',height:'120px',marginTop:'1px', marginLeft:'17px', width:'130px'}} alt={res.name} />
+                   
+                                              <div style={{marginLeft:'60px'}}>
+                                                  <h6>{res.name}</h6>
+                                                  <p>Unit Name: {res.unitName}</p>
+                                                  <p>Status: <span style={{color:'green'}}>{res.status}</span></p>
+                                                  <p>Unit Price: {res.unitPrice}</p>
+                                                  <span>Total Price: {res.totalPrice}</span>  <span style={{borderRadius:'12px', height:'25px', width:'75px', textAlign:'center', marginLeft:'290px', backgroundColor:'lightgreen', color:'white', float:'right'}}>Qty: {res.quantity}</span>
+
+                                              </div>
+                                          
+                                      
+                                      </div>
+                                                    
+                          </div>
+                                  )
+                      }
+                      )//end of map
+                    }
+</>
     )
 }
 
