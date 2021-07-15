@@ -47,39 +47,39 @@ const DeliveryInfo = (props) => {
 
 
     return (
-        <div style={{border:'1px solid #DEDBDB'}}>
+        <div style={{border:'1px solid #DEDBDB', marginRight:'20px'}}>
 
           {
             deliveryInf.deliveryInfo && 
                     
                     <table>
-                        <tr rowSpan="3" style={{backgroundColor:'#DEDBDB'}}> <th></th> <td rowSpan="1" style={{ minWidth:'260px' }}><strong style={{fontSize:'26px', opacity:'0.7'}}>Delivery Information</strong> </td>    <th></th></tr>
+                        <tr rowSpan="3" style={{backgroundColor:'#DEDBDB'}}> <th></th> <td rowSpan="1" style={{ minWidth:'365px' }}><strong style={{fontSize:'26px', opacity:'0.7'}}>Delivery Information</strong> </td>    <th></th></tr>
                         
                         <tr>
-                            <th><h6>Postal Code</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliveryInf.deliveryInfo.postalCode}</Typography></td> <td></td>
+                            <th><h6 style={{marginLeft:'15px'}}>Postal Code</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliveryInf.deliveryInfo.postalCode}</Typography></td> <td></td>
                         </tr>
 
                         <tr>
-                            <th><h6>City</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliveryInf.deliveryInfo.city}</Typography></td><td></td>
+                            <th><h6 style={{marginLeft:'15px'}}>City</h6></th>  <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliveryInf.deliveryInfo.city}</Typography></td><td></td>
                         </tr>
 
                         <tr>
-                          <th style={{minWidth:'240px'}}><h6>Country</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliveryInf.deliveryInfo.country}</Typography></td><td style={{minWidth:'130px'}}></td>
+                          <th style={{minWidth:'240px'}}><h6 style={{marginLeft:'15px'}}>Country</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{deliveryInf.deliveryInfo.country}</Typography></td><td style={{minWidth:'130px'}}></td>
                         </tr>
                         <tr>
-                          <th><h6>Gift Message</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{!deliveryInf.deliveryInfo.gift? 'Not Specified': deliveryInf.deliveryInfo.gift}</Typography></td><td></td>
-                        </tr>
-
-                        <tr>
-                          <th><h6>Gift Option</h6></th>  <td><Typography  variant="body2"  style={{color:'grey'}} component="h6">  {!deliveryInf.deliveryInfo.go? 'Not Specified' :deliveryInf.deliveryInfo.go}</Typography></td><td></td>
+                          <th><h6 style={{marginLeft:'15px'}}>Gift Message</h6></th>   <td><Typography  variant="body2" style={{color:'grey'}} component="h6">{!deliveryInf.deliveryInfo.gift? 'Not Specified': deliveryInf.deliveryInfo.gift}</Typography></td><td></td>
                         </tr>
 
                         <tr>
-                          <th><h6>Delivery Note</h6></th>  <td><Typography  variant="body2"  style={{color:'grey'}} component="h6">  {!deliveryInf.deliveryInfo.go? 'Not Specified' :deliveryInf.deliveryInfo.deliveryNote}</Typography></td><td></td>
+                          <th><h6 style={{marginLeft:'15px'}}>Gift Option</h6></th>  <td><Typography  variant="body2"  style={{color:'grey'}} component="h6">  {!deliveryInf.deliveryInfo.go? 'Not Specified' :deliveryInf.deliveryInfo.go}</Typography></td><td></td>
                         </tr>
 
                         <tr>
-                          <th><h6>Zero Plastic</h6></th>  <td><Typography  variant="body2"  style={{color:'grey'}} component="h6">  {!deliveryInf.deliveryInfo.zp? 'Not Specified' :deliveryInf.deliveryInfo.zp}</Typography></td><td></td>
+                          <th><h6 style={{marginLeft:'15px'}}>Delivery Note</h6></th>  <td><Typography  variant="body2"  style={{color:'grey'}} component="h6">  {!deliveryInf.deliveryInfo.go? 'Not Specified' :deliveryInf.deliveryInfo.deliveryNote}</Typography></td><td></td>
+                        </tr>
+
+                        <tr>
+                          <th><h6 style={{marginLeft:'15px'}}>Zero Plastic</h6></th>  <td><Typography  variant="body2"  style={{color:'grey'}} component="h6">  {!deliveryInf.deliveryInfo.zp? 'Not Specified' :deliveryInf.deliveryInfo.zp}</Typography></td><td></td>
                         </tr>
                     </table>
                 }
