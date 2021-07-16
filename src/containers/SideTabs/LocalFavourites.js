@@ -87,7 +87,7 @@ class PaginatedData extends Component{
                     });
                     });
 
-   } //end of componentDidMount
+   }
 
 
     //method to change the paginator number

@@ -92,7 +92,7 @@ const OrderItems = (props) => {
 
           const statusUpdate = {
                                   id: parseInt(orderId),
-                                  status:'PROCESSING',
+                                  status:'CONFIRMED',
                                   orderItems:[
                                                 {
                                                   id: parseInt(orderItemID),
