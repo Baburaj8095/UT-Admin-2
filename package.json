@@ -1,7 +1,6 @@
 {
   "name": "admin-console",
   "version": "0.1.0",
-  "homepage": "/admin_dashboard_new",
   "private": true,
   "dependencies": {
     "@fullcalendar/core": "^5.8.0",
