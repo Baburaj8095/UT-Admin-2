@@ -111,7 +111,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
 const logout=()=>{
     reactLocalStorage.remove('id_token');
-    history.push('/');
+    history.push('/admin_dashboard_new');
 
 }
 

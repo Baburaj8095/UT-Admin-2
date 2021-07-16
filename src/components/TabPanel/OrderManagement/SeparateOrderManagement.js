@@ -139,19 +139,20 @@ const filters = [
 
 const SeparateOrderManagement =()=> {
 
+ 
   //handle logout
 const   history = useHistory();
 
 if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token') === ''){
-  history.push('/');
+  history.push('/admin_dashboard_new');
     }
 
-const logout=()=>{
-    reactLocalStorage.remove('id_token');
-    history.push('/');
 
-}
-
+    const logout=()=>{
+      reactLocalStorage.remove('id_token');
+      history.push('/admin_dashboard_new');
+  
+  }
   const classes = useStyles();
 
   const theme = useTheme();
@@ -213,7 +214,7 @@ const logout=()=>{
 
  let startDate = moment(firstDay).clone().startOf('month').format('YYYY-MM-DD')+"T00:00:00.000Z";
  let endDate = moment(currentDate).format('YYYY-MM-DD')+'T23:59:59.000Z';
- //moment(dateRange[0]).format('YYYY-MM-DD')
+
  console.log("start date: ", startDate+", end date: "+currentDate);
  
 
@@ -221,6 +222,10 @@ const logout=()=>{
 
   //sorting data selected
   const [sortBy, setSortBy] = useState('deliveryInfo.slotStart');
+
+
+
+
 
   const handleSortBy = (event) => {
     setSortBy(event.target.value);
@@ -232,26 +237,39 @@ const logout=()=>{
   const [orders, setOrders] = useState([]);
 
      
-  const api = "/orders/details/?placedDate.specified=true&placedDate.greaterThanOrEqual="+startDate+"&placedDate.lessThanOrEqual="+endDate+"&sort="+sortBy+",desc&status.in="+selected.join(',')+"";
+  const api = "/orders/details/?page=0&placedDate.specified=true&placedDate.greaterThanOrEqual="+startDate+"&placedDate.lessThanOrEqual="+endDate+"&size=1000&sort="+sortBy+",desc&status.in="+selected.join(',')+"";
   const token = reactLocalStorage.get('id_token');
   const jwtToken ='Bearer '+token;
 
   //get the orders based on order date
     useEffect( () =>{
-      axios.get(api, {
-              headers: {
-              'Authorization': jwtToken,
-              'Accept' : '*/*',
-              'Content-Type': 'application/json',
-              'App-Token' : 'A14BC'
-                }
-              })
-              .then(order =>{
-                setOrders(order.data);
-                  setisLoading(false);
-                return order;
-              })
+
+
+      data_api1();
+
+    
     },[api, jwtToken]);
+
+
+    const data_api1 = () =>
+    {
+
+      axios.get(api, {
+        headers: {
+        'Authorization': jwtToken,
+        'Accept' : '*/*',
+        'Content-Type': 'application/json',
+        'App-Token' : 'A14BC'
+          }
+        })
+        .then(order =>{
+          setOrders(order.data);
+            console.log("ORDERS based on order date: ",order.data);
+            setisLoading(false);
+          return order;
+        })
+
+    }
 
 
 
@@ -261,31 +279,62 @@ const logout=()=>{
    const [deliveryDate, setDeliveryDate] = useState( moment() );
   
    const chosenDeliveryStartDate = moment(deliveryDate).format('YYYY-MM-DD')+"T00:00:00.000Z";
-   const endDeliveryDate = moment(deliveryDate).format('YYYY-MM-DD')+'T23:59:59.000Z';
+   const endDeliveryDate = moment(deliveryDate).format('YYYY-MM-DD');
 
-  const api2="orders/details/?page=0&placedDate.specified=true&placedDate.greaterThanOrEqual="+chosenDeliveryStartDate+"&placedDate.lessThanOrEqual="+endDeliveryDate+"&size=1000&sort="+sortBy+",desc&status.in="+selected.join(',')+"";
+   //get the axios orders
+  const api2="orders/details/?page=0&placedDate.specified=true&placedDate.greaterThanOrEqual="+startDate+"&placedDate.lessThanOrEqual="+endDate+"&size=1000&sort="+sortBy+",desc&status.in="+selected.join(',')+"";
   
   const [placedDateOrders, setPlacedDateOrders] = useState([]); 
+  const [placedDateOrders1, setPlacedDateOrders1] = useState([]); 
+
+
+  let conctas = new Array();
 
   useEffect( () =>{
+
+
+    data_api();
+    setisLoading(true);
+
+    
+    },[deliveryDate]);
+
+    const data_api = () =>{
       axios.get(api2, {
-              headers: {
-              'Authorization': jwtToken,
-              'Accept' : '*/*',
-              'Content-Type': 'application/json',
-              'App-Token' : 'A14BC'
-                }
-              })
-              .then(order =>{
-                setPlacedDateOrders(order.data);
-                  setisLoading(false);
-                return order;
-              })
-    },[api2, jwtToken]);
+        headers: {
+        'Authorization': jwtToken,
+        'Accept' : '*/*',
+        'Content-Type': 'application/json',
+        'App-Token' : 'A14BC'
+          }
+        })
+        .then(order =>{
+          for(var i=0; i<order.data.length; i++)
+          {
+
+            if(endDeliveryDate == order.data[i].deliveryInfo["slotStart"].slice(0, 10))
+            {
+
+              conctas.push(order.data[i]);
+
+
+             }
+
+
+          }  
+          setPlacedDateOrders(conctas)
+          setisLoading(false);
+
+
+
+   
+        })
+    }
 
 
     //use this dataHolder in the table to display data
     let dataHolder = orders;
+    let dataHolder1 = placedDateOrders1;
 
   //use the above products response based on sort data selected
   if(sortBy === 'deliveryInfo.slotStart'){
@@ -478,6 +527,7 @@ const logout=()=>{
                                           value={deliveryDate}
                                           onChange={(newValue) => {
                                             setDeliveryDate(newValue);
+                                            data_api();
                                             }}
                                         />
                             }

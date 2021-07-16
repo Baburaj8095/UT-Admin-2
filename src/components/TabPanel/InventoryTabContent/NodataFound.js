@@ -6,11 +6,11 @@ import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissa
 const NodataFound = () => {
     return (
         <Auxiliary>
-            <div style={{backgroundColor:'#8FBC8B',width:'99.7%', height:'70%'}}>
+            <div style={{width:'100%', height:'70%',display:'flex',justifyContent:'center'}}>
                 <div>
-                    <h1 style={{marginLeft:'150px', color:'white'}}>No data found for the selected date. Please choose a different one<br/><span style={{marginLeft:'55px'}}>and make sure you're connected to an internet connection.</span></h1>
-                    <SentimentVeryDissatisfiedIcon style={{marginLeft:'660px',marginTop:'30px',fontSize:'150px'}}/>
-                </div>
+<img src={'https://ecom.xircular.io/admin/images/nodata.png'} />
+<h3 style={{textAlign:'center'}}>No Data Found</h3>
+                    </div>
             </div>
 
             <div style={{backgroundColor: 'grey', color:'white', position:'fixed',  width:'97%', marginTop:'45px', bottom:0, height:'140px'}}>

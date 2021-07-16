@@ -100,10 +100,13 @@ const completeOrderStatus = (orderID) =>{
 //inner table, using the props tableData passed from the OrderManagement.js
 function Row(props) {
 
+  console.log(props)
+
   const classes2 = useStyles();
 
 
-  const { row } = props; //outer table data
+  const { row } = props;
+  const { row1 } = props;
 
 
   return (
@@ -140,7 +143,12 @@ function Row(props) {
 const CollapsibleOrderTable = (props)=> {
   const   history = useHistory();
 
-  const data = props.tableData; //data passed as props in OrderManagement.js
+  const data = props.tableData; 
+  const data_1 = props.tableData1; 
+
+  console.log(props.tableData1)
+
+
   reactLocalStorage.set('table_data_length', data.length);
   const classes2 = useStyles();
 
@@ -179,14 +187,14 @@ const CollapsibleOrderTable = (props)=> {
                               ).then(success=>{
 
                                   if(success){
-                                    window.location.href='/orders';
+                                    window.location.href='/homepage';
                                   //history.push('/orders');
                                   
                                   }
 
                               });
                               
-                        history.push('/orders')
+                        history.push('/')
 
 
                   }else{
@@ -262,7 +270,10 @@ const CollapsibleOrderTable = (props)=> {
 
         <TableBody>
           {data.slice(pagesVisited, pagesVisited + itemsPerPage ).map((row) => (
-            <Row key={row.name} row={row} />
+
+              <Row key={row.name} row={row} row1={data_1} />
+
+      
           ))}
         </TableBody>
         

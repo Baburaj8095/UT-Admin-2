@@ -13,13 +13,13 @@ import { useHistory } from 'react-router';
     const   history = useHistory();
 
     if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token') === ''){
-        history.push('/');
+        history.push('/admin_dashboard_new');
     }
        
     const logout=()=>{
 
         reactLocalStorage.remove('id_token');
-        history.push('/');
+        history.push('/admin_dashboard_new');
 
     }
 
@@ -27,7 +27,7 @@ import { useHistory } from 'react-router';
         return(
             <Auxiliary>
                  {/* header start */}
-                <div className={classes.Header}>
+                <div className={classes.Header} style={{zIndex:'11'}}>
                 
                     <Button style={{float:'left', margin:'15px', opacity: '0.7', fontWeight:'1000', fontSize: '16px'}}><strong>URBAN TILLER</strong></Button>
                     <Button onClick={logout} variant="outlined" style={{float:'right', color: 'white', margin:'18px', borderColor: 'white'}}><strong>Logout</strong></Button>

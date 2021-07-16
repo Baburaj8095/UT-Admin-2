@@ -21,7 +21,7 @@ function App() {
     
     {/* <ProtectedRoutes path="/homepage" component={HomePage} isAuth={isAuth}/>  */}
        
-    <Route  path="/homepage" exact component={ withRouter(HomePage) } />
+    <Route exact  path="/homepage" exact component={ withRouter(HomePage) } />
 
     <Route  path="/edit-product" exact component={ withRouter(EditProduct) } />
     <Route  path="/archieve-product" exact component={ withRouter(ArchieveProduct) } />
@@ -32,7 +32,7 @@ function App() {
     <Route  path="/order-details" exact component={ withRouter(OrderDetailsPage) } />
     <Route  path="/orders" exact component={ withRouter(SeparateOrderManagement) } />
 
-    <Route exact path="/" component={ withRouter(Login) } />
+    <Route exact path="/admin_dashboard_new" component={ withRouter(Login) } />
 
   </Switch>
 </div>

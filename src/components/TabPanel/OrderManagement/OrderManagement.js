@@ -138,7 +138,7 @@ const OrderManagement =()=> {
 const   history = useHistory();
 
 if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token') === ''){
-  history.push('/');
+  history.push('/admin_dashboard_new');
     }
 
 
@@ -203,7 +203,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
  let startDate = moment(firstDay).clone().startOf('month').format('YYYY-MM-DD')+"T00:00:00.000Z";
  let endDate = moment(currentDate).format('YYYY-MM-DD')+'T23:59:59.000Z';
- //moment(dateRange[0]).format('YYYY-MM-DD')
+
  console.log("start date: ", startDate+", end date: "+currentDate);
  
 
@@ -211,6 +211,10 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
   //sorting data selected
   const [sortBy, setSortBy] = useState('deliveryInfo.slotStart');
+
+
+
+
 
   const handleSortBy = (event) => {
     setSortBy(event.target.value);
@@ -221,7 +225,6 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
   const [orders, setOrders] = useState([]);
 
-//http://localhost:8999/api/orders/?page=0&placedDate.specified=true&placedDate.greaterThanOrEqual=2020-12-09T00:00:00.000Z&placedDate.lessThanOrEqual=2021-01-04T23:59:59.000Z&size=500&sort=deliveryInfo.slotStart,desc&status.in=CREATED,PROCESSING,DISPATCHED,COMPLETED,PENDING,CANCELLED,CONFIRMED,PAY_FAILED  //url:"/orders/?page=0&placedDate.specified=true&placedDate.greaterThanOrEqual="+startdate+"&placedDate.lessThanOrEqual="+enddate+"&size=20&sort="+sorts+",desc&status.in="+year+"",
      
   const api = "/orders/details/?page=0&placedDate.specified=true&placedDate.greaterThanOrEqual="+startDate+"&placedDate.lessThanOrEqual="+endDate+"&size=1000&sort="+sortBy+",desc&status.in="+selected.join(',')+"";
   const token = reactLocalStorage.get('id_token');
@@ -229,21 +232,33 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
   //get the orders based on order date
     useEffect( () =>{
-      axios.get(api, {
-              headers: {
-              'Authorization': jwtToken,
-              'Accept' : '*/*',
-              'Content-Type': 'application/json',
-              'App-Token' : 'A14BC'
-                }
-              })
-              .then(order =>{
-                setOrders(order.data);
-                  console.log("ORDERS based on order date : ",order.data);
-                  setisLoading(false);
-                return order;
-              })
+
+
+      data_api1();
+
+    
     },[api, jwtToken]);
+
+
+    const data_api1 = () =>
+    {
+
+      axios.get(api, {
+        headers: {
+        'Authorization': jwtToken,
+        'Accept' : '*/*',
+        'Content-Type': 'application/json',
+        'App-Token' : 'A14BC'
+          }
+        })
+        .then(order =>{
+          setOrders(order.data);
+            console.log("ORDERS based on order date: ",order.data);
+            setisLoading(false);
+          return order;
+        })
+
+    }
 
 
 
@@ -253,33 +268,62 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
    const [deliveryDate, setDeliveryDate] = useState( moment() );
   
    const chosenDeliveryStartDate = moment(deliveryDate).format('YYYY-MM-DD')+"T00:00:00.000Z";
-   const endDeliveryDate = moment(deliveryDate).format('YYYY-MM-DD')+'T23:59:59.000Z';
+   const endDeliveryDate = moment(deliveryDate).format('YYYY-MM-DD');
 
    //get the axios orders
-  const api2="orders/details/?page=0&placedDate.specified=true&placedDate.greaterThanOrEqual="+chosenDeliveryStartDate+"&placedDate.lessThanOrEqual="+endDeliveryDate+"&size=1000&sort="+sortBy+",desc&status.in="+selected.join(',')+"";
+  const api2="orders/details/?page=0&placedDate.specified=true&placedDate.greaterThanOrEqual="+startDate+"&placedDate.lessThanOrEqual="+endDate+"&size=1000&sort="+sortBy+",desc&status.in="+selected.join(',')+"";
   
   const [placedDateOrders, setPlacedDateOrders] = useState([]); 
+  const [placedDateOrders1, setPlacedDateOrders1] = useState([]); 
+
+
+  let conctas = new Array();
 
   useEffect( () =>{
+
+
+    data_api();
+    setisLoading(true);
+
+    
+    },[deliveryDate]);
+
+    const data_api = () =>{
       axios.get(api2, {
-              headers: {
-              'Authorization': jwtToken,
-              'Accept' : '*/*',
-              'Content-Type': 'application/json',
-              'App-Token' : 'A14BC'
-                }
-              })
-              .then(order =>{
-                setPlacedDateOrders(order.data);
-                  console.log("ORDERS  based on delivery date: ",order.data);
-                  setisLoading(false);
-                return order;
-              })
-    },[api2, jwtToken]);
+        headers: {
+        'Authorization': jwtToken,
+        'Accept' : '*/*',
+        'Content-Type': 'application/json',
+        'App-Token' : 'A14BC'
+          }
+        })
+        .then(order =>{
+          for(var i=0; i<order.data.length; i++)
+          {
+
+            if(endDeliveryDate == order.data[i].deliveryInfo["slotStart"].slice(0, 10))
+            {
+
+              conctas.push(order.data[i]);
+
+
+             }
+
+
+          }  
+          setPlacedDateOrders(conctas)
+          setisLoading(false);
+
+
+
+   
+        })
+    }
 
 
     //use this dataHolder in the table to display data
     let dataHolder = orders;
+    let dataHolder1 = placedDateOrders1;
 
   //use the above products response based on sort data selected
   if(sortBy === 'deliveryInfo.slotStart'){
@@ -455,6 +499,8 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                           value={deliveryDate}
                                           onChange={(newValue) => {
                                             setDeliveryDate(newValue);
+                                            data_api();
+
                                             }}
                                         />
                             }
@@ -468,16 +514,14 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
      { !isLoading ?  <div style={{marginTop:'100px', width:'100%'}}>
                       <div style={{overflow:'auto',overflowX:'hidden', height:'480px', width:'100%'}}>
                         <div>
-                            <CollapsibleOrderTable  tableData = {dataHolder}/>
+                            <CollapsibleOrderTable  tableData = {dataHolder}  />
                         </div>
                       </div>
                     </div>
 
                  : <Spinner />
     }
-        {/* <div style={{backgroundColor: 'grey', color:'white', position:'fixed', width:'97%',bottom:0, height:'130px'}}>
-              <Footer />
-        </div> */}
+
 
 </div>
 

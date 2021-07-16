@@ -86,6 +86,7 @@ const useStyles = makeStyles((theme) => ({
     top:'70px',
     width:'100%',
     backgroundColor: theme.palette.background.paper,
+    zIndex :'11'
   },
   rowElementsDiv:{ // category, all products, add product, add category div
     position:'fixed',
