@@ -165,6 +165,8 @@ const Login=()=> {
                 ).then(clusterID=>{
                     console.log("clusterID code: ", clusterID.data[0].id)
                     reactLocalStorage.setObject("regionID", clusterID.data[0]);
+                    reactLocalStorage.set('clusterID',clusterID.data[0].id);
+
                 });
 
     }

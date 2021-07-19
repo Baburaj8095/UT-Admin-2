@@ -13,6 +13,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import DoneIcon from '@material-ui/icons/Done';
+import Typography from '@material-ui/core/Typography';
 
 import moment from 'moment';
 import { reactLocalStorage } from 'reactjs-localstorage';
@@ -22,7 +23,12 @@ import axios from 'axios';
 import Paginator from 'react-paginate';
 import InventoryTabContentCss from '.././InventoryTabContent/InventoryTabContent.module.css';
 import Auxiliary from '../../../hoc/Auxiliary';
-
+import Box from '@material-ui/core/Box';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
+import TableContainer from '@material-ui/core/TableContainer';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 const useStyles = makeStyles({
   paper: {
@@ -108,15 +114,22 @@ function Row(props) {
   const { row } = props;
   const { row1 } = props;
 
+  const [open, setOpen] = React.useState(false);
 
   return (
     <React.Fragment>
       <TableRow className={classes2.paper}>
+      <TableCell>
+        { row.orderItems.length >1 &&
+          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+          }
+        </TableCell>
               <TableCell component="th" scope="row"> <NavLink to="/order-details" style={{textDecoration:'none'}} onClick={(order_id)=>handleOrderClick(row.id)}> { row.id }</NavLink></TableCell>
               <TableCell component="th">{moment(row.placedDate).format('DD-MM-YYYY, hh:mm A')}</TableCell>
               <TableCell component="th">{row.status}</TableCell>
               <TableCell component="th">{row.customer.firstName}</TableCell>
-              <TableCell component="th">{ moment(row.deliveryInfo.slotStart).format('DD-MM-YYYY, hh:mm A')} - { moment(row.deliveryInfo.slotEnd).format('DD-MM-YYYY, hh:mm A')}</TableCell>
                         
               <TableCell component="th">
 
@@ -129,6 +142,51 @@ function Row(props) {
               </TableCell>
                     
           
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box margin={1}>
+              <Typography variant="h6" gutterBottom component="div">
+                Order Items
+              </Typography>
+              <Table size="small" aria-label="purchases">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Delivery Date</TableCell>
+                    <TableCell>Item Name</TableCell>
+                    <TableCell align="right">Unit Name</TableCell>
+                    <TableCell align="right">Status</TableCell>
+                    <TableCell align="right">Unit Price</TableCell>
+                    <TableCell align="right">Total Price</TableCell>
+
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {
+                row.orderItems.map((values) => (
+                    <TableRow key={values.id}>
+                      <TableCell component="th" scope="row">
+                      {values.deliveryDate}
+                      </TableCell>
+                      <TableCell>{values.name}</TableCell>
+                      <TableCell align="right">{values.unitName}</TableCell>
+                      <TableCell align="right">
+                        {values.status}
+                      </TableCell>
+                      <TableCell align="right">
+                        {values.unitPrice}
+                      </TableCell>
+                      <TableCell align="right">
+                        {values.totalPrice}
+                      </TableCell>
+                    </TableRow>
+  ))}
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+        </TableCell>
       </TableRow>
        
       
@@ -152,6 +210,7 @@ const CollapsibleOrderTable = (props)=> {
   reactLocalStorage.set('table_data_length', data.length);
   const classes2 = useStyles();
 
+  const [open, setOpen] = React.useState(false);
 
 
 
@@ -224,12 +283,6 @@ const CollapsibleOrderTable = (props)=> {
 
    let itemsPerPage = 6;
 
-   // if(products.length <=5){
-   //     itemsPerPage = 11;
-   // }else{
-   //     itemsPerPage = 14;
-   // }
-
    const pagesVisited = pageNumber * itemsPerPage;
 
    const pageCount = Math.ceil(data.length / itemsPerPage);
@@ -249,11 +302,12 @@ const CollapsibleOrderTable = (props)=> {
 
         <TableHead>
           <TableRow style={{backgroundColor:'#E6E6FA', textAlign:'center'}}>
+          <TableCell style={{fontSize:'17px'}}></TableCell>
+
             <TableCell style={{fontSize:'17px'}}>Order ID</TableCell>
             <TableCell style={{fontSize:'17px'}} component="th">Order Date</TableCell>
             <TableCell style={{fontSize:'17px'}} component="th">Status</TableCell>
             <TableCell style={{fontSize:'17px'}} component="th">Customer Name</TableCell>
-            <TableCell style={{fontSize:'17px'}} component="th">Delivery Slot</TableCell>
             <TableCell style={{fontSize:'17px'}} component="th">
                    { 
                      <FormGroup row>     

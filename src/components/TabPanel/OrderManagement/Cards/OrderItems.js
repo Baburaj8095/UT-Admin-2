@@ -86,13 +86,12 @@ const OrderItems = (props) => {
         setOrderItemStatus(newData);
 
                   
-          //status update
 
           const apiToUpdate = "/orders/status";
 
           const statusUpdate = {
                                   id: parseInt(orderId),
-                                  status:'CONFIRMED',
+                                  status:OrderItems.status,
                                   orderItems:[
                                                 {
                                                   id: parseInt(orderItemID),
