@@ -268,10 +268,14 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
    const [deliveryDate, setDeliveryDate] = useState( moment() );
   
    const chosenDeliveryStartDate = moment(deliveryDate).format('YYYY-MM-DD')+"T00:00:00.000Z";
-   const endDeliveryDate = moment(deliveryDate).format('YYYY-MM-DD');
+   const endDeliveryDate = moment(deliveryDate).format('YYYY-MM-DD')+"T00:00:00.000Z";
+
+   const region_id =   reactLocalStorage.get("clusterID");
+
+
 
    //get the axios orders
-  const api2="orders/details/?page=0&placedDate.specified=true&placedDate.greaterThanOrEqual="+startDate+"&placedDate.lessThanOrEqual="+endDate+"&size=1000&sort="+sortBy+",desc&status.in="+selected.join(',')+"";
+  const api2="orders/delivery/"+region_id+"/"+endDeliveryDate+"/";
   
   const [placedDateOrders, setPlacedDateOrders] = useState([]); 
   const [placedDateOrders1, setPlacedDateOrders1] = useState([]); 
@@ -298,20 +302,8 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
           }
         })
         .then(order =>{
-          for(var i=0; i<order.data.length; i++)
-          {
-
-            if(endDeliveryDate == order.data[i].deliveryInfo["slotStart"].slice(0, 10))
-            {
-
-              conctas.push(order.data[i]);
-
-
-             }
-
-
-          }  
-          setPlacedDateOrders(conctas)
+         
+          setPlacedDateOrders(order.data)
           setisLoading(false);
 
 

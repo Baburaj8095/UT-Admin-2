@@ -224,12 +224,6 @@ const CollapsibleOrderTable = (props)=> {
 
    let itemsPerPage = 6;
 
-   // if(products.length <=5){
-   //     itemsPerPage = 11;
-   // }else{
-   //     itemsPerPage = 14;
-   // }
-
    const pagesVisited = pageNumber * itemsPerPage;
 
    const pageCount = Math.ceil(data.length / itemsPerPage);
