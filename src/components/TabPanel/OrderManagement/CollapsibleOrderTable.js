@@ -125,6 +125,7 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
           }
+         
         </TableCell>
               <TableCell component="th" scope="row"> <NavLink to="/order-details" style={{textDecoration:'none'}} onClick={(order_id)=>handleOrderClick(row.id)}> { row.id }</NavLink></TableCell>
               <TableCell component="th">{moment(row.placedDate).format('DD-MM-YYYY, hh:mm A')}</TableCell>
