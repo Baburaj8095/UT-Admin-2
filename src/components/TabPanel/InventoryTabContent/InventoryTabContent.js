@@ -41,13 +41,13 @@ import SearchFilterResult from './SearchFilterResult';
 
 const useStyles = makeStyles((theme) => ({
     theCard:{
-        // maxWidth:450,
+         maxWidth:530,
         // maxHeight: 400,
         // minHeight: 280,
         // minWidth: 450,
-        width: 450,
+        //width: 450,
         height: 280,
-        margin: 9.8,
+        margin: 25,
     },
   table: {
      //maxWidth: 650,
@@ -256,7 +256,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                                 <Table className={classes.table} >
                                                         <TableHead>
                                                             <TableRow>
-                                                                <TableCell colSpan={5}>
+                                                                <TableCell colSpan={7}>
 
                                                                     <Box className={classes.toolbar}>
                                                                         <Grid container>
@@ -286,8 +286,9 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                                  
                                                                 <TableCell >Unit</TableCell>                       
                                                                 <TableCell >Price</TableCell>
-                                                                <TableCell colspan={1} >Stock</TableCell>
-                                                                <TableCell colspan={2} >Delivery Date</TableCell>
+                                                                <TableCell colspan={1}>Stock</TableCell>
+                                                                <TableCell colspan={2} >Total Stock</TableCell>
+                                                                <TableCell colspan={3} style={{minWidth:'190px'}}>Delivery Date</TableCell>
                                                                 
                                                             </TableRow>
                                                         </TableHead>
@@ -308,13 +309,17 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
                                                                             },
                                                                         }}
                                                                         >
-                                                                        <TableCell style={{color:"blue", border:'0px', cursor:'pointer'}} onClick={ (event) =>openEditModalWithInvId(res.id,res.productId, res.name, res.unitName, res.price, res.stock,res.unitValue,res.totalId, true) }>{res.unitName}</TableCell>                                                         
+                                                                        <TableCell  style={{color:"blue", border:'0px',minWidth:'90px', cursor:'pointer'}} onClick={ (event) =>openEditModalWithInvId(res.id,res.productId, res.name, res.unitName, res.price, res.stock,res.unitValue,res.totalId, true) }>{res.unitName}</TableCell>                                                         
                                                                     </Tooltip>
-                                                                    
+
                                                                     <TableCell style={{border:'0px solid grey'}}>{res.price}</TableCell>
                                                                     <TableCell style={res.stock === 0 ? {border:'0px solid grey', color:'red'} : {border:'0px solid grey', color:'green'} }>{res.stock}</TableCell>
-                                                                    <TableCell style={{border:'0px solid grey'}}>{moment(res.date).format('YYYY-MM-DD')}</TableCell>
+                                                                    <TableCell style={res.stock === 0 ? {border:'0px solid grey', color:'red'} : {border:'0px solid grey', color:'green'} }>{res.totalStock}</TableCell>
+                                                                    <TableCell></TableCell>
+                                                                    <TableCell  style={{border:'0px solid grey'}}>{moment(res.date).format('YYYY-MM-DD')}</TableCell>
+                                                                    
                                                                     <TableCell style={{border:'0px solid grey'}}>
+                                                                    
                                                                         <Tooltip  title="Remove" arrow  placement="right">
                                                                             <IconButton  style={{color:'red'}}>
                                                                                 <RemoveCircleOutlineIcon
