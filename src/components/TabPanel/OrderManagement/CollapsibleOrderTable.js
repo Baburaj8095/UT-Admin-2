@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { Card, CardContent, FormControl, Grid, InputLabel, Select } from '@material-ui/core';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -116,6 +117,56 @@ function Row(props) {
 
   const [open, setOpen] = React.useState(false);
 
+
+
+
+
+  //status to update 
+  
+  const statuses = ['AVAILABLE', 'UNAVAILABLE', 'OUT_OF_STOCK','BACK_ORDER', 'DELIVERED'];  
+
+  //order status input change
+  const [OrderItemStatus, setOrderItemStatus] = useState('');
+  const   history = useHistory();
+
+  const handleStatusChange = (event, orderItemID, orderStatus, OrderID) => {
+    //const newData= {id: orderItemID, status:event.target.value};
+    setOrderItemStatus(event.target.value);
+
+      console.log("OrderItemStatus Data: ", OrderItemStatus);
+              
+
+      const apiToUpdate = "/orders/status";
+
+      const statusUpdate = {
+                              id: parseInt(OrderID),
+                              status: orderStatus,
+                              orderItems:[
+                                            {
+                                              id: parseInt(orderItemID),
+                                              status: (event.target.value),
+                                            }
+                                          ]
+                          }
+
+
+          console.log("orderItemID",event.target.value, orderItemID);
+
+
+          axios.put(apiToUpdate,
+                  statusUpdate,
+                  {headers: headerObject} 
+                  )
+                  .then(response=>{
+                      console.log("staus updated: ",response)
+                      return history.push("/orders");
+                        }
+                    );  
+                    history.push("/orders");  
+
+};
+
+
   return (
     <React.Fragment>
       <TableRow className={classes2.paper}>
@@ -160,7 +211,7 @@ function Row(props) {
                     <TableCell align="right">Status</TableCell>
                     <TableCell align="right">Unit Price</TableCell>
                     <TableCell align="right">Total Price</TableCell>
-
+                    <TableCell></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -181,6 +232,31 @@ function Row(props) {
                       <TableCell align="right">
                         {values.totalPrice}
                       </TableCell>
+                        <tableCell>
+                              <div style={{float:'right'}}>
+                                                <FormControl variant="outlined" style={{width:'220px', marginRight:'10px'}}>
+                                                                <InputLabel id="status">Update Order Status</InputLabel>
+                                                                <Select
+                                                                  style={{height:'44px',textAlign:'center', margin:'7px'}}
+                                                                  native
+                                                                  id= 'status'
+                                                                  value={OrderItemStatus.status}
+                                                                  onChange={(event, id)=>{handleStatusChange(event, values.id, row.status, row.id)}}
+                                                                  label="Update Order Status"
+                                                                                                        
+                                                                >
+                                                                <option aria-label="None" value="" />
+                                                                {statuses.map((res, index)=>{
+                                                                    return(<option id={index} key={index} value={res}>{res}</option>
+                                                                    )
+                                                                })}
+                                                                </Select>
+                                                  </FormControl>
+                               </div>
+                          </tableCell>
+
+
+
                     </TableRow>
   ))}
                 </TableBody>
