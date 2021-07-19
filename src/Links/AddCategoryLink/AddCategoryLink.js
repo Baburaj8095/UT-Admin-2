@@ -65,16 +65,7 @@ const AddCategoryLink=()=> {
 
     }
 
-//axios code to create a new category
 
-  //body
-//   {
-//     "name": "Drinks",
-//     "description":"fresh drinks",
-//     "categoryImage" : "",
-//     "rank":3,
-//     "archieved":false
-// }
   const [body, setbody] = useState({ 
                                       name: '',
                                       description: '',
@@ -86,7 +77,7 @@ const AddCategoryLink=()=> {
 
                                       
 //handle user form input data
-  const handleInputData=(event) =>{ //the above property names must match the id of the input fields
+  const handleInputData=(event) =>{
     const newData= {...body};
     newData[event.target.id] = event.target.value;
     setbody(newData);
@@ -113,10 +104,7 @@ const headerObject = {
 
 const submitData =(event)=>{
   event.preventDefault();
- // console.log("id_token from localstorage: ",reactLocalStorage.get('id_token'));
 
- // product-category input data
-  //body
   const product = {
                       name: body.name,
                       description: body.description,
