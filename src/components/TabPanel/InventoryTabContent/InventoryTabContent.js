@@ -314,7 +314,7 @@ if(reactLocalStorage.get('id_token') == null || reactLocalStorage.get('id_token'
 
                                                                     <TableCell style={{border:'0px solid grey'}}>{res.price}</TableCell>
                                                                     <TableCell style={res.stock === 0 ? {border:'0px solid grey', color:'red'} : {border:'0px solid grey', color:'green'} }>{res.stock}</TableCell>
-                                                                    <TableCell style={res.stock === 0 ? {border:'0px solid grey', color:'red'} : {border:'0px solid grey', color:'green'} }>{res.totalStock}</TableCell>
+                                                                    <TableCell style={res.totalStock === 0 ? {border:'0px solid grey', color:'red'} : {border:'0px solid grey', color:'green'} }>{res.totalStock}</TableCell>
                                                                     <TableCell></TableCell>
                                                                     <TableCell  style={{border:'0px solid grey'}}>{moment(res.date).format('YYYY-MM-DD')}</TableCell>
                                                                     
